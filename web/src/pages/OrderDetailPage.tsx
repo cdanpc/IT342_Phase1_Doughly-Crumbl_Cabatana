@@ -2,10 +2,39 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Phone, FileText } from 'lucide-react';
 import { getOrderById } from '../api/orderApi';
-import { formatPrice, formatDate, getStatusColor } from '../utils/formatters';
+import {
+  formatPrice,
+  formatDate,
+  getStatusColor,
+  formatOrderStatus,
+  getOrderStatusHelperText,
+} from '../utils/formatters';
 import { ROUTES } from '../utils/routes';
 import type { Order } from '../types';
 import '../components/common/LoadingSpinner.css';
+
+const STATUS_TIMELINE = [
+  'ORDER_PLACED',
+  'AWAITING_DELIVERY_QUOTE',
+  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
+  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
+  'PAYMENT_CONFIRMED',
+  'PREPARING',
+  'OUT_FOR_DELIVERY',
+  'COMPLETED',
+];
+
+function getStatusIndex(status: string): number {
+  const timelineIndex = STATUS_TIMELINE.indexOf(status);
+  if (timelineIndex >= 0) return timelineIndex;
+
+  if (status === 'PENDING') return 0;
+  if (status === 'CONFIRMED') return 4;
+  if (status === 'READY') return 5;
+  if (status === 'DELIVERED') return 7;
+
+  return 0;
+}
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -80,8 +109,75 @@ export default function OrderDetailPage() {
           fontSize: 13, fontWeight: 600, padding: '6px 16px',
           borderRadius: 'var(--radius-full)',
         }}>
-          {order.status}
+          {formatOrderStatus(order.status)}
         </span>
+      </div>
+
+      {getOrderStatusHelperText(order.status) && (
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--color-border)',
+            padding: '10px 14px',
+            marginBottom: 16,
+            fontSize: 13,
+            color: 'var(--color-text-secondary)',
+          }}
+        >
+          {getOrderStatusHelperText(order.status)}
+        </div>
+      )}
+
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: 'var(--radius-md)',
+          padding: 20,
+          boxShadow: 'var(--shadow-card)',
+          marginBottom: 20,
+        }}
+      >
+        <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, marginBottom: 14 }}>
+          Order Status Timeline
+        </h3>
+        <div style={{ display: 'grid', gap: 10 }}>
+          {STATUS_TIMELINE.map((status, idx) => {
+            const active = idx <= getStatusIndex(order.status) && order.status !== 'CANCELLED';
+            return (
+              <div key={status} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: active ? 'var(--color-primary)' : 'var(--color-border)',
+                    display: 'inline-block',
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{ fontSize: 13, color: active ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
+                  {formatOrderStatus(status)}
+                </span>
+              </div>
+            );
+          })}
+          {order.status === 'CANCELLED' && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: '#DC2626',
+                  display: 'inline-block',
+                  flexShrink: 0,
+                }}
+              />
+              <span style={{ fontSize: 13, color: '#DC2626' }}>Cancelled</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Delivery Info */}
@@ -141,6 +237,24 @@ export default function OrderDetailPage() {
           <span>{formatPrice(order.totalAmount)}</span>
         </div>
       </div>
+
+      <button
+        onClick={() => navigate(`/orders/${order.orderId}/payment`)}
+        style={{
+          marginTop: 20,
+          width: '100%',
+          borderRadius: 'var(--radius-sm)',
+          border: '1.5px solid var(--color-primary)',
+          color: 'var(--color-primary)',
+          background: '#fff',
+          padding: '12px 16px',
+          fontSize: 14,
+          fontWeight: 700,
+          cursor: 'pointer',
+        }}
+      >
+        Payment Instructions
+      </button>
     </div>
   );
 }
