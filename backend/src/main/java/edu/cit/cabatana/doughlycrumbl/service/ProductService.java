@@ -1,5 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.service;
 
+import edu.cit.cabatana.doughlycrumbl.adapter.ProductAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
 import edu.cit.cabatana.doughlycrumbl.exception.ResourceNotFoundException;
@@ -12,11 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Refactored ProductService using Adapter Pattern
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductAdapter productAdapter;  // Adapter Pattern
 
     public Page<ProductResponse> getAllAvailableProducts(String search, String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -27,7 +32,7 @@ public class ProductService {
     public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
-        return toResponse(product);
+        return productAdapter.toDto(product);
     }
 
     // --- Admin methods ---
@@ -35,7 +40,7 @@ public class ProductService {
     public Page<ProductResponse> getAllProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable)
-                .map(this::toResponse);
+                .map(productAdapter::toDto);
     }
 
     @Transactional
@@ -50,7 +55,7 @@ public class ProductService {
                 .build();
 
         product = productRepository.save(product);
-        return toResponse(product);
+        return productAdapter.toDto(product);
     }
 
     @Transactional
@@ -66,7 +71,7 @@ public class ProductService {
         if (request.getAvailable() != null) product.setAvailable(request.getAvailable());
 
         product = productRepository.save(product);
-        return toResponse(product);
+        return productAdapter.toDto(product);
     }
 
     @Transactional
@@ -75,17 +80,5 @@ public class ProductService {
             throw new ResourceNotFoundException("Product", id);
         }
         productRepository.deleteById(id);
-    }
-
-    private ProductResponse toResponse(Product product) {
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .imageUrl(product.getImageUrl())
-                .category(product.getCategory())
-                .available(product.getAvailable())
-                .build();
     }
 }
