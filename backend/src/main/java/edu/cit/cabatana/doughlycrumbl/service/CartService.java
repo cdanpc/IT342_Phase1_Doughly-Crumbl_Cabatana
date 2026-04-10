@@ -1,9 +1,9 @@
 package edu.cit.cabatana.doughlycrumbl.service;
 
+import edu.cit.cabatana.doughlycrumbl.adapter.CartAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.AddToCartRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateCartItemRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.CartResponse;
-import edu.cit.cabatana.doughlycrumbl.dto.response.CartResponse.CartItemResponse;
 import edu.cit.cabatana.doughlycrumbl.exception.ResourceNotFoundException;
 import edu.cit.cabatana.doughlycrumbl.model.*;
 import edu.cit.cabatana.doughlycrumbl.repository.CartItemRepository;
@@ -14,10 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+/**
+ * Refactored CartService using Adapter Pattern
+ */
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -26,10 +27,11 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final CartAdapter cartAdapter;  // Adapter Pattern
 
     public CartResponse getCart(Long userId) {
         Cart cart = getOrCreateCart(userId);
-        return toResponse(cart);
+        return cartAdapter.toDto(cart);
     }
 
     @Transactional
@@ -59,7 +61,7 @@ public class CartService {
 
         // Reload cart to reflect changes
         cart = cartRepository.findByUserId(userId).orElseThrow();
-        return toResponse(cart);
+        return cartAdapter.toDto(cart);
     }
 
     @Transactional
@@ -78,7 +80,7 @@ public class CartService {
         cartItemRepository.save(item);
 
         cart = cartRepository.findByUserId(userId).orElseThrow();
-        return toResponse(cart);
+        return cartAdapter.toDto(cart);
     }
 
     @Transactional
@@ -97,7 +99,7 @@ public class CartService {
         cartItemRepository.delete(item);
 
         cart = cartRepository.findByUserId(userId).orElseThrow();
-        return toResponse(cart);
+        return cartAdapter.toDto(cart);
     }
 
     @Transactional
@@ -117,31 +119,5 @@ public class CartService {
                     Cart newCart = Cart.builder().user(user).build();
                     return cartRepository.save(newCart);
                 });
-    }
-
-    private CartResponse toResponse(Cart cart) {
-        var items = cart.getItems().stream().map(item -> CartItemResponse.builder()
-                .cartItemId(item.getId())
-                .productId(item.getProduct().getId())
-                .productName(item.getProduct().getName())
-                .productImageUrl(item.getProduct().getImageUrl())
-                .unitPrice(item.getProduct().getPrice())
-                .quantity(item.getQuantity())
-                .subtotal(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .build()
-        ).collect(Collectors.toList());
-
-        BigDecimal total = items.stream()
-                .map(CartItemResponse::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        int count = items.stream().mapToInt(CartItemResponse::getQuantity).sum();
-
-        return CartResponse.builder()
-                .cartId(cart.getId())
-                .items(items)
-                .totalAmount(total)
-                .itemCount(count)
-                .build();
     }
 }
