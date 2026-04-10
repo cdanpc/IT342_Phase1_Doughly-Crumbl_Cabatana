@@ -44,6 +44,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .address(request.getAddress())
                 .phoneNumber(request.getPhoneNumber())
+            .provider("LOCAL")
                 .role("CUSTOMER")
                 .build();
 

@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyOrders } from '../api/orderApi';
-import { formatPrice, formatDate, getStatusColor } from '../utils/formatters';
+import {
+  formatPrice,
+  formatDate,
+  getStatusColor,
+  formatOrderStatus,
+  getOrderStatusHelperText,
+} from '../utils/formatters';
 import type { Order } from '../types';
 import '../components/common/LoadingSpinner.css';
 
@@ -51,31 +57,39 @@ export default function OrdersPage() {
               style={{
                 background: '#fff', borderRadius: 'var(--radius-md)', padding: 20,
                 boxShadow: 'var(--shadow-card)', cursor: 'pointer', transition: 'all 0.2s',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                display: 'flex', flexDirection: 'column', gap: 10,
               }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = 'none'; }}
             >
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
-                  Order #{order.orderId}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
+                    Order #{order.orderId}
+                  </div>
+                  <div style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
+                    {formatDate(order.orderDate)}
+                  </div>
                 </div>
-                <div style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
-                  {formatDate(order.orderDate)}
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <span style={{ fontWeight: 600, fontSize: 15 }}>{formatPrice(order.totalAmount)}</span>
+                  <span style={{
+                    background: getStatusColor(order.status) + '20',
+                    color: getStatusColor(order.status),
+                    fontSize: 12, fontWeight: 600, padding: '4px 12px',
+                    borderRadius: 'var(--radius-full)',
+                  }}>
+                    {formatOrderStatus(order.status)}
+                  </span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <span style={{ fontWeight: 600, fontSize: 15 }}>{formatPrice(order.totalAmount)}</span>
-                <span style={{
-                  background: getStatusColor(order.status) + '20',
-                  color: getStatusColor(order.status),
-                  fontSize: 12, fontWeight: 600, padding: '4px 12px',
-                  borderRadius: 'var(--radius-full)',
-                }}>
-                  {order.status}
-                </span>
-              </div>
+              {getOrderStatusHelperText(order.status) && (
+                <p style={{ marginTop: 2, fontSize: 12, color: 'var(--color-text-secondary)' }}>
+                  {getOrderStatusHelperText(order.status)}
+                </p>
+              )}
             </div>
           ))}
         </div>

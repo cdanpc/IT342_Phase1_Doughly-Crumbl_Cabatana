@@ -5,6 +5,7 @@ export const ROUTES = {
   MENU: '/menu',
   ORDERS: '/orders',
   ORDER_DETAIL: '/orders/:id',
+  PAYMENT_INSTRUCTIONS: '/orders/:id/payment',
   ORDER_SUCCESS: '/order-success',
   CHECKOUT: '/checkout',
   ABOUT: '/about',

@@ -9,11 +9,15 @@ interface CartContextValue {
   cart: Cart | null;
   isLoading: boolean;
   itemCount: number;
+  isOrderPanelOpen: boolean;
   fetchCart: () => Promise<void>;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   updateQuantity: (cartItemId: number, quantity: number) => Promise<void>;
   removeItem: (cartItemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
+  openOrderPanel: () => void;
+  closeOrderPanel: () => void;
+  toggleOrderPanel: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -21,6 +25,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOrderPanelOpen, setIsOrderPanelOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
   const fetchCart = useCallback(async () => {
@@ -78,10 +83,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       await cartApi.clearCart();
       setCart(null);
+      setIsOrderPanelOpen(false);
     } catch {
       toast.error('Failed to clear cart');
     }
   }, []);
+
+  const openOrderPanel = useCallback(() => setIsOrderPanelOpen(true), []);
+  const closeOrderPanel = useCallback(() => setIsOrderPanelOpen(false), []);
+  const toggleOrderPanel = useCallback(() => setIsOrderPanelOpen((prev) => !prev), []);
 
   return (
     <CartContext.Provider
@@ -89,11 +99,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         isLoading,
         itemCount: cart?.itemCount ?? 0,
+        isOrderPanelOpen,
         fetchCart,
         addToCart,
         updateQuantity,
         removeItem,
         clearCart: clearCartHandler,
+        openOrderPanel,
+        closeOrderPanel,
+        toggleOrderPanel,
       }}
     >
       {children}

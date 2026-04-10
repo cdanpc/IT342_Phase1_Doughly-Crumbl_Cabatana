@@ -8,26 +8,54 @@ import { ROUTES } from '../utils/routes';
 import toast from 'react-hot-toast';
 import '../components/common/LoadingSpinner.css';
 
-const DELIVERY_FEE = 80;
+type FulfillmentMethod = 'PICKUP' | 'DELIVERY';
+type PaymentMethod = 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';
+
+const PAYMENT_LABELS: Record<PaymentMethod, string> = {
+  GCASH: 'GCash',
+  MAYA: 'Maya',
+  BANK_TRANSFER: 'Bank Transfer',
+  CASH_ON_PICKUP: 'Cash on Pickup',
+};
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const { cart, clearCart } = useCart();
 
-  const [address, setAddress] = useState('');
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<FulfillmentMethod>('DELIVERY');
+  const [street, setStreet] = useState('');
+  const [barangay, setBarangay] = useState('');
+  const [city, setCity] = useState('');
+  const [landmark, setLandmark] = useState('');
   const [phone, setPhone] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('GCASH');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const items = cart?.items ?? [];
   const subtotal = cart?.totalAmount ?? 0;
-  const total = subtotal + DELIVERY_FEE;
+  const isDelivery = fulfillmentMethod === 'DELIVERY';
+  const availablePaymentMethods: PaymentMethod[] = isDelivery
+    ? ['GCASH', 'MAYA', 'BANK_TRANSFER']
+    : ['GCASH', 'MAYA', 'BANK_TRANSFER', 'CASH_ON_PICKUP'];
+
+  function handleFulfillmentChange(nextMethod: FulfillmentMethod) {
+    setFulfillmentMethod(nextMethod);
+    if (nextMethod === 'DELIVERY' && paymentMethod === 'CASH_ON_PICKUP') {
+      setPaymentMethod('GCASH');
+    }
+  }
 
   async function handlePlaceOrder(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!address.trim() || !phone.trim()) {
-      toast.error('Please fill in delivery address and phone number.');
+    if (!phone.trim()) {
+      toast.error('Please fill in your contact number.');
+      return;
+    }
+
+    if (isDelivery && (!street.trim() || !barangay.trim() || !city.trim())) {
+      toast.error('Please complete your delivery address (street, barangay, city).');
       return;
     }
 
@@ -38,10 +66,22 @@ export default function CheckoutPage() {
 
     setIsSubmitting(true);
     try {
+      const deliveryAddress = isDelivery
+        ? `${street.trim()}, ${barangay.trim()}, ${city.trim()}${landmark.trim() ? ` (Landmark: ${landmark.trim()})` : ''}`
+        : 'Pickup - Don Gil Garcia St., Capitol Site, Cebu City';
+
+      const orderNotes = [
+        `Fulfillment: ${fulfillmentMethod}`,
+        `Payment Method: ${PAYMENT_LABELS[paymentMethod]}`,
+        notes.trim(),
+      ]
+        .filter(Boolean)
+        .join(' | ');
+
       const order = await placeOrder({
-        deliveryAddress: address.trim(),
+        deliveryAddress,
         contactNumber: phone.trim(),
-        deliveryNotes: notes.trim() || undefined,
+        deliveryNotes: orderNotes || undefined,
       });
       await clearCart();
       toast.success('Order placed successfully!');
@@ -59,33 +99,137 @@ export default function CheckoutPage() {
         Checkout
       </h2>
       <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 32 }}>
-        Review your order and enter delivery details
+        Review your order, choose fulfillment, and submit your request.
       </p>
 
       <form onSubmit={handlePlaceOrder}>
+        <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', padding: 24, marginBottom: 24, boxShadow: 'var(--shadow-card)' }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18, marginBottom: 14 }}>
+            Fulfillment Method
+          </h3>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => handleFulfillmentChange('PICKUP')}
+              style={{
+                padding: '10px 16px',
+                borderRadius: 'var(--radius-full)',
+                border: `1.5px solid ${fulfillmentMethod === 'PICKUP' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                color: fulfillmentMethod === 'PICKUP' ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                background: fulfillmentMethod === 'PICKUP' ? 'var(--color-primary-light)' : '#fff',
+                fontSize: 14,
+                fontWeight: 600,
+              }}
+            >
+              Pickup
+            </button>
+            <button
+              type="button"
+              onClick={() => handleFulfillmentChange('DELIVERY')}
+              style={{
+                padding: '10px 16px',
+                borderRadius: 'var(--radius-full)',
+                border: `1.5px solid ${fulfillmentMethod === 'DELIVERY' ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                color: fulfillmentMethod === 'DELIVERY' ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                background: fulfillmentMethod === 'DELIVERY' ? 'var(--color-primary-light)' : '#fff',
+                fontSize: 14,
+                fontWeight: 600,
+              }}
+            >
+              Delivery
+            </button>
+          </div>
+        </div>
+
         {/* Delivery Details */}
         <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', padding: 24, marginBottom: 24, boxShadow: 'var(--shadow-card)' }}>
           <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18, marginBottom: 20 }}>
-            Delivery Details
+            {isDelivery ? 'Delivery Details' : 'Pickup Details'}
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
-                <MapPin size={14} /> Delivery Address
-              </label>
-              <input
+            {isDelivery && (
+              <>
+                <div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
+                    <MapPin size={14} /> Street Address
+                  </label>
+                  <input
+                    style={{
+                      width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
+                      borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                    }}
+                    type="text"
+                    placeholder="House/Unit, Street"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                    required={isDelivery}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>Barangay</label>
+                    <input
+                      style={{
+                        width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
+                        borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                      }}
+                      type="text"
+                      value={barangay}
+                      onChange={(e) => setBarangay(e.target.value)}
+                      required={isDelivery}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>City</label>
+                    <input
+                      style={{
+                        width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
+                        borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                      }}
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      required={isDelivery}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>Landmark (Optional)</label>
+                  <input
+                    style={{
+                      width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
+                      borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                    }}
+                    type="text"
+                    placeholder="Near school/church/building"
+                    value={landmark}
+                    onChange={(e) => setLandmark(e.target.value)}
+                  />
+                </div>
+
+                <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                  Delivery fee is calculated based on your location and confirmed before payment.
+                </p>
+              </>
+            )}
+
+            {!isDelivery && (
+              <div
                 style={{
-                  width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
-                  borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                  background: 'var(--color-primary-light)',
+                  color: 'var(--color-text-primary)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '12px 14px',
+                  fontSize: 14,
                 }}
-                type="text"
-                placeholder="123 Bakery Street, Cebu City"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-              />
-            </div>
+              >
+                Pickup location: Don Gil Garcia St., Capitol Site, Cebu City
+              </div>
+            )}
 
             <div>
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
@@ -102,6 +246,26 @@ export default function CheckoutPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
+                Payment Method
+              </label>
+              <select
+                style={{
+                  width: '100%', padding: '12px 16px', border: '1.5px solid var(--color-border)',
+                  borderRadius: 'var(--radius-sm)', fontSize: 15, background: '#FAFAFA', outline: 'none',
+                }}
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
+              >
+                {availablePaymentMethods.map((method) => (
+                  <option key={method} value={method}>
+                    {PAYMENT_LABELS[method]}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -143,11 +307,11 @@ export default function CheckoutPage() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--color-text-secondary)', marginBottom: 12 }}>
             <span>Delivery fee</span>
-            <span>{formatPrice(DELIVERY_FEE)}</span>
+            <span>{isDelivery ? 'To be quoted' : 'N/A (Pickup)'}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700 }}>
             <span>Total</span>
-            <span>{formatPrice(total)}</span>
+            <span>{formatPrice(subtotal)}</span>
           </div>
         </div>
 
