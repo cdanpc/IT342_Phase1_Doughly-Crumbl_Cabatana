@@ -151,6 +151,13 @@
   color: var(--color-text-primary);
 }
 
+.order-panel__policy-note {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .order-panel__confirm-btn {
   width: 100%;
   padding: 14px;

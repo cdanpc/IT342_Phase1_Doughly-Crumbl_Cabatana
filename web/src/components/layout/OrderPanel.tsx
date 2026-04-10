@@ -5,15 +5,12 @@ import { formatPrice } from '../../utils/formatters';
 import { ROUTES } from '../../utils/routes';
 import './OrderPanel.css';
 
-const DELIVERY_FEE = 80;
-
 export default function OrderPanel() {
   const navigate = useNavigate();
   const { cart, updateQuantity, removeItem } = useCart();
 
   const items = cart?.items ?? [];
   const subtotal = cart?.totalAmount ?? 0;
-  const total = items.length > 0 ? subtotal + DELIVERY_FEE : 0;
 
   return (
     <aside className="order-panel">
@@ -84,14 +81,18 @@ export default function OrderPanel() {
             </div>
             <div className="order-panel__summary-row">
               <span>Delivery fee</span>
-              <span>{formatPrice(DELIVERY_FEE)}</span>
+              <span>To be quoted</span>
             </div>
             <hr className="order-panel__summary-divider" />
             <div className="order-panel__summary-total">
               <span>Total</span>
-              <span>{formatPrice(total)}</span>
+              <span>{formatPrice(subtotal)}</span>
             </div>
           </div>
+
+          <p className="order-panel__policy-note">
+            Delivery fee is calculated based on your location and confirmed before payment.
+          </p>
 
           <button className="order-panel__confirm-btn" onClick={() => navigate(ROUTES.CHECKOUT)}>
             Confirm Order

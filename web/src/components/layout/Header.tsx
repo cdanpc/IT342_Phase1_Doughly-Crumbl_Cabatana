@@ -1,5 +1,5 @@
 import { Cookie, Search, ShoppingCart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/CartContext';
 import { useAuth } from '../../store/AuthContext';
 import { ROUTES } from '../../utils/routes';
@@ -12,8 +12,32 @@ interface HeaderProps {
 
 export default function Header({ searchQuery, onSearchChange }: HeaderProps) {
   const navigate = useNavigate();
-  const { itemCount } = useCart();
+  const location = useLocation();
+  const { itemCount, toggleOrderPanel, openOrderPanel, closeOrderPanel } = useCart();
   const { isAdmin } = useAuth();
+
+  function handleOrderBagClick() {
+    if (location.pathname !== ROUTES.MENU) {
+      navigate(ROUTES.MENU);
+      if (itemCount > 0) {
+        openOrderPanel();
+      } else {
+        closeOrderPanel();
+      }
+      return;
+    }
+
+    if (itemCount > 0) {
+      toggleOrderPanel();
+      return;
+    }
+
+    closeOrderPanel();
+  }
+
+  function handleOrderClick() {
+    navigate(ROUTES.CHECKOUT);
+  }
 
   return (
     <header className="app-header">
@@ -38,10 +62,21 @@ export default function Header({ searchQuery, onSearchChange }: HeaderProps) {
       )}
 
       {!isAdmin && (
-        <button className="app-header__cart" onClick={() => navigate(ROUTES.MENU)}>
-          <ShoppingCart size={28} />
-          {itemCount > 0 && <span className="app-header__cart-badge">{itemCount}</span>}
-        </button>
+        <div className="app-header__actions">
+          <button className="app-header__cart" onClick={handleOrderBagClick}>
+            <ShoppingCart size={18} />
+            <span className="app-header__cart-label">Add to Cart</span>
+            <span className="app-header__cart-badge">{itemCount}</span>
+          </button>
+
+          <button
+            className={`app-header__order-btn ${location.pathname.startsWith(ROUTES.ORDERS) ? 'app-header__order-btn--outline' : ''}`}
+            onClick={handleOrderClick}
+            disabled={itemCount === 0}
+          >
+            Order
+          </button>
+        </div>
       )}
     </header>
   );

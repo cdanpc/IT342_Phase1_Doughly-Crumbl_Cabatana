@@ -1,0 +1,149 @@
+.care-guide-page {
+  padding: 32px 24px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.care-guide__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header */
+.care-guide__header {
+  margin-bottom: 48px;
+}
+
+.care-guide__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.care-guide__subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Content */
+.care-guide__content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.care-guide__section {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 32px;
+}
+
+.care-guide__section:last-child {
+  border-bottom: none;
+}
+
+.care-guide__section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+.care-guide__text {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.care-guide__text strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Subsections */
+.care-guide__subsection {
+  margin-left: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.care-guide__subsection-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+/* Lists */
+.care-guide__list {
+  list-style: none;
+  padding-left: 0;
+  margin: 12px 0;
+}
+
+.care-guide__list li {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.8;
+  padding-left: 24px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.care-guide__list li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* Warning Box */
+.care-guide__warning {
+  background: #FAF7F4;
+  border-left: 4px solid var(--color-primary);
+  padding: 16px;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.care-guide__warning .care-guide__text {
+  margin-bottom: 8px;
+}
+
+.care-guide__warning .care-guide__text:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer */
+.care-guide__footer {
+  background: #FAF7F4;
+  padding: 24px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.care-guide__contact-note {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .care-guide-page {
+    padding: 24px 16px;
+  }
+
+  .care-guide__title {
+    font-size: 24px;
+  }
+
+  .care-guide__section-title {
+    font-size: 18px;
+  }
+}

@@ -11,7 +11,7 @@ const CATEGORIES = ['All Categories', 'CLASSIC', 'SPECIALTY', 'SEASONAL', 'BEST_
 
 export default function MenuPage() {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
-  const { addToCart } = useCart();
+  const { addToCart, openOrderPanel } = useCart();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,9 +43,10 @@ export default function MenuPage() {
     setShowFilter(false);
   }
 
-  function handleAddToCart(e: React.MouseEvent, product: Product) {
+  async function handleAddToCart(e: React.MouseEvent, product: Product) {
     e.stopPropagation();
-    addToCart(product.id, 1);
+    await addToCart(product.id, 1);
+    openOrderPanel();
   }
 
   return (
@@ -121,6 +122,7 @@ export default function MenuPage() {
                     <span className="product-card__name">{product.name}</span>
                     <button className="product-card__cart-btn" onClick={(e) => handleAddToCart(e, product)}>
                       <ShoppingCart size={18} />
+                      <span className="sr-only">Add 1 item</span>
                     </button>
                   </div>
                   <div className="product-card__price-row">

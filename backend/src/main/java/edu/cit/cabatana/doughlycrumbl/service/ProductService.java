@@ -25,8 +25,8 @@ public class ProductService {
 
     public Page<ProductResponse> getAllAvailableProducts(String search, String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAllAvailable(search, category, pageable)
-                .map(productAdapter::toDto);
+        return productRepository.findAllAvailable(category, pageable)
+                .map(this::toResponse);
     }
 
     public ProductResponse getProductById(Long id) {

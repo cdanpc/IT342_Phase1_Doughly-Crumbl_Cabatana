@@ -33,6 +33,13 @@ public class User {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Column(nullable = false, length = 30)
+    @Builder.Default
+    private String provider = "LOCAL";
+
+    @Column(name = "provider_id", length = 255)
+    private String providerId;
+
     @Column(nullable = false, length = 20)
     @Builder.Default
     private String role = "CUSTOMER";
