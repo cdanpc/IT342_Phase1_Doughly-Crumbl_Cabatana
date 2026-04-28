@@ -7,7 +7,6 @@ export const ROUTES = {
   ORDER_DETAIL: '/orders/:id',
   PAYMENT_INSTRUCTIONS: '/orders/:id/payment',
   ORDER_SUCCESS: '/order-success',
-  CHECKOUT: '/checkout',
   ABOUT: '/about',
   CARE_GUIDE: '/care-guide',
   ADMIN_DASHBOARD: '/admin',

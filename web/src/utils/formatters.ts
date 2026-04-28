@@ -83,23 +83,27 @@ export function formatOrderStatus(status: string): string {
 
 export function getOrderStatusHelperText(status: string): string {
   switch (status) {
+    case 'ORDER_PLACED':
+      return 'Your order has been placed and is awaiting seller confirmation.';
     case 'AWAITING_DELIVERY_QUOTE':
-      return "We're calculating your delivery fee based on your location.";
+      return "Seller is calculating your delivery fee. You'll be notified here once it's ready.";
     case 'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED':
-      return 'Delivery fee has been added. Please review the updated total and submit payment.';
+      return 'Delivery fee has been confirmed. Please review the total and submit your payment.';
     case 'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION':
-      return "We've received your proof of payment and are verifying it.";
+      return "We've received your proof of payment and are verifying it. Hang tight!";
     case 'PAYMENT_CONFIRMED':
-      return 'Payment verified. Your order will now proceed to preparation.';
+      return 'Payment verified! Your order is now being prepared.';
+    case 'PREPARING':
+      return 'Your order is being freshly prepared.';
+    case 'OUT_FOR_DELIVERY':
+      return "Your order is on its way! The rider is heading to your location.";
+    case 'READY':
+      return 'Your order is ready! Please come to the store to pick it up.';
+    case 'COMPLETED':
+      return 'Order completed. Thank you for choosing Doughly Crumbl!';
+    case 'CANCELLED':
+      return 'This order has been cancelled.';
     default:
       return '';
   }
-}
-
-/**
- * Truncate text to N characters
- */
-export function truncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
 }

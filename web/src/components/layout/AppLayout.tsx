@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import OrderPanel from './OrderPanel';
+import CheckoutModal from './CheckoutModal';
 import { useAuth } from '../../store/AuthContext';
 import { useCart } from '../../store/CartContext';
 import { ROUTES } from '../../utils/routes';
@@ -11,7 +12,7 @@ import './AppLayout.css';
 export default function AppLayout() {
   const [searchQuery, setSearchQuery] = useState('');
   const { isAdmin } = useAuth();
-  const { isOrderPanelOpen, closeOrderPanel } = useCart();
+  const { isOrderPanelOpen, closeOrderPanel, isCheckoutOpen, closeCheckout } = useCart();
   const location = useLocation();
 
   useEffect(() => {
@@ -31,7 +32,13 @@ export default function AppLayout() {
           <Outlet context={{ searchQuery }} />
         </div>
       </div>
-      {!isAdmin && isOrderPanelOpen && <OrderPanel />}
+      {!isAdmin && isOrderPanelOpen && (
+        <>
+          <div className="app-layout__overlay" onClick={closeOrderPanel} />
+          <OrderPanel />
+        </>
+      )}
+      {!isAdmin && <CheckoutModal isOpen={isCheckoutOpen} onClose={closeCheckout} />}
     </div>
   );
 }

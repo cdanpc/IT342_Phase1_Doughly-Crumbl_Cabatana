@@ -10,6 +10,7 @@ interface CartContextValue {
   isLoading: boolean;
   itemCount: number;
   isOrderPanelOpen: boolean;
+  isCheckoutOpen: boolean;
   fetchCart: () => Promise<void>;
   addToCart: (productId: number, quantity: number) => Promise<void>;
   updateQuantity: (cartItemId: number, quantity: number) => Promise<void>;
@@ -18,6 +19,8 @@ interface CartContextValue {
   openOrderPanel: () => void;
   closeOrderPanel: () => void;
   toggleOrderPanel: () => void;
+  openCheckout: () => void;
+  closeCheckout: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -26,6 +29,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOrderPanelOpen, setIsOrderPanelOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
   const fetchCart = useCallback(async () => {
@@ -92,6 +96,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const openOrderPanel = useCallback(() => setIsOrderPanelOpen(true), []);
   const closeOrderPanel = useCallback(() => setIsOrderPanelOpen(false), []);
   const toggleOrderPanel = useCallback(() => setIsOrderPanelOpen((prev) => !prev), []);
+  const openCheckout = useCallback(() => setIsCheckoutOpen(true), []);
+  const closeCheckout = useCallback(() => setIsCheckoutOpen(false), []);
 
   return (
     <CartContext.Provider
@@ -100,6 +106,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isLoading,
         itemCount: cart?.itemCount ?? 0,
         isOrderPanelOpen,
+        isCheckoutOpen,
         fetchCart,
         addToCart,
         updateQuantity,
@@ -108,6 +115,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         openOrderPanel,
         closeOrderPanel,
         toggleOrderPanel,
+        openCheckout,
+        closeCheckout,
       }}
     >
       {children}

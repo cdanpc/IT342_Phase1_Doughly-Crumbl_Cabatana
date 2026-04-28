@@ -31,8 +31,10 @@ export default function AdminDashboard() {
     fetchData();
   }, []);
 
-  const pendingCount = orders.filter((o) => o.status === 'PENDING').length;
-  const deliveredCount = orders.filter((o) => o.status === 'DELIVERED').length;
+  const pendingCount = orders.filter(
+    (o) => o.status === 'ORDER_PLACED' || o.status === 'AWAITING_DELIVERY_QUOTE'
+  ).length;
+  const deliveredCount = orders.filter((o) => o.status === 'COMPLETED').length;
 
   const stats = [
     { label: 'Total Products', value: products.length, icon: <Package size={24} />, color: '#3B82F6', bg: '#EFF6FF' },

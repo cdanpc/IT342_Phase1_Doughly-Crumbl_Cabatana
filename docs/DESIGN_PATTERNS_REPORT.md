@@ -5,6 +5,21 @@
 **Course:** IT342 - Integrative Programming and Technologies  
 **Date:** April 2026
 
+### GitHub Repository Information
+**Branch:** `feature/design-patterns-refactor`  
+**Repository:** https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana
+
+**Pattern Implementation Commits:**
+- Factory Pattern: [`3cafb2a`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/3cafb2a)
+- Builder Pattern: [`3cafb2a`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/3cafb2a) *(Lombok @Builder)*
+- Adapter Pattern: [`0029ebe`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/0029ebe)
+- Strategy Pattern: [`1424278`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/1424278)
+- Observer Pattern: [`c653e51`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/c653e51)
+- Decorator Pattern: [`e4e4784`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/e4e4784)
+- Documentation: [`b8f9fb9`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/b8f9fb9)
+
+> **Note:** Replace `[your-repo]` with your actual GitHub username or organization name
+
 ---
 
 ## Executive Summary
@@ -135,6 +150,8 @@ When orders are placed or status changes, `OrderEventPublisher` notifies three o
 
 ### Pattern #1: Factory Pattern - Order Creation
 
+**📌 Commit:** [`3cafb2a`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/3cafb2a)
+
 **Location:**
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/factory/OrderFactory.java`
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/factory/OrderItemFactory.java`
@@ -186,6 +203,8 @@ Order order = orderFactory.createOrderFromCart(user, cart, request);
 ---
 
 ### Pattern #2: Adapter Pattern - DTO Mapping
+
+**📌 Commit:** [`0029ebe`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/0029ebe)
 
 **Location:**
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/adapter/EntityToDtoAdapter.java` (interface)
@@ -239,6 +258,8 @@ return orderAdapter.toSummaryDto(order);    // Summary
 ---
 
 ### Pattern #3: Strategy Pattern - Order Status Management
+
+**📌 Commit:** [`1424278`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/1424278)
 
 **Location:**
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/strategy/OrderStatusStrategy.java` (interface)
@@ -311,6 +332,8 @@ public OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest re
 
 ### Pattern #4: Observer Pattern - Order Events
 
+**📌 Commit:** [`c653e51`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/c653e51)
+
 **Location:**
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/observer/OrderObserver.java` (interface)
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/observer/OrderEventPublisher.java`
@@ -353,6 +376,8 @@ public OrderResponse placeOrder(Long userId, CheckoutRequest request) {
 ---
 
 ### Pattern #5: Decorator Pattern - Response Enhancement
+
+**📌 Commit:** [`e4e4784`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/e4e4784)
 
 **Location:**
 - `backend/src/main/java/edu/cit/cabatana/doughlycrumbl/decorator/ResponseDecorator.java`
@@ -398,6 +423,8 @@ Map<String, Object> decoratedResponse = new ResponseDecorator<>(orders.getConten
 ---
 
 ### Pattern #6: Builder Pattern (Lombok)
+
+**📌 Commit:** [`3cafb2a`](https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/3cafb2a) *(integrated with Factory Pattern)*
 
 **Location:**
 Used throughout DTOs with `@Builder` annotation:
@@ -553,6 +580,31 @@ While the pattern implementation increased the number of files, it followed SOLI
 
 ---
 
+## Git Repository Details
+
+### Implementation Commit
+- **Branch:** `feature/design-patterns-refactor`
+- **Commit Hash:** `b8f9fb9a3e4f3729fb8516a6214f520f35b9b1cc`
+- **Commit Message:** "Applied 6 design patterns to improve code quality"
+- **Files Changed:** 29 files (26 new pattern classes, 3 refactored services)
+- **Lines Added:** ~1,500+ lines of pattern implementation
+- **Lines Removed:** ~150+ lines of duplicate/complex code
+
+### How to Access the Code
+```bash
+git clone <your-repository-url>
+cd IT342_Phase1_Doughly-Crumbl_Cabatana
+git checkout feature/design-patterns-refactor
+git log --oneline | head -1  # Verify commit hash
+```
+
+### Direct Link to Changes
+View all changes in this commit:  
+https://github.com/[your-repo]/IT342_Phase1_Doughly-Crumbl_Cabatana/commit/b8f9fb9a3e4f3729fb8516a6214f520f35b9b1cc
+
+---
+
 **Prepared by:** Group 5 - Cabatana  
 **Reviewed:** All design patterns functional and tested  
-**Status:** ✅ Complete - Ready for submission
+**Status:** ✅ Complete - Ready for submission  
+**Implementation Commit:** `b8f9fb9a3e4f3729fb8516a6214f520f35b9b1cc`

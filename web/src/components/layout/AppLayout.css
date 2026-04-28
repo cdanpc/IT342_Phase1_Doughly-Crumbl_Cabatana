@@ -19,3 +19,27 @@
   flex: 1;
   overflow-y: auto;
 }
+
+.app-layout__overlay {
+  display: none;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .app-layout__main {
+    margin-left: 0;
+    padding-bottom: 64px;
+  }
+
+  .app-layout__main--with-panel {
+    margin-right: 0;
+  }
+
+  .app-layout__overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 35;
+  }
+}

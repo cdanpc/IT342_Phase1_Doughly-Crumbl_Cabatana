@@ -7,6 +7,11 @@ import toast from 'react-hot-toast';
 import '../components/common/LoadingSpinner.css';
 import './AuthPages.css';
 
+interface FieldErrors {
+  email?: string;
+  password?: string;
+}
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -15,14 +20,25 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  function clearErrors() {
+    setApiError('');
+    setFieldErrors({});
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setApiError('');
+    clearErrors();
 
-    if (!email.trim() || !password.trim()) {
-      setApiError('Please fill in all fields.');
+    // Client-side validation
+    const newFieldErrors: FieldErrors = {};
+    if (!email.trim()) newFieldErrors.email = 'Email is required.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) newFieldErrors.email = 'Enter a valid email address.';
+    if (!password) newFieldErrors.password = 'Password is required.';
+    if (Object.keys(newFieldErrors).length > 0) {
+      setFieldErrors(newFieldErrors);
       return;
     }
 
@@ -30,7 +46,6 @@ export default function LoginPage() {
     try {
       await login({ email: email.trim(), password });
       toast.success('Welcome back!');
-      // Auth context will update isAdmin — check from the stored data
       const stored = localStorage.getItem('auth');
       if (stored) {
         const parsed = JSON.parse(stored);
@@ -39,10 +54,26 @@ export default function LoginPage() {
         navigate(ROUTES.MENU);
       }
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      const message = error.response?.data?.message || 'Invalid email or password.';
+      const error = err as { response?: { status?: number; data?: { message?: string } }; request?: unknown; message?: string };
+
+      if (!error.response) {
+        // Network error — backend not reachable
+        const msg = 'Cannot connect to server. Make sure the backend is running.';
+        setApiError(msg);
+        toast.error(msg);
+        return;
+      }
+
+      const message = error.response.data?.message || 'Login failed. Please try again.';
       setApiError(message);
       toast.error(message);
+
+      // Highlight the relevant field based on the error message
+      if (message.toLowerCase().includes('email') || message.toLowerCase().includes('account')) {
+        setFieldErrors({ email: message });
+      } else if (message.toLowerCase().includes('password') || message.toLowerCase().includes('incorrect')) {
+        setFieldErrors({ password: message });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -76,23 +107,24 @@ export default function LoginPage() {
           <div className="auth-form__field">
             <label className="auth-form__label">Email</label>
             <input
-              className="auth-form__input"
+              className={`auth-form__input ${fieldErrors.email ? 'auth-form__input--error' : ''}`}
               type="email"
               placeholder="johndoe@gmail.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setEmail(e.target.value); clearErrors(); }}
             />
+            {fieldErrors.email && <span className="auth-form__field-error">{fieldErrors.email}</span>}
           </div>
 
           <div className="auth-form__field">
             <label className="auth-form__label">Password</label>
             <div className="auth-form__input-wrapper">
               <input
-                className="auth-form__input auth-form__input--with-toggle"
+                className={`auth-form__input auth-form__input--with-toggle ${fieldErrors.password ? 'auth-form__input--error' : ''}`}
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); clearErrors(); }}
               />
               <button
                 type="button"
@@ -103,6 +135,7 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            {fieldErrors.password && <span className="auth-form__field-error">{fieldErrors.password}</span>}
           </div>
 
           <button className="auth-form__submit" type="submit" disabled={isLoading} style={{ marginTop: '28px' }}>

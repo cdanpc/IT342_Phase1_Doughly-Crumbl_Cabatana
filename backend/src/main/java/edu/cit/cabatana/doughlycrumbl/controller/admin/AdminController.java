@@ -4,6 +4,7 @@ import edu.cit.cabatana.doughlycrumbl.dto.request.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateOrderStatusRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
 import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.service.FileUploadService;
 import edu.cit.cabatana.doughlycrumbl.service.OrderService;
 import edu.cit.cabatana.doughlycrumbl.service.ProductService;
 import jakarta.validation.Valid;
@@ -13,9 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/admin")
@@ -25,6 +30,7 @@ public class AdminController {
 
     private final ProductService productService;
     private final OrderService orderService;
+    private final FileUploadService fileUploadService;
 
     // ===== Product Management =====
 
@@ -62,23 +68,21 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/products/upload-image")
+    public ResponseEntity<Map<String, String>> uploadProductImage(
+            @RequestParam MultipartFile file) {
+        String url = fileUploadService.saveImage(file);
+        return ResponseEntity.ok(Map.of("url", url));
+    }
+
     // ===== Order Management =====
 
     @GetMapping("/orders")
-    public ResponseEntity<Map<String, Object>> getAllOrders(
+    public ResponseEntity<List<OrderResponse>> getAllOrders(
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-
-        Page<OrderResponse> orderPage = orderService.getAllOrders(status, page, size);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("content", orderPage.getContent());
-        response.put("totalElements", orderPage.getTotalElements());
-        response.put("totalPages", orderPage.getTotalPages());
-        response.put("currentPage", orderPage.getNumber());
-
-        return ResponseEntity.ok(response);
+            @RequestParam(defaultValue = "50") int size) {
+        return ResponseEntity.ok(orderService.getAllOrders(status, page, size).getContent());
     }
 
     @GetMapping("/orders/{id}")
@@ -91,5 +95,12 @@ public class AdminController {
             @PathVariable Long id,
             @Valid @RequestBody UpdateOrderStatusRequest request) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, request));
+    }
+
+    @PutMapping("/orders/{id}/delivery-fee")
+    public ResponseEntity<OrderResponse> quoteDeliveryFee(
+            @PathVariable Long id,
+            @RequestParam BigDecimal fee) {
+        return ResponseEntity.ok(orderService.quoteDeliveryFee(id, fee));
     }
 }

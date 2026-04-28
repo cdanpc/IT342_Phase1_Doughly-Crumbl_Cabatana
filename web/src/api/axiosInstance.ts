@@ -9,9 +9,15 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor — attach JWT token
+// Request interceptor — attach JWT token + fix FormData Content-Type
 axiosInstance.interceptors.request.use(
   (config) => {
+    // When sending FormData, delete the default Content-Type so the browser
+    // can set multipart/form-data with the correct boundary automatically.
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
+    }
+
     const authData = localStorage.getItem('auth');
     if (authData) {
       try {
@@ -34,12 +40,13 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('auth');
-      // Only redirect if not already on auth pages
       if (
         !window.location.pathname.includes('/login') &&
         !window.location.pathname.includes('/register')
       ) {
         window.location.href = '/login';
+        // Leave the promise pending so catch blocks never fire error toasts
+        return new Promise(() => {});
       }
     }
     return Promise.reject(error);

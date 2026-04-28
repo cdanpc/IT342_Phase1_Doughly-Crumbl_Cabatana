@@ -7,7 +7,7 @@ import './OrderPanel.css';
 
 export default function OrderPanel() {
   const navigate = useNavigate();
-  const { cart, updateQuantity, removeItem } = useCart();
+  const { cart, updateQuantity, removeItem, openCheckout } = useCart();
 
   const items = cart?.items ?? [];
   const subtotal = cart?.totalAmount ?? 0;
@@ -94,8 +94,8 @@ export default function OrderPanel() {
             Delivery fee is calculated based on your location and confirmed before payment.
           </p>
 
-          <button className="order-panel__confirm-btn" onClick={() => navigate(ROUTES.CHECKOUT)}>
-            Confirm Order
+          <button className="order-panel__confirm-btn" onClick={openCheckout}>
+            Proceed to Checkout
           </button>
         </>
       )}

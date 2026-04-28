@@ -58,10 +58,15 @@ public class OrderFactory {
         // Calculate total amount
         BigDecimal totalAmount = calculateTotalAmount(orderItems);
 
+        // Determine initial status based on fulfillment method
+        boolean isPickup = request.getDeliveryNotes() != null
+                && request.getDeliveryNotes().contains("Fulfillment: PICKUP");
+        String initialStatus = isPickup ? "ORDER_PLACED" : "AWAITING_DELIVERY_QUOTE";
+
         // Build the order
         Order order = Order.builder()
                 .user(user)
-                .status("PENDING")
+                .status(initialStatus)
                 .deliveryAddress(request.getDeliveryAddress())
                 .contactNumber(request.getContactNumber())
                 .deliveryNotes(request.getDeliveryNotes())

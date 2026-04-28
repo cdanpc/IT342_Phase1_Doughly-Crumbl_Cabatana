@@ -10,6 +10,7 @@ import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
 import edu.cit.cabatana.doughlycrumbl.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,19 +65,30 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        // Check if the email exists before attempting authentication
+        // so we can return a specific message instead of Spring Security's generic one
+        if (!userRepository.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("No account found with that email address.");
+        }
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String token = jwtTokenProvider.generateToken(userDetails);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
 
-        return AuthResponse.builder()
-                .token(token)
-                .userId(userDetails.getId())
-                .name(userDetails.getName())
-                .email(userDetails.getEmail())
-                .role(userDetails.getRole())
-                .build();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            String token = jwtTokenProvider.generateToken(userDetails);
+
+            return AuthResponse.builder()
+                    .token(token)
+                    .userId(userDetails.getId())
+                    .name(userDetails.getName())
+                    .email(userDetails.getEmail())
+                    .role(userDetails.getRole())
+                    .build();
+
+        } catch (BadCredentialsException ex) {
+            throw new BadRequestException("Incorrect password. Please try again.");
+        }
     }
 }

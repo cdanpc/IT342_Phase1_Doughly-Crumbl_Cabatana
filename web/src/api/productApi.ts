@@ -11,15 +11,17 @@ export async function getProducts(params?: {
   return response.data;
 }
 
-export async function getProductById(id: number): Promise<Product> {
-  const response = await axiosInstance.get<Product>(`/products/${id}`);
-  return response.data;
-}
-
 // Admin endpoints
 export async function getAdminProducts(): Promise<Product[]> {
-  const response = await axiosInstance.get<Product[]>('/admin/products');
-  return response.data;
+  const response = await axiosInstance.get<{ content: Product[] }>('/admin/products');
+  return response.data.content;
+}
+
+export async function uploadProductImage(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await axiosInstance.post<{ url: string }>('/admin/products/upload-image', formData);
+  return response.data.url;
 }
 
 export async function createProduct(data: ProductRequest): Promise<Product> {

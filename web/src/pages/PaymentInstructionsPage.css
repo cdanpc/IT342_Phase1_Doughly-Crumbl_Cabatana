@@ -1,0 +1,323 @@
+/* ===== PAYMENT INSTRUCTIONS PAGE ===== */
+
+.pip {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ===== BACK BUTTON ===== */
+.pip__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.pip__back:hover {
+  color: var(--color-primary);
+}
+
+/* ===== HEADER ===== */
+.pip__title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 6px 0;
+  line-height: 1.2;
+}
+
+.pip__subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0 0 24px 0;
+}
+
+.pip__subtitle strong {
+  color: var(--color-primary);
+}
+
+/* ===== METHOD TABS ===== */
+.pip__tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.pip__tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: #fff;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.pip__tab:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pip__tab--active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.pip__tab--active:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+/* ===== PAYMENT CARD ===== */
+.pip__card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+/* ===== TOTAL BANNER ===== */
+.pip__total-banner {
+  background: var(--color-primary-light, #FFF5F5);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pip__total-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.pip__total-amount {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ===== QR SECTION ===== */
+.pip__qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.pip__qr-img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.pip__qr-img--clickable {
+  cursor: zoom-in;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.pip__qr-img--clickable:hover {
+  opacity: 0.88;
+  transform: scale(1.03);
+}
+
+.pip__qr-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin: 0;
+  text-align: center;
+}
+
+/* ===== ACCOUNT DETAILS ===== */
+.pip__account-details {
+  width: 100%;
+  background: #F8F9FA;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+
+.pip__account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding: 4px 0;
+  gap: 16px;
+}
+
+.pip__account-row:not(:last-child) {
+  border-bottom: 1px solid #EDEDED;
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.pip__account-key {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pip__account-value {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+.pip__account-value--ref {
+  color: var(--color-primary);
+}
+
+/* ===== INSTRUCTIONS TEXT ===== */
+.pip__instructions {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  background: #F8F9FA;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 0;
+}
+
+/* ===== CASH ON PICKUP ===== */
+.pip__cash-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.pip__cash-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);
+}
+
+.pip__cash-desc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* ===== PROOF UPLOAD CARD ===== */
+.pip__upload-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 4px 0;
+  color: var(--color-text-primary);
+}
+
+.pip__upload-desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 0 0 16px 0;
+}
+
+/* ===== SUBMIT BUTTON (cash) ===== */
+.pip__submit-btn {
+  width: 100%;
+  padding: 13px 0;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  letter-spacing: 0.3px;
+}
+
+.pip__submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.pip__submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== LIGHTBOX ===== */
+.pip__lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 1000;
+  cursor: zoom-out;
+}
+
+.pip__lightbox-img {
+  max-width: 92vw;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+}
+
+.pip__lightbox-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 560px) {
+  .pip {
+    padding: 24px 16px 48px;
+  }
+
+  .pip__qr-img {
+    width: 175px;
+    height: 175px;
+  }
+
+  .pip__lightbox-img {
+    max-width: 96vw;
+    max-height: 80vh;
+  }
+
+  .pip__tabs {
+    gap: 6px;
+  }
+
+  .pip__tab {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+}

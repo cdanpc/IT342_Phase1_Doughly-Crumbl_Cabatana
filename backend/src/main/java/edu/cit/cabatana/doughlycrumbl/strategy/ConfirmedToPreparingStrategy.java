@@ -14,12 +14,16 @@ public class ConfirmedToPreparingStrategy implements OrderStatusStrategy {
 
     @Override
     public boolean canTransition(Order order) {
-        return "CONFIRMED".equals(order.getStatus());
+        String s = order.getStatus();
+        // Legacy CONFIRMED, new PAYMENT_CONFIRMED, and ORDER_PLACED (cash-on-pickup)
+        return "CONFIRMED".equals(s)
+                || "PAYMENT_CONFIRMED".equals(s)
+                || "ORDER_PLACED".equals(s);
     }
 
     @Override
     public String getValidationError() {
-        return "Can only prepare CONFIRMED orders";
+        return "Order must be in CONFIRMED, PAYMENT_CONFIRMED, or ORDER_PLACED status to start preparing";
     }
 
     @Override
