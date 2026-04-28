@@ -241,10 +241,10 @@ Environment: Windows 11, Java 17, Maven 3.x, H2 in-memory (test profile)
 
 | Fix ID | Issue Ref | What Was Changed | Files |
 |---|---|---|---|
-| FIX-001 | ISS-001 | Updated `package` declarations in all 25 `features/order/` files from old layer packages to `edu.cit.cabatana.doughlycrumbl.features.order` | 25 files in `features/order/` |
-| FIX-002 | ISS-002 | Removed stale `import edu.cit.cabatana.doughlycrumbl.model.*` from `CartService.java` | `features/cart/CartService.java` |
-| FIX-003 | ISS-003 | Added H2 test dependency to `pom.xml`; created `src/test/resources/application-test.properties` with in-memory datasource; annotated `BackendApplicationTests` with `@ActiveProfiles("test")` | `pom.xml`, `application-test.properties`, `BackendApplicationTests.java` |
-| FIX-004 | ISS-004 | Changed test assertion from `isUnauthorized()` to `is4xxClientError()`; renamed test method to `addToCart_unauthenticated_isRejected` | `CartControllerIntegrationTest.java` |
-| FIX-005 | ISS-005 | Updated all imports in `OrderServiceTest` from old layer packages to `features.order.*` | `OrderServiceTest.java` |
-| FIX-006 | ISS-005 | Added explicit `exceptionHandling` with `AuthenticationEntryPoint` returning 401 to `SecurityConfig` (also improves production REST API behavior) | `shared/config/SecurityConfig.java` |
-| FIX-007 | ISS-006 | Updated `main.tsx` imports from `./store/X` to `./shared/hooks/X` | `web/src/main.tsx` |
+| FIX-001 | ISS-001 | Updated `package` declarations in all 25 `features/order/` files from old layer packages to `edu.cit.cabatana.doughlycrumbl.features.order` | `bda2621` |
+| FIX-002 | ISS-002 | Removed stale `import edu.cit.cabatana.doughlycrumbl.model.*` from `CartService.java` | `bda2621` |
+| FIX-003 | ISS-003 | Added H2 test dependency to `pom.xml`; created `src/test/resources/application-test.properties` with in-memory datasource; annotated `BackendApplicationTests` with `@ActiveProfiles("test")` | `bda2621` |
+| FIX-004 | ISS-004 | Changed test assertion from `isUnauthorized()` to `is4xxClientError()`; renamed test method to `addToCart_unauthenticated_isRejected` | `bda2621` |
+| FIX-005 | ISS-005 | Updated all imports in `OrderServiceTest` from old layer packages to `features.order.*` | `bda2621` |
+| FIX-006 | ISS-005 | Added explicit `exceptionHandling` with `AuthenticationEntryPoint` returning 401 to `SecurityConfig` (also improves production REST API behavior) | `bda2621` |
+| FIX-007 | ISS-006 | Updated `main.tsx` imports from `./store/X` to `./shared/hooks/X` | `8af25c9` |
