@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.service;
 
-import edu.cit.cabatana.doughlycrumbl.config.properties.AppUploadProperties;
+import edu.cit.cabatana.doughlycrumbl.shared.config.AppUploadProperties;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

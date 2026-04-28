@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.config;
+package edu.cit.cabatana.doughlycrumbl.shared.config;
 
 import edu.cit.cabatana.doughlycrumbl.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;

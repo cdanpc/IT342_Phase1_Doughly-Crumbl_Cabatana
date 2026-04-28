@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.config;
+package edu.cit.cabatana.doughlycrumbl.shared.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

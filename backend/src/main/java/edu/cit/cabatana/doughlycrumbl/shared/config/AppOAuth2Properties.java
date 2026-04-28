@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.config.properties;
+package edu.cit.cabatana.doughlycrumbl.shared.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
