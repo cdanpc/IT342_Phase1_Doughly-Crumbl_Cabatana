@@ -10,7 +10,7 @@ import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException
 import edu.cit.cabatana.doughlycrumbl.model.*;
 import edu.cit.cabatana.doughlycrumbl.repository.CartItemRepository;
 import edu.cit.cabatana.doughlycrumbl.repository.CartRepository;
-import edu.cit.cabatana.doughlycrumbl.repository.ProductRepository;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductRepository;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

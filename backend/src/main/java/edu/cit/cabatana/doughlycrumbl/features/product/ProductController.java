@@ -1,7 +1,7 @@
-package edu.cit.cabatana.doughlycrumbl.controller;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
-import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
-import edu.cit.cabatana.doughlycrumbl.service.ProductService;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,5 @@
-package edu.cit.cabatana.doughlycrumbl.dto.request;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,19 +11,13 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequest {
+public class ProductResponse {
 
-    @NotBlank(message = "Product name is required")
+    private Long id;
     private String name;
-
     private String description;
-
-    @NotNull(message = "Price is required")
     private BigDecimal price;
-
     private String imageUrl;
-
     private String category;
-
     private Boolean available;
 }

@@ -1,7 +1,9 @@
-package edu.cit.cabatana.doughlycrumbl.adapter;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
-import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
-import edu.cit.cabatana.doughlycrumbl.model.Product;
+import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
+
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.features.product.Product;
 import org.springframework.stereotype.Component;
 
 /**

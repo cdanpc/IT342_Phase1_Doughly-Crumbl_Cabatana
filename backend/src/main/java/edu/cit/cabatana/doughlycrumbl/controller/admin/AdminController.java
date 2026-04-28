@@ -1,12 +1,12 @@
 package edu.cit.cabatana.doughlycrumbl.controller.admin;
 
-import edu.cit.cabatana.doughlycrumbl.dto.request.ProductRequest;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateOrderStatusRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
-import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
 import edu.cit.cabatana.doughlycrumbl.service.FileUploadService;
 import edu.cit.cabatana.doughlycrumbl.service.OrderService;
-import edu.cit.cabatana.doughlycrumbl.service.ProductService;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

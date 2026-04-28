@@ -1,11 +1,11 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
-import edu.cit.cabatana.doughlycrumbl.adapter.ProductAdapter;
-import edu.cit.cabatana.doughlycrumbl.dto.request.ProductRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductAdapter;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductRequest;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException;
-import edu.cit.cabatana.doughlycrumbl.model.Product;
-import edu.cit.cabatana.doughlycrumbl.repository.ProductRepository;
+import edu.cit.cabatana.doughlycrumbl.features.product.Product;
+import edu.cit.cabatana.doughlycrumbl.features.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

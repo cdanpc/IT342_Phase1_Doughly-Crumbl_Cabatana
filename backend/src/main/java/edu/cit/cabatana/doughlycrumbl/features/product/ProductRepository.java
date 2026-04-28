@@ -1,6 +1,6 @@
-package edu.cit.cabatana.doughlycrumbl.repository;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
-import edu.cit.cabatana.doughlycrumbl.model.Product;
+import edu.cit.cabatana.doughlycrumbl.features.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

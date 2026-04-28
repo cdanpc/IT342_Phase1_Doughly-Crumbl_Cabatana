@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.config;
+package edu.cit.cabatana.doughlycrumbl.features.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;

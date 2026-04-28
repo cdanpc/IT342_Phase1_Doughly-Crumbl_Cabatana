@@ -1,5 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.adapter;
 
+import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
+
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse.OrderItemResponse;
 import edu.cit.cabatana.doughlycrumbl.model.Order;
