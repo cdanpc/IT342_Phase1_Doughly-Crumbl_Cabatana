@@ -1,7 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.factory;
 
 import edu.cit.cabatana.doughlycrumbl.dto.request.CheckoutRequest;
-import edu.cit.cabatana.doughlycrumbl.model.Cart;
+import edu.cit.cabatana.doughlycrumbl.features.cart.Cart;
 import edu.cit.cabatana.doughlycrumbl.model.Order;
 import edu.cit.cabatana.doughlycrumbl.model.OrderItem;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;

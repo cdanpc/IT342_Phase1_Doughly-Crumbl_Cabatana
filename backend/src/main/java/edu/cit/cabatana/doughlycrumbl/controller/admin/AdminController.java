@@ -4,7 +4,7 @@ import edu.cit.cabatana.doughlycrumbl.features.product.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateOrderStatusRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
-import edu.cit.cabatana.doughlycrumbl.service.FileUploadService;
+import edu.cit.cabatana.doughlycrumbl.features.payment.FileUploadService;
 import edu.cit.cabatana.doughlycrumbl.service.OrderService;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductService;
 import jakarta.validation.Valid;

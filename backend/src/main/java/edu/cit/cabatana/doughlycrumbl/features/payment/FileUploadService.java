@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.payment;
 
 import edu.cit.cabatana.doughlycrumbl.shared.config.AppUploadProperties;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;

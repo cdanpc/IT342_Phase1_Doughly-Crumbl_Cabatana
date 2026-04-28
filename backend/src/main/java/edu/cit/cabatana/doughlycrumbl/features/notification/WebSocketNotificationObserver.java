@@ -1,9 +1,11 @@
-package edu.cit.cabatana.doughlycrumbl.observer;
+package edu.cit.cabatana.doughlycrumbl.features.notification;
+
+import edu.cit.cabatana.doughlycrumbl.observer.OrderObserver;
 
 import edu.cit.cabatana.doughlycrumbl.model.Order;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
-import edu.cit.cabatana.doughlycrumbl.service.NotificationService;
+import edu.cit.cabatana.doughlycrumbl.features.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

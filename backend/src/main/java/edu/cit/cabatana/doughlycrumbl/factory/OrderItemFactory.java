@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.factory;
 
-import edu.cit.cabatana.doughlycrumbl.model.CartItem;
+import edu.cit.cabatana.doughlycrumbl.features.cart.CartItem;
 import edu.cit.cabatana.doughlycrumbl.model.OrderItem;
 import org.springframework.stereotype.Component;
 

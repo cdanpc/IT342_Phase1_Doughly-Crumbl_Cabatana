@@ -1,6 +1,6 @@
-package edu.cit.cabatana.doughlycrumbl.controller;
+package edu.cit.cabatana.doughlycrumbl.features.payment;
 
-import edu.cit.cabatana.doughlycrumbl.service.FileUploadService;
+import edu.cit.cabatana.doughlycrumbl.features.payment.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

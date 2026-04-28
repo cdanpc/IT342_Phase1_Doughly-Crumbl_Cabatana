@@ -1,6 +1,6 @@
-package edu.cit.cabatana.doughlycrumbl.repository;
+package edu.cit.cabatana.doughlycrumbl.features.notification;
 
-import edu.cit.cabatana.doughlycrumbl.model.Notification;
+import edu.cit.cabatana.doughlycrumbl.features.notification.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

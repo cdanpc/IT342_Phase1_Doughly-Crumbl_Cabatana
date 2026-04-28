@@ -1,15 +1,15 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.cart;
 
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 
-import edu.cit.cabatana.doughlycrumbl.adapter.CartAdapter;
-import edu.cit.cabatana.doughlycrumbl.dto.request.AddToCartRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateCartItemRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.response.CartResponse;
+import edu.cit.cabatana.doughlycrumbl.features.cart.CartAdapter;
+import edu.cit.cabatana.doughlycrumbl.features.cart.AddToCartRequest;
+import edu.cit.cabatana.doughlycrumbl.features.cart.UpdateCartItemRequest;
+import edu.cit.cabatana.doughlycrumbl.features.cart.CartResponse;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException;
 import edu.cit.cabatana.doughlycrumbl.model.*;
-import edu.cit.cabatana.doughlycrumbl.repository.CartItemRepository;
-import edu.cit.cabatana.doughlycrumbl.repository.CartRepository;
+import edu.cit.cabatana.doughlycrumbl.features.cart.CartItemRepository;
+import edu.cit.cabatana.doughlycrumbl.features.cart.CartRepository;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductRepository;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import lombok.RequiredArgsConstructor;

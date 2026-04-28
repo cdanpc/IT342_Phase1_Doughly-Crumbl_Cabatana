@@ -1,9 +1,9 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.notification;
 
-import edu.cit.cabatana.doughlycrumbl.dto.response.NotificationResponse;
-import edu.cit.cabatana.doughlycrumbl.model.Notification;
+import edu.cit.cabatana.doughlycrumbl.features.notification.NotificationResponse;
+import edu.cit.cabatana.doughlycrumbl.features.notification.Notification;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
-import edu.cit.cabatana.doughlycrumbl.repository.NotificationRepository;
+import edu.cit.cabatana.doughlycrumbl.features.notification.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

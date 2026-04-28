@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.model;
+package edu.cit.cabatana.doughlycrumbl.features.cart;
 
 import edu.cit.cabatana.doughlycrumbl.features.product.Product;
 
