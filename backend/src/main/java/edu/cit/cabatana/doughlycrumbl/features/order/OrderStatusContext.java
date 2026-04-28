@@ -1,7 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.strategy;
 
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
-import edu.cit.cabatana.doughlycrumbl.model.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

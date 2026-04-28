@@ -2,10 +2,10 @@ package edu.cit.cabatana.doughlycrumbl.adapter;
 
 import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
 
-import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
-import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse.OrderItemResponse;
-import edu.cit.cabatana.doughlycrumbl.model.Order;
-import edu.cit.cabatana.doughlycrumbl.model.OrderItem;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderResponse;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderResponse.OrderItemResponse;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderItem;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

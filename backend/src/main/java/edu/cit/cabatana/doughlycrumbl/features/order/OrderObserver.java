@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.observer;
 
-import edu.cit.cabatana.doughlycrumbl.model.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 
 /**
  * Observer Pattern Implementation - Behavioral Pattern

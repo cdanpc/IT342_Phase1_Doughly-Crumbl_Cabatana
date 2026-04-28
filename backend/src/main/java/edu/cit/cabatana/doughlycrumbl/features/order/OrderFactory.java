@@ -1,9 +1,9 @@
 package edu.cit.cabatana.doughlycrumbl.factory;
 
-import edu.cit.cabatana.doughlycrumbl.dto.request.CheckoutRequest;
+import edu.cit.cabatana.doughlycrumbl.features.order.CheckoutRequest;
 import edu.cit.cabatana.doughlycrumbl.features.cart.Cart;
-import edu.cit.cabatana.doughlycrumbl.model.Order;
-import edu.cit.cabatana.doughlycrumbl.model.OrderItem;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderItem;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

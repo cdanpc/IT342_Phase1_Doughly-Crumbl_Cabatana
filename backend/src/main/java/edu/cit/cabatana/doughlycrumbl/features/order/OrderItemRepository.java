@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.repository;
 
-import edu.cit.cabatana.doughlycrumbl.model.OrderItem;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

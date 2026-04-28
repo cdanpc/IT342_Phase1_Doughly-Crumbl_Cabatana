@@ -1,8 +1,8 @@
 package edu.cit.cabatana.doughlycrumbl.features.notification;
 
-import edu.cit.cabatana.doughlycrumbl.observer.OrderObserver;
+import edu.cit.cabatana.doughlycrumbl.features.order.OrderObserver;
 
-import edu.cit.cabatana.doughlycrumbl.model.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import edu.cit.cabatana.doughlycrumbl.features.notification.NotificationService;

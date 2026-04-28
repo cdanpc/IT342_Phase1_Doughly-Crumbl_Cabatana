@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.strategy;
 
-import edu.cit.cabatana.doughlycrumbl.model.Order;
+import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 
 /**
  * Strategy Pattern Implementation - Behavioral Pattern
