@@ -51,6 +51,7 @@ export default function AdminOrderDetail() {
         setOrder(data);
       } catch {
         setOrder(null);
+        toast.error('Failed to load order. Please try again.');
       } finally {
         setIsLoading(false);
       }

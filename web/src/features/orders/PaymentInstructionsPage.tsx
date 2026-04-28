@@ -76,6 +76,7 @@ export default function PaymentInstructionsPage() {
         setPaymentMethod(getDefaultPaymentMethod(data));
       } catch {
         setOrder(null);
+        toast.error('Failed to load order. Please try again.');
       } finally {
         setIsLoading(false);
       }

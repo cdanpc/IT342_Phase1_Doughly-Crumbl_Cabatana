@@ -37,6 +37,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ phone?: string; street?: string; barangay?: string; city?: string }>({});
 
   if (!isOpen) return null;
 
@@ -64,17 +65,36 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
       return;
     }
 
+    const errs: typeof fieldErrors = {};
     if (!phone.trim()) {
-      toast.error('Please fill in your contact number.');
+      errs.phone = 'Contact number is required.';
+    } else if (!/^(09\d{9}|\+639\d{9})$/.test(phone.trim())) {
+      errs.phone = 'Enter a valid PH number (e.g. 09171234567).';
+    }
+    if (isDelivery) {
+      if (!street.trim()) errs.street = 'Street address is required.';
+      if (!barangay.trim()) errs.barangay = 'Barangay is required.';
+      if (!city.trim()) errs.city = 'City is required.';
+    }
+    if (Object.keys(errs).length > 0) {
+      setFieldErrors(errs);
       return;
     }
 
-    if (isDelivery && (!street.trim() || !barangay.trim() || !city.trim())) {
-      toast.error('Please complete your delivery address (street, barangay, city).');
-      return;
-    }
-
+    setFieldErrors({});
     setIsConfirmOpen(true);
+  }
+
+  function resetForm() {
+    setFulfillmentMethod('DELIVERY');
+    setStreet('');
+    setBarangay('');
+    setCity('');
+    setLandmark('');
+    setPhone('');
+    setPaymentMethod('GCASH');
+    setNotes('');
+    setFieldErrors({});
   }
 
   async function confirmPlaceOrder() {
@@ -99,6 +119,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
       });
       await clearCart();
       setIsConfirmOpen(false);
+      resetForm();
       onClose();
       toast.success('Order placed! Awaiting delivery quote.');
       navigate(ROUTES.ORDER_SUCCESS, { state: { order, fulfillmentMethod } });
@@ -299,12 +320,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                           <MapPin size={13} /> Street Address <span style={{ color: 'var(--color-primary)' }}>*</span>
                         </label>
                         <input
-                          style={inputStyle}
+                          style={{ ...inputStyle, ...(fieldErrors.street ? { borderColor: 'var(--color-error)' } : {}) }}
                           type="text"
                           placeholder="House/Unit No., Street Name"
                           value={street}
-                          onChange={(e) => setStreet(e.target.value)}
+                          onChange={(e) => { setStreet(e.target.value); setFieldErrors((p) => ({ ...p, street: undefined })); }}
                         />
+                        {fieldErrors.street && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{fieldErrors.street}</span>}
                       </div>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -313,22 +335,24 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                             Barangay <span style={{ color: 'var(--color-primary)' }}>*</span>
                           </label>
                           <input
-                            style={inputStyle}
+                            style={{ ...inputStyle, ...(fieldErrors.barangay ? { borderColor: 'var(--color-error)' } : {}) }}
                             type="text"
                             value={barangay}
-                            onChange={(e) => setBarangay(e.target.value)}
+                            onChange={(e) => { setBarangay(e.target.value); setFieldErrors((p) => ({ ...p, barangay: undefined })); }}
                           />
+                          {fieldErrors.barangay && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{fieldErrors.barangay}</span>}
                         </div>
                         <div>
                           <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
                             City <span style={{ color: 'var(--color-primary)' }}>*</span>
                           </label>
                           <input
-                            style={inputStyle}
+                            style={{ ...inputStyle, ...(fieldErrors.city ? { borderColor: 'var(--color-error)' } : {}) }}
                             type="text"
                             value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            onChange={(e) => { setCity(e.target.value); setFieldErrors((p) => ({ ...p, city: undefined })); }}
                           />
+                          {fieldErrors.city && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{fieldErrors.city}</span>}
                         </div>
                       </div>
 
@@ -381,12 +405,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       <Phone size={13} /> Contact Number <span style={{ color: 'var(--color-primary)' }}>*</span>
                     </label>
                     <input
-                      style={inputStyle}
+                      style={{ ...inputStyle, ...(fieldErrors.phone ? { borderColor: 'var(--color-error)' } : {}) }}
                       type="tel"
                       placeholder="09171234567"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => { setPhone(e.target.value); setFieldErrors((p) => ({ ...p, phone: undefined })); }}
                     />
+                    {fieldErrors.phone && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{fieldErrors.phone}</span>}
                   </div>
                 </div>
               </div>

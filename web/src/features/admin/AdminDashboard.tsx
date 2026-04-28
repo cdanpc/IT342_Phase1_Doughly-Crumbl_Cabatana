@@ -5,6 +5,7 @@ import { getAdminOrders } from '../../shared/api/orderApi';
 import { getAdminProducts } from '../../shared/api/productApi';
 import { ROUTES } from '../../shared/utils/routes';
 import type { Order, Product } from '../../shared/types';
+import toast from 'react-hot-toast';
 import '../../shared/components/LoadingSpinner.css';
 
 export default function AdminDashboard() {
@@ -23,7 +24,7 @@ export default function AdminDashboard() {
         setOrders(ordersData);
         setProducts(productsData);
       } catch {
-        // ignore
+        toast.error('Failed to load dashboard data. Please try again.');
       } finally {
         setIsLoading(false);
       }

@@ -92,7 +92,10 @@ export default function OrderDetailPage() {
       prevStatusRef.current = data.status;
       setOrder(data);
     } catch {
-      if (!silent) setOrder(null);
+      if (!silent) {
+        setOrder(null);
+        toast.error('Failed to load order. Please try again.');
+      }
     } finally {
       if (!silent) setIsLoading(false);
     }
