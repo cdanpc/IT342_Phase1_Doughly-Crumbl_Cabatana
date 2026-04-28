@@ -112,9 +112,12 @@ export interface Order {
   orderId: number;
   orderDate: string;
   status: OrderStatus;
+  paymentStatus: string;   // UNPAID | SUBMITTED | PAID | CANCELLED
   deliveryAddress: string;
   contactNumber: string;
   deliveryNotes: string;
+  proofImageUrl?: string;
+  cancellationReason?: string;
   items: OrderItem[];
   totalAmount: number;
   itemCount?: number;
@@ -128,6 +131,19 @@ export interface CheckoutRequest {
 
 export interface UpdateOrderStatusRequest {
   status: OrderStatus;
+  reason?: string;
+}
+
+// ===== Notifications =====
+
+export interface Notification {
+  id: number;
+  orderId: number | null;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
 }
 
 // ===== API Error =====

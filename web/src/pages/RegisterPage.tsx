@@ -80,9 +80,45 @@ export default function RegisterPage() {
       toast.success('Account created successfully!');
       navigate(ROUTES.MENU);
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      const message = error.response?.data?.message || 'Registration failed. Please try again.';
-      setApiError(message);
+      const error = err as {
+        response?: { status?: number; data?: { message?: string; fields?: Record<string, string> } };
+        request?: unknown;
+      };
+
+      if (!error.response) {
+        const msg = 'Cannot connect to server. Make sure the backend is running.';
+        setApiError(msg);
+        toast.error(msg);
+        return;
+      }
+
+      const data = error.response.data;
+      const message = data?.message || 'Registration failed. Please try again.';
+
+      // If the backend returned per-field errors, map them to form state
+      if (data?.fields && Object.keys(data.fields).length > 0) {
+        const mapped: FormErrors = {};
+        for (const [field, msg] of Object.entries(data.fields)) {
+          // Backend field names: name, email, password, confirmPassword, address, phoneNumber
+          if (field === 'name') mapped.firstName = msg;
+          else if (field === 'email') mapped.email = msg;
+          else if (field === 'password') mapped.password = msg;
+          else if (field === 'confirmPassword') mapped.confirmPassword = msg;
+          else if (field === 'address') mapped.address = msg;
+          else if (field === 'phoneNumber') mapped.phoneNumber = msg;
+        }
+        setErrors((prev) => ({ ...prev, ...mapped }));
+        setApiError(message);
+      } else {
+        // Map known business-rule messages to specific fields
+        if (message.toLowerCase().includes('email is already')) {
+          setErrors((prev) => ({ ...prev, email: message }));
+        } else if (message.toLowerCase().includes('passwords do not match')) {
+          setErrors((prev) => ({ ...prev, confirmPassword: message }));
+        }
+        setApiError(message);
+      }
+
       toast.error(message);
     } finally {
       setIsLoading(false);

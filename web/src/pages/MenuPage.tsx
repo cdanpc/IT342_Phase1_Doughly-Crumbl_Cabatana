@@ -1,13 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Filter, ShoppingCart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { getProducts } from '../api/productApi';
 import { useCart } from '../store/CartContext';
 import { formatPrice } from '../utils/formatters';
 import type { Product } from '../types';
+import toast from 'react-hot-toast';
 import './MenuPage.css';
 
-const CATEGORIES = ['All Categories', 'CLASSIC', 'SPECIALTY', 'SEASONAL', 'BEST_SELLERS'];
+const CATEGORIES = [
+  { value: 'All', label: 'All' },
+  { value: 'CLASSIC', label: 'Classic' },
+  { value: 'SPECIALTY', label: 'Specialty' },
+  { value: 'SEASONAL', label: 'Seasonal' },
+  { value: 'BEST_SELLERS', label: 'Best Sellers' },
+];
 
 export default function MenuPage() {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
@@ -15,19 +22,19 @@ export default function MenuPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [showFilter, setShowFilter] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const fetchProducts = useCallback(async () => {
     setIsLoading(true);
     try {
       const params: { search?: string; category?: string; size?: number } = { size: 50 };
       if (searchQuery) params.search = searchQuery;
-      if (selectedCategory !== 'All Categories') params.category = selectedCategory;
+      if (selectedCategory !== 'All') params.category = selectedCategory;
 
       const data = await getProducts(params);
       setProducts(data.content);
     } catch {
+      toast.error('Failed to load products. Please try again.');
       setProducts([]);
     } finally {
       setIsLoading(false);
@@ -37,11 +44,6 @@ export default function MenuPage() {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
-
-  function handleCategorySelect(cat: string) {
-    setSelectedCategory(cat);
-    setShowFilter(false);
-  }
 
   async function handleAddToCart(e: React.MouseEvent, product: Product) {
     e.stopPropagation();
@@ -64,26 +66,19 @@ export default function MenuPage() {
       <section className="menu-section">
         <div className="menu-section__header">
           <h3 className="menu-section__title">Featured Delights</h3>
-          <div className="menu-section__filter-wrapper">
-            <button className="menu-section__filter-btn" onClick={() => setShowFilter(!showFilter)}>
-              <Filter size={14} />
-              {selectedCategory === 'All Categories' ? 'All Categories' : selectedCategory}
+        </div>
+
+        {/* Category Pills */}
+        <div className="menu-category-tabs">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.value}
+              className={`menu-category-tab${selectedCategory === cat.value ? ' menu-category-tab--active' : ''}`}
+              onClick={() => setSelectedCategory(cat.value)}
+            >
+              {cat.label}
             </button>
-            {showFilter && (
-              <div className="menu-section__filter-dropdown">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    className={`menu-section__filter-option ${selectedCategory === cat ? 'menu-section__filter-option--active' : ''}`}
-                    onClick={() => handleCategorySelect(cat)}
-                  >
-                    {selectedCategory === cat ? '✓ ' : ''}
-                    {cat === 'BEST_SELLERS' ? 'Best Sellers' : cat === 'All Categories' ? cat : cat.charAt(0) + cat.slice(1).toLowerCase()}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          ))}
         </div>
 
         {isLoading ? (

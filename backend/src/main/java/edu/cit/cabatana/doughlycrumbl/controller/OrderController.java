@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -39,5 +40,21 @@ public class OrderController {
             @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id, user.getId()));
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<OrderResponse> cancelOrder(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long id,
+            @RequestParam(required = false) String reason) {
+        return ResponseEntity.ok(orderService.cancelOrder(id, user.getId(), reason));
+    }
+
+    @PutMapping("/{id}/submit-payment")
+    public ResponseEntity<OrderResponse> submitPayment(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long id,
+            @RequestParam(required = false) MultipartFile proof) {
+        return ResponseEntity.ok(orderService.submitPayment(id, user.getId(), proof));
     }
 }

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RefreshCw } from 'lucide-react';
 import { getMyOrders } from '../api/orderApi';
 import {
   formatPrice,
@@ -9,34 +10,74 @@ import {
   getOrderStatusHelperText,
 } from '../utils/formatters';
 import type { Order } from '../types';
+import toast from 'react-hot-toast';
 import '../components/common/LoadingSpinner.css';
+
+const ACTIVE_STATUSES = [
+  'ORDER_PLACED', 'AWAITING_DELIVERY_QUOTE',
+  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
+  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
+  'PAYMENT_CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'READY',
+];
 
 export default function OrdersPage() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchOrders = useCallback(async (silent = false) => {
+    if (!silent) setIsLoading(true);
+    else setIsRefreshing(true);
+    try {
+      const data = await getMyOrders();
+      setOrders(data);
+    } catch {
+      if (!silent) {
+        toast.error('Failed to load orders. Please try again.');
+        setOrders([]);
+      }
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const data = await getMyOrders();
-        setOrders(data);
-      } catch {
-        setOrders([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
+
+  // Auto-refresh every 30s if there are active orders
+  useEffect(() => {
+    const hasActive = orders.some((o) => ACTIVE_STATUSES.includes(o.status));
+    if (!hasActive) return;
+    const interval = setInterval(() => fetchOrders(true), 30000);
+    return () => clearInterval(interval);
+  }, [orders, fetchOrders]);
 
   return (
     <div style={{ padding: '32px 24px', animation: 'fadeIn 0.3s ease-out' }}>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 28, marginBottom: 8 }}>
-        My Orders
-      </h2>
-      <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 32 }}>
-        Track your order history
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 28, margin: 0 }}>
+          My Orders
+        </h2>
+        <button
+          onClick={() => fetchOrders(true)}
+          disabled={isRefreshing}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '7px 14px', fontSize: 13, fontWeight: 600,
+            border: '1.5px solid var(--color-border)', borderRadius: 'var(--radius-sm)',
+            background: '#fff', cursor: isRefreshing ? 'not-allowed' : 'pointer',
+            color: 'var(--color-text-secondary)',
+          }}
+        >
+          <RefreshCw size={14} style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} />
+          {isRefreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
+      <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24 }}>
+        Track your order history — auto-refreshes every 30s for active orders
       </p>
 
       {isLoading ? (

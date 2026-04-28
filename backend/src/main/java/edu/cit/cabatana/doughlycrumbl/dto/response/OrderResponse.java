@@ -18,9 +18,12 @@ public class OrderResponse {
     private Long orderId;
     private LocalDateTime orderDate;
     private String status;
+    private String paymentStatus;
     private String deliveryAddress;
     private String contactNumber;
     private String deliveryNotes;
+    private String proofImageUrl;
+    private String cancellationReason;
     private List<OrderItemResponse> items;
     private BigDecimal totalAmount;
     private Integer itemCount;

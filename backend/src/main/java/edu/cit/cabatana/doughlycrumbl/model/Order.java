@@ -26,9 +26,17 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 60)
     @Builder.Default
     private String status = "PENDING";
+
+    // Payment status — default "UNPAID" so Hibernate never inserts null.
+    // columnDefinition also sets a DB-level DEFAULT so existing rows and
+    // any raw SQL inserts that omit the column stay consistent.
+    @Column(name = "payment_status", nullable = false, length = 30,
+            columnDefinition = "VARCHAR(30) DEFAULT 'UNPAID'")
+    @Builder.Default
+    private String paymentStatus = "UNPAID";
 
     @Column(name = "delivery_address", nullable = false, columnDefinition = "TEXT")
     private String deliveryAddress;
@@ -38,6 +46,12 @@ public class Order {
 
     @Column(name = "delivery_notes", columnDefinition = "TEXT")
     private String deliveryNotes;
+
+    @Column(name = "proof_image_url", length = 500)
+    private String proofImageUrl;
+
+    @Column(name = "cancellation_reason", columnDefinition = "TEXT")
+    private String cancellationReason;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;

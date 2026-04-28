@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X } from 'lucide-react';
-import { getAdminProducts, createProduct, updateProduct, deleteProduct } from '../../api/productApi';
+import { useState, useEffect, useRef } from 'react';
+import { Plus, Pencil, Trash2, X, Upload } from 'lucide-react';
+import { getAdminProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from '../../api/productApi';
 import { formatPrice } from '../../utils/formatters';
 import type { Product, ProductRequest } from '../../types';
 import toast from 'react-hot-toast';
@@ -18,6 +18,9 @@ export default function AdminProducts() {
   const [form, setForm] = useState<ProductRequest>(EMPTY_FORM);
   const [isSaving, setIsSaving] = useState(false);
   const [search, setSearch] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -27,8 +30,12 @@ export default function AdminProducts() {
     try {
       const data = await getAdminProducts();
       setProducts(data);
-    } catch {
-      toast.error('Failed to load products');
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      const msg = status
+        ? `Failed to load products (HTTP ${status})`
+        : 'Failed to load products — backend may be unreachable';
+      toast.error(msg, { duration: 8000 });
     } finally {
       setIsLoading(false);
     }
@@ -37,6 +44,8 @@ export default function AdminProducts() {
   function openCreate() {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setImageFile(null);
+    setImagePreview('');
     setShowModal(true);
   }
 
@@ -50,7 +59,16 @@ export default function AdminProducts() {
       category: product.category,
       available: product.available,
     });
+    setImageFile(null);
+    setImagePreview(product.imageUrl || '');
     setShowModal(true);
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   }
 
   async function handleSave() {
@@ -61,11 +79,16 @@ export default function AdminProducts() {
 
     setIsSaving(true);
     try {
+      let finalForm = { ...form };
+      if (imageFile) {
+        const uploadedUrl = await uploadProductImage(imageFile);
+        finalForm = { ...finalForm, imageUrl: uploadedUrl };
+      }
       if (editingId) {
-        await updateProduct(editingId, form);
+        await updateProduct(editingId, finalForm);
         toast.success('Product updated!');
       } else {
-        await createProduct(form);
+        await createProduct(finalForm);
         toast.success('Product created!');
       }
       setShowModal(false);
@@ -234,8 +257,39 @@ export default function AdminProducts() {
                 <input style={inputStyle} type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
               </div>
               <div>
-                <label style={labelStyle}>Image URL</label>
-                <input style={inputStyle} value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} />
+                <label style={labelStyle}>Product Image</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    border: '2px dashed var(--color-border)', borderRadius: 'var(--radius-sm)',
+                    padding: '16px', textAlign: 'center', cursor: 'pointer',
+                    background: '#FAFAFA', transition: 'border-color 0.15s',
+                  }}
+                >
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      style={{ maxHeight: 120, maxWidth: '100%', objectFit: 'contain', borderRadius: 6, marginBottom: 8 }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <Upload size={24} style={{ color: 'var(--color-text-muted)', marginBottom: 8 }} />
+                  )}
+                  <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', margin: 0 }}>
+                    {imagePreview ? 'Click to change image' : 'Click to upload image'}
+                  </p>
+                  <p style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 4 }}>
+                    JPEG, PNG, WebP, GIF — max 5 MB
+                  </p>
+                </div>
               </div>
               <div>
                 <label style={labelStyle}>Category</label>

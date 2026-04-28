@@ -181,3 +181,61 @@
 | —          | Poppins (display) + Inter (body) via Google Fonts         | Team     |
 | —          | Delivery fee fixed at ₱80                                 | Team     |
 | —          | Spring Security updated to non-deprecated DaoAuthenticationProvider(UserDetailsService) constructor | Team |
+| April 2026 | Quote-based delivery fee system adopted (Lalamove/Borzo); manual seller input replaces fixed ₱80 fee | Team |
+| April 2026 | New order status flow: ORDER_PLACED / AWAITING_DELIVERY_QUOTE → DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED → PAYMENT_SUBMITTED_AWAITING_CONFIRMATION → PAYMENT_CONFIRMED → PREPARING → READY/OUT_FOR_DELIVERY → COMPLETED | Team |
+
+---
+
+## 🗂️ Feature Sprint Log — April 2026
+
+> Last updated: April 10, 2026. Tracks detailed UI/design/product tasks beyond the module-level checklist above.
+
+### ✅ Completed
+
+**UI / Design**
+- [x] Sidebar navigation redesign — replaced logo with user profile section
+- [x] Order item list component redesign
+- [x] Page header redesign — logo moved beside search bar
+- [x] My Orders page — 3-click rule applied
+- [x] Product filter UI — replaced pill filters with single compact dropdown
+- [x] Order panel — item card redesign with quantity stepper and trash icon
+- [x] Order panel — auto-collapse when on My Orders page
+- [x] Header — cart icon replaces "Order" button in nav
+
+**Checkout & Payment**
+- [x] Checkout page — fulfillment toggle (Pickup / Delivery)
+- [x] Checkout page — delivery address input + optional landmark field
+- [x] Checkout page — "delivery fee quoted on confirmation" placeholder note
+- [x] Checkout page — payment method selector (GCash / Maya / Bank Transfer / Cash on Pickup)
+- [x] Checkout page — Place Order advances to `AWAITING_DELIVERY_QUOTE` status
+- [x] Payment instructions screen — dynamic per payment method (QR code, bank details, cash note)
+- [x] Proof of payment upload — image upload with "Submit Payment" button
+
+**Order Status Flow**
+- [x] `AWAITING_DELIVERY_QUOTE` — helper text: "We're calculating your delivery fee."
+- [x] `DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED` — shows updated total, payment instructions, proof upload
+- [x] `PAYMENT_SUBMITTED_AWAITING_CONFIRMATION` — helper text: "We've received your proof of payment."
+- [x] `PAYMENT_CONFIRMED` — advances to Preparing
+- [x] My Orders — full status timeline stepper with all new states
+
+### 🔲 Backlog
+
+**Admin Panel**
+- [ ] Admin — input field to enter quoted delivery fee per order
+- [ ] Admin — trigger status update to notify customer fee has been quoted
+- [ ] Admin — view uploaded proof of payment per order
+- [ ] Admin — confirm payment button → advances to Payment Confirmed → Preparing
+- [ ] Admin — manual order status override at any stage
+- [ ] Admin — cancel order with optional reason field
+
+**General UI**
+- [ ] Right sidebar — shop/grid button opens and closes Order Bag drawer
+- [ ] Order Bag — illustrated empty state with "Browse Menu" CTA
+- [ ] User avatar dropdown — My Profile, Settings, Sign Out
+- [ ] My Orders — Reorder button (adds all items back to cart in one click)
+- [ ] Responsive layout — mobile/tablet breakpoints
+
+**Future / Post-Launch**
+- [ ] PayMongo integration — replaces manual proof of payment upload
+- [ ] Lalamove API integration — replaces manual seller delivery fee quote
+- [ ] Push notifications — active alerts for status changes

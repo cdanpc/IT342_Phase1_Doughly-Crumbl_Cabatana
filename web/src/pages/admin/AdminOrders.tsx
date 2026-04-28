@@ -1,11 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import { getAdminOrders } from '../../api/orderApi';
-import { formatPrice, formatDate, getStatusColor } from '../../utils/formatters';
+import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../utils/formatters';
 import type { Order, OrderStatus } from '../../types';
+import toast from 'react-hot-toast';
 import '../../components/common/LoadingSpinner.css';
+import './AdminOrders.css';
 
-const STATUSES: (OrderStatus | 'ALL')[] = ['ALL', 'PENDING', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERED', 'CANCELLED'];
+const STATUSES: (OrderStatus | 'ALL')[] = [
+  'ALL',
+  'ORDER_PLACED',
+  'AWAITING_DELIVERY_QUOTE',
+  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
+  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
+  'PAYMENT_CONFIRMED',
+  'PREPARING',
+  'OUT_FOR_DELIVERY',
+  'READY',
+  'COMPLETED',
+  'CANCELLED',
+];
 
 export default function AdminOrders() {
   const navigate = useNavigate();
@@ -15,11 +30,17 @@ export default function AdminOrders() {
 
   useEffect(() => {
     async function fetchOrders() {
+      setIsLoading(true);
       try {
         const params = filterStatus !== 'ALL' ? { status: filterStatus } : undefined;
         const data = await getAdminOrders(params);
         setOrders(data);
-      } catch {
+      } catch (err: unknown) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        const msg = status
+          ? `Failed to load orders (HTTP ${status})`
+          : 'Failed to load orders — backend may be unreachable';
+        toast.error(msg, { duration: 8000 });
         setOrders([]);
       } finally {
         setIsLoading(false);
@@ -40,7 +61,7 @@ export default function AdminOrders() {
 
   return (
     <div style={{ padding: '32px 24px', animation: 'fadeIn 0.3s ease-out' }}>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 28, marginBottom: 8 }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 28, marginBottom: 4 }}>
         Orders
       </h2>
       <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24 }}>
@@ -48,26 +69,26 @@ export default function AdminOrders() {
       </p>
 
       {/* Status Filter */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {STATUSES.map((status) => (
-          <button
-            key={status}
-            onClick={() => { setFilterStatus(status); setIsLoading(true); }}
-            style={{
-              padding: '6px 16px', borderRadius: 'var(--radius-full)', fontSize: 13, fontWeight: 600,
-              border: filterStatus === status ? 'none' : '1px solid var(--color-border)',
-              background: filterStatus === status ? 'var(--color-primary)' : '#fff',
-              color: filterStatus === status ? '#fff' : 'var(--color-text-secondary)',
-              cursor: 'pointer', transition: 'all 0.2s',
-            }}
+      <div className="admin-orders__filter-row">
+        <label className="admin-orders__filter-label">Filter by status</label>
+        <div className="admin-orders__select-wrapper">
+          <select
+            className="admin-orders__select"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as OrderStatus | 'ALL')}
           >
-            {status === 'ALL' ? 'All' : status.charAt(0) + status.slice(1).toLowerCase()}
-          </button>
-        ))}
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {s === 'ALL' ? 'All Statuses' : formatOrderStatus(s)}
+              </option>
+            ))}
+          </select>
+          <ChevronDown size={16} className="admin-orders__select-icon" />
+        </div>
       </div>
 
       {/* Orders Table */}
-      <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-card)', overflow: 'hidden' }}>
+      <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-card)', overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
@@ -93,7 +114,7 @@ export default function AdminOrders() {
                     fontSize: 12, fontWeight: 600, padding: '4px 12px',
                     borderRadius: 'var(--radius-full)',
                   }}>
-                    {order.status}
+                    {formatOrderStatus(order.status)}
                   </span>
                 </td>
                 <td style={{ ...tdStyle, textAlign: 'right' }}>

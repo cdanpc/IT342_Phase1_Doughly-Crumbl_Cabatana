@@ -1,8 +1,11 @@
-import { Cookie, Search, ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
+import { Cookie, Search, ShoppingCart, Bell } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/CartContext';
 import { useAuth } from '../../store/AuthContext';
+import { useNotifications } from '../../store/NotificationContext';
 import { ROUTES } from '../../utils/routes';
+import NotificationDropdown from '../common/NotificationDropdown';
 import './Header.css';
 
 interface HeaderProps {
@@ -15,6 +18,8 @@ export default function Header({ searchQuery, onSearchChange }: HeaderProps) {
   const location = useLocation();
   const { itemCount, toggleOrderPanel, openOrderPanel, closeOrderPanel } = useCart();
   const { isAdmin } = useAuth();
+  const { unreadCount } = useNotifications();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   function handleOrderBagClick() {
     if (location.pathname !== ROUTES.MENU) {
@@ -33,10 +38,6 @@ export default function Header({ searchQuery, onSearchChange }: HeaderProps) {
     }
 
     closeOrderPanel();
-  }
-
-  function handleOrderClick() {
-    navigate(ROUTES.CHECKOUT);
   }
 
   return (
@@ -61,23 +62,34 @@ export default function Header({ searchQuery, onSearchChange }: HeaderProps) {
         </div>
       )}
 
-      {!isAdmin && (
-        <div className="app-header__actions">
+      <div className="app-header__actions">
+        {/* Bell icon — visible for both customers and admins */}
+        <div className="app-header__notif-wrapper">
+          <button
+            className="app-header__notif-btn"
+            onClick={() => setShowNotifications((v) => !v)}
+            aria-label="Notifications"
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className="app-header__notif-badge">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </button>
+          {showNotifications && (
+            <NotificationDropdown onClose={() => setShowNotifications(false)} />
+          )}
+        </div>
+
+        {!isAdmin && (
           <button className="app-header__cart" onClick={handleOrderBagClick}>
             <ShoppingCart size={18} />
             <span className="app-header__cart-label">Add to Cart</span>
             <span className="app-header__cart-badge">{itemCount}</span>
           </button>
-
-          <button
-            className={`app-header__order-btn ${location.pathname.startsWith(ROUTES.ORDERS) ? 'app-header__order-btn--outline' : ''}`}
-            onClick={handleOrderClick}
-            disabled={itemCount === 0}
-          >
-            Order
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   );
 }

@@ -10,7 +10,6 @@ import OrdersPage from '../pages/OrdersPage';
 import OrderDetailPage from '../pages/OrderDetailPage';
 import PaymentInstructionsPage from '../pages/PaymentInstructionsPage';
 import OrderConfirmationPage from '../pages/OrderConfirmationPage';
-import CheckoutPage from '../pages/CheckoutPage';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import AdminProducts from '../pages/admin/AdminProducts';
 import AdminOrders from '../pages/admin/AdminOrders';
@@ -61,8 +60,7 @@ export default function AppRouter() {
           <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
           <Route path={ROUTES.PAYMENT_INSTRUCTIONS} element={<PaymentInstructionsPage />} />
           <Route path={ROUTES.ORDER_SUCCESS} element={<OrderConfirmationPage />} />
-          <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
-          <Route path={ROUTES.CARE_GUIDE} element={<CareGuidePage />} />
+<Route path={ROUTES.CARE_GUIDE} element={<CareGuidePage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
         </Route>
 

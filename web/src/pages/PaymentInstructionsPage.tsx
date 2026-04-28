@@ -1,20 +1,52 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Upload } from 'lucide-react';
-import { getOrderById } from '../api/orderApi';
+import { ArrowLeft, Banknote } from 'lucide-react';
+import { getOrderById, submitPayment } from '../api/orderApi';
 import { formatPrice } from '../utils/formatters';
 import { ROUTES } from '../utils/routes';
 import type { Order } from '../types';
 import toast from 'react-hot-toast';
 import '../components/common/LoadingSpinner.css';
+import ProofUploadForm from '../components/ProofUploadForm';
+import './PaymentInstructionsPage.css';
 
 type PaymentMethod = 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';
 
 const PAYMENT_LABELS: Record<PaymentMethod, string> = {
   GCASH: 'GCash',
   MAYA: 'Maya',
-  BANK_TRANSFER: 'Bank Transfer',
+  BANK_TRANSFER: 'Bank Transfer (BPI)',
   CASH_ON_PICKUP: 'Cash on Pickup',
+};
+
+const PAYMENT_TAB_LABELS: Record<PaymentMethod, string> = {
+  GCASH: 'GCash',
+  MAYA: 'Maya',
+  BANK_TRANSFER: 'BPI',
+  CASH_ON_PICKUP: 'Cash',
+};
+
+const QR_MAP: Record<string, string> = {
+  GCASH: '/gcash-qr.jpg',
+  MAYA: '/maya-qr.jpg',
+  BANK_TRANSFER: '/bpi-qr.jpg',
+};
+
+const ACCOUNT_DETAILS: Record<string, { label: string; value: string }[]> = {
+  GCASH: [
+    { label: 'Name', value: 'Doughly Crumbl' },
+    { label: 'Number', value: '0916 566 7589' },
+  ],
+  MAYA: [
+    { label: 'Name', value: 'Chris Daniel Cabataña' },
+    { label: 'Username', value: '@cdanpc' },
+    { label: 'Number', value: '+63 *** *** 8113' },
+  ],
+  BANK_TRANSFER: [
+    { label: 'Bank', value: 'BPI' },
+    { label: 'Name', value: 'Briana' },
+    { label: 'Account', value: 'xxxxxxxxxx521' },
+  ],
 };
 
 function getDefaultPaymentMethod(order: Order | null): PaymentMethod {
@@ -26,34 +58,18 @@ function getDefaultPaymentMethod(order: Order | null): PaymentMethod {
   return 'GCASH';
 }
 
-function getPaymentInstruction(method: PaymentMethod): string {
-  if (method === 'GCASH') {
-    return 'Scan the GCash QR code or send payment to 09165667589. Use your Order ID as reference.';
-  }
-  if (method === 'MAYA') {
-    return 'Scan the Maya QR code or send payment to @doughlycrumbl. Use your Order ID as reference.';
-  }
-  if (method === 'BANK_TRANSFER') {
-    return 'Transfer to BDO 0123456789 (Doughly Crumbl). Include your Order ID in transfer notes.';
-  }
-  return 'Cash payment is accepted only for pickup orders. Please prepare exact amount at pickup.';
-}
-
 export default function PaymentInstructionsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('GCASH');
-  const [proofFile, setProofFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [qrExpanded, setQrExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchOrder() {
-      if (!id) {
-        setIsLoading(false);
-        return;
-      }
+      if (!id) { setIsLoading(false); return; }
       try {
         const data = await getOrderById(Number(id));
         setOrder(data);
@@ -67,36 +83,56 @@ export default function PaymentInstructionsPage() {
     fetchOrder();
   }, [id]);
 
-  const isPickup = useMemo(() => {
-    return order?.deliveryAddress.toLowerCase().includes('pickup') ?? false;
-  }, [order]);
+  const isPickup = useMemo(
+    () => order?.deliveryAddress.toLowerCase().includes('pickup') ?? false,
+    [order]
+  );
 
   const availableMethods: PaymentMethod[] = isPickup
     ? ['GCASH', 'MAYA', 'BANK_TRANSFER', 'CASH_ON_PICKUP']
     : ['GCASH', 'MAYA', 'BANK_TRANSFER'];
 
-  async function handleSubmitPayment() {
-    if (!order) return;
+  const ONLINE_METHODS: PaymentMethod[] = ['GCASH', 'MAYA', 'BANK_TRANSFER'];
 
-    if (paymentMethod !== 'CASH_ON_PICKUP' && !proofFile) {
-      toast.error('Please upload proof of payment first.');
-      return;
+  function handleTabChange(newMethod: PaymentMethod) {
+    if (ONLINE_METHODS.includes(paymentMethod) && newMethod !== paymentMethod) {
+      toast('Switching payment method may require re-uploading your proof of payment.', {
+        icon: '⚠️',
+        duration: 4000,
+      });
     }
+    setPaymentMethod(newMethod);
+  }
 
+  async function handleSubmitCashOnPickup() {
+    if (!order) return;
     setIsSubmitting(true);
     try {
-      const existing = localStorage.getItem('paymentProofSubmissions');
-      const parsed = existing ? JSON.parse(existing) : {};
-      parsed[order.orderId] = {
-        orderId: order.orderId,
-        paymentMethod,
-        proofFileName: proofFile?.name ?? null,
-        submittedAt: new Date().toISOString(),
-      };
-      localStorage.setItem('paymentProofSubmissions', JSON.stringify(parsed));
-
+      await submitPayment(order.orderId);
       toast.success('Payment submitted. Awaiting confirmation.');
       navigate(ROUTES.ORDERS);
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Failed to submit payment. Please try again.';
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleSubmitWithProof(file: File) {
+    if (!order) return;
+    setIsSubmitting(true);
+    try {
+      await submitPayment(order.orderId, file);
+      toast.success('Payment submitted. Awaiting confirmation.');
+      navigate(ROUTES.ORDERS);
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Failed to submit payment. Please try again.';
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -112,15 +148,13 @@ export default function PaymentInstructionsPage() {
 
   if (!order) {
     return (
-      <div style={{ padding: '64px 24px', textAlign: 'center' }}>
-        <p style={{ marginBottom: 16, color: 'var(--color-text-secondary)' }}>Order not found.</p>
+      <div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+        <p style={{ marginBottom: 16 }}>Order not found.</p>
         <button
           style={{
-            background: 'var(--color-primary)',
-            color: '#fff',
-            borderRadius: 'var(--radius-sm)',
-            padding: '10px 16px',
-            fontWeight: 600,
+            background: 'var(--color-primary)', color: '#fff',
+            borderRadius: 'var(--radius-sm)', padding: '10px 20px',
+            fontWeight: 600, border: 'none', cursor: 'pointer',
           }}
           onClick={() => navigate(ROUTES.ORDERS)}
         >
@@ -130,113 +164,136 @@ export default function PaymentInstructionsPage() {
     );
   }
 
+  const itemsSubtotal = order.items.reduce((s, i) => s + i.subtotal, 0);
+  const isCash = paymentMethod === 'CASH_ON_PICKUP';
+  const qrSrc = QR_MAP[paymentMethod];
+  const accountDetails = ACCOUNT_DETAILS[paymentMethod];
+
   return (
-    <div style={{ padding: '32px 24px', maxWidth: 760, animation: 'fadeIn 0.3s ease-out' }}>
-      <button
-        onClick={() => navigate(`/orders/${order.orderId}`)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          color: 'var(--color-text-secondary)',
-          marginBottom: 24,
-          background: 'none',
-          border: 'none',
-        }}
-      >
-        <ArrowLeft size={16} /> Back to Order Details
+    <div className="pip">
+
+      <button className="pip__back" onClick={() => navigate(`/orders/${order.orderId}`)}>
+        <ArrowLeft size={15} /> Back to Order Details
       </button>
 
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 28, marginBottom: 8 }}>Payment Instructions</h2>
-      <p style={{ color: 'var(--color-text-secondary)', marginBottom: 24 }}>
-        Order #{order.orderId} • Total currently shown: {formatPrice(order.totalAmount)}
+      <h2 className="pip__title">Complete Payment</h2>
+      <p className="pip__subtitle">
+        Order #{order.orderId} &nbsp;·&nbsp; Total due:{' '}
+        <strong>{formatPrice(order.totalAmount)}</strong>
       </p>
 
-      <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', padding: 24, boxShadow: 'var(--shadow-card)', marginBottom: 20 }}>
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, marginBottom: 12 }}>Select Payment Method</h3>
-        <select
-          value={paymentMethod}
-          onChange={(event) => setPaymentMethod(event.target.value as PaymentMethod)}
-          style={{
-            width: '100%',
-            border: '1.5px solid var(--color-border)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '12px 14px',
-            marginBottom: 16,
-            background: '#FAFAFA',
-          }}
-        >
-          {availableMethods.map((method) => (
-            <option key={method} value={method}>
-              {PAYMENT_LABELS[method]}
-            </option>
-          ))}
-        </select>
-
-        <div style={{ background: 'var(--color-primary-light)', borderRadius: 'var(--radius-sm)', padding: 14 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, marginBottom: 8 }}>
-            <CreditCard size={16} /> {PAYMENT_LABELS[paymentMethod]} Instructions
-          </div>
-          <p style={{ fontSize: 14, lineHeight: 1.6 }}>{getPaymentInstruction(paymentMethod)}</p>
-        </div>
+      {/* ── Method tabs ── */}
+      <div className="pip__tabs">
+        {availableMethods.map((m) => (
+          <button
+            key={m}
+            className={`pip__tab ${paymentMethod === m ? 'pip__tab--active' : ''}`}
+            onClick={() => { handleTabChange(m); setQrExpanded(false); }}
+          >
+            {PAYMENT_TAB_LABELS[m]}
+          </button>
+        ))}
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', padding: 24, boxShadow: 'var(--shadow-card)' }}>
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, marginBottom: 12 }}>Proof of Payment Upload</h3>
+      {/* ── Payment details card ── */}
+      <div className="pip__card">
 
-        {paymentMethod === 'CASH_ON_PICKUP' ? (
-          <p style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>
-            Proof upload is not required for cash on pickup.
-          </p>
+        {/* Total banner */}
+        <div className="pip__total-banner">
+          <span className="pip__total-label">
+            {isCash ? 'Prepare exact cash' : `Pay via ${PAYMENT_LABELS[paymentMethod]}`}
+          </span>
+          <span className="pip__total-amount">
+            {formatPrice(isCash ? itemsSubtotal : order.totalAmount)}
+          </span>
+        </div>
+
+        {/* QR code + account details */}
+        {!isCash && qrSrc && (
+          <div className="pip__qr-section">
+            <img
+              src={qrSrc}
+              alt={`${PAYMENT_LABELS[paymentMethod]} QR`}
+              className="pip__qr-img pip__qr-img--clickable"
+              onClick={() => setQrExpanded(true)}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+            <p className="pip__qr-hint">Tap to enlarge for scanning</p>
+            {accountDetails && (
+              <div className="pip__account-details">
+                {accountDetails.map((row) => (
+                  <div key={row.label} className="pip__account-row">
+                    <span className="pip__account-key">{row.label}</span>
+                    <span className="pip__account-value">{row.value}</span>
+                  </div>
+                ))}
+                <div className="pip__account-row">
+                  <span className="pip__account-key">Reference</span>
+                  <span className="pip__account-value pip__account-value--ref">
+                    Order #{order.orderId}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Cash on pickup */}
+        {isCash && (
+          <>
+            <div className="pip__cash-icon-wrap">
+              <Banknote size={48} color="var(--color-primary)" />
+            </div>
+            <p className="pip__cash-title">Pay at the Store</p>
+            <p className="pip__cash-desc">
+              Please prepare the exact amount in cash.
+              Payment is collected when you arrive to pick up your order.
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* ── Proof upload card ── */}
+      <div className="pip__card">
+        {isCash ? (
+          <>
+            <p className="pip__upload-title">No Proof Required</p>
+            <p className="pip__upload-desc">Cash payment is confirmed in-store at pickup.</p>
+            <button
+              className="pip__submit-btn"
+              onClick={handleSubmitCashOnPickup}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Confirm Order'}
+            </button>
+          </>
         ) : (
           <>
-            <label
-              htmlFor="payment-proof"
-              style={{
-                border: '1.5px dashed var(--color-border)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '16px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                cursor: 'pointer',
-                marginBottom: 10,
-              }}
-            >
-              <Upload size={16} />
-              <span>{proofFile ? proofFile.name : 'Choose image file (JPG/PNG)'}</span>
-            </label>
-            <input
-              id="payment-proof"
-              type="file"
-              accept="image/*"
-              onChange={(event) => setProofFile(event.target.files?.[0] ?? null)}
-              style={{ display: 'none' }}
+            <p className="pip__upload-title">Upload Proof of Payment</p>
+            <p className="pip__upload-desc">
+              Take a screenshot of your payment confirmation and upload it below.
+            </p>
+            <ProofUploadForm
+              onSubmit={handleSubmitWithProof}
+              isSubmitting={isSubmitting}
+              submitLabel="Submit Payment"
             />
           </>
         )}
-
-        <button
-          onClick={handleSubmitPayment}
-          disabled={isSubmitting || (paymentMethod !== 'CASH_ON_PICKUP' && !proofFile)}
-          style={{
-            marginTop: 10,
-            width: '100%',
-            background: 'var(--color-primary)',
-            color: '#fff',
-            borderRadius: 'var(--radius-sm)',
-            padding: '12px 16px',
-            fontWeight: 700,
-            opacity: isSubmitting || (paymentMethod !== 'CASH_ON_PICKUP' && !proofFile) ? 0.6 : 1,
-            cursor:
-              isSubmitting || (paymentMethod !== 'CASH_ON_PICKUP' && !proofFile)
-                ? 'not-allowed'
-                : 'pointer',
-          }}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Payment'}
-        </button>
       </div>
+
+      {/* ── QR Lightbox ── */}
+      {qrExpanded && qrSrc && (
+        <div className="pip__lightbox" onClick={() => setQrExpanded(false)}>
+          <img
+            src={qrSrc}
+            alt={`${PAYMENT_LABELS[paymentMethod]} QR`}
+            className="pip__lightbox-img"
+          />
+          <p className="pip__lightbox-hint">Tap anywhere to close</p>
+        </div>
+      )}
+
     </div>
   );
 }

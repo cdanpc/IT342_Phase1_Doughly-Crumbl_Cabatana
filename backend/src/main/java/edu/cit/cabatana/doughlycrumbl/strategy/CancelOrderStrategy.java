@@ -15,13 +15,15 @@ public class CancelOrderStrategy implements OrderStatusStrategy {
 
     @Override
     public boolean canTransition(Order order) {
-        return !"DELIVERED".equals(order.getStatus()) 
-                && !"CANCELLED".equals(order.getStatus());
+        String s = order.getStatus();
+        return !"DELIVERED".equals(s)
+                && !"COMPLETED".equals(s)
+                && !"CANCELLED".equals(s);
     }
 
     @Override
     public String getValidationError() {
-        return "Cannot cancel a delivered or already cancelled order";
+        return "Cannot cancel an order that is already completed or cancelled";
     }
 
     @Override
