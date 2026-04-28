@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.security;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

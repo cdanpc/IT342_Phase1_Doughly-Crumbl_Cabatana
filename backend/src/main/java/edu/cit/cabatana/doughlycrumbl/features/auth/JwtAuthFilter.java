@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.security;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

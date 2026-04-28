@@ -2,7 +2,7 @@ package edu.cit.cabatana.doughlycrumbl.controller;
 
 import edu.cit.cabatana.doughlycrumbl.dto.request.CheckoutRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
-import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
+import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
 import edu.cit.cabatana.doughlycrumbl.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

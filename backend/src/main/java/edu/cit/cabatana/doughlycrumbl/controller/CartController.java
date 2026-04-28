@@ -3,7 +3,7 @@ package edu.cit.cabatana.doughlycrumbl.controller;
 import edu.cit.cabatana.doughlycrumbl.dto.request.AddToCartRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateCartItemRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.CartResponse;
-import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
+import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
 import edu.cit.cabatana.doughlycrumbl.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

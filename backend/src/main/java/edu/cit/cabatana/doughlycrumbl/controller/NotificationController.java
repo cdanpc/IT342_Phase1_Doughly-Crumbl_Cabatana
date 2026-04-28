@@ -1,7 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.controller;
 
 import edu.cit.cabatana.doughlycrumbl.dto.response.NotificationResponse;
-import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
+import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
 import edu.cit.cabatana.doughlycrumbl.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

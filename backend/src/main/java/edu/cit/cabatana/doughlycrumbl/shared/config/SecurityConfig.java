@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.shared.config;
 
-import edu.cit.cabatana.doughlycrumbl.security.JwtAuthFilter;
+import edu.cit.cabatana.doughlycrumbl.features.auth.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

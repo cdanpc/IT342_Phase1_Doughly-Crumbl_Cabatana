@@ -1,13 +1,13 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
-import edu.cit.cabatana.doughlycrumbl.dto.request.LoginRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.request.RegisterRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.response.AuthResponse;
+import edu.cit.cabatana.doughlycrumbl.features.auth.LoginRequest;
+import edu.cit.cabatana.doughlycrumbl.features.auth.RegisterRequest;
+import edu.cit.cabatana.doughlycrumbl.features.auth.AuthResponse;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
 import edu.cit.cabatana.doughlycrumbl.model.User;
 import edu.cit.cabatana.doughlycrumbl.repository.UserRepository;
-import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
-import edu.cit.cabatana.doughlycrumbl.security.JwtTokenProvider;
+import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
+import edu.cit.cabatana.doughlycrumbl.features.auth.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

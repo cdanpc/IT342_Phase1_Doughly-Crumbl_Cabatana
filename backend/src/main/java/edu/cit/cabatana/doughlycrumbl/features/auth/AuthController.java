@@ -1,9 +1,9 @@
-package edu.cit.cabatana.doughlycrumbl.controller;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
-import edu.cit.cabatana.doughlycrumbl.dto.request.LoginRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.request.RegisterRequest;
-import edu.cit.cabatana.doughlycrumbl.dto.response.AuthResponse;
-import edu.cit.cabatana.doughlycrumbl.service.AuthService;
+import edu.cit.cabatana.doughlycrumbl.features.auth.LoginRequest;
+import edu.cit.cabatana.doughlycrumbl.features.auth.RegisterRequest;
+import edu.cit.cabatana.doughlycrumbl.features.auth.AuthResponse;
+import edu.cit.cabatana.doughlycrumbl.features.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

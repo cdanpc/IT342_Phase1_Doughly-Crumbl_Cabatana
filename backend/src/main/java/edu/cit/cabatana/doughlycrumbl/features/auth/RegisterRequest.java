@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.dto.request;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

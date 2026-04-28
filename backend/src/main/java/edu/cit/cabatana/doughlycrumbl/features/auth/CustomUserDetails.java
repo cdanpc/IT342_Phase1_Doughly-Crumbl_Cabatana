@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.security;
+package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import edu.cit.cabatana.doughlycrumbl.model.User;
 import lombok.AllArgsConstructor;
