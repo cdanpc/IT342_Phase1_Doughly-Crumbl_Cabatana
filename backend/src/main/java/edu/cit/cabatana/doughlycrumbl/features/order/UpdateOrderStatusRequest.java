@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.dto.request;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.dto.response;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

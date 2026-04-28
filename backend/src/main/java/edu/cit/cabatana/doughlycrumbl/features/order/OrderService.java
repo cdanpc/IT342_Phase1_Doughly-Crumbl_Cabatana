@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.service;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.order.OrderAdapter;
 import edu.cit.cabatana.doughlycrumbl.features.order.CheckoutRequest;

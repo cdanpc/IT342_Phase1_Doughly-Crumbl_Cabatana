@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.factory;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.order.CheckoutRequest;
 import edu.cit.cabatana.doughlycrumbl.features.cart.Cart;

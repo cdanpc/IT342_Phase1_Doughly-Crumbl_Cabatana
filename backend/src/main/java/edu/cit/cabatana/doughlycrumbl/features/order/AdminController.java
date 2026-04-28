@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.controller.admin;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.features.order.UpdateOrderStatusRequest;

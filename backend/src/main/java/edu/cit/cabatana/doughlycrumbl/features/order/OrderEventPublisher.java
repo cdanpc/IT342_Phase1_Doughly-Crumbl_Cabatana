@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.observer;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 import lombok.RequiredArgsConstructor;

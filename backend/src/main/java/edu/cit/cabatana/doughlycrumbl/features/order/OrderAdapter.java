@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.adapter;
+package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
 
