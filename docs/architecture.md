@@ -232,7 +232,78 @@ Controller
 
 ---
 
-## 6. API Communication
+## 6. Vertical Slice Architecture (Target — refactor/vertical-slice-architecture)
+
+The project is being refactored from a horizontal layer-based structure to
+Vertical Slice Architecture (VSA). Each feature owns all its layers.
+
+### Target Backend Structure
+```
+backend/src/main/java/edu/cit/cabatana/doughlycrumbl/
+├── shared/
+│   ├── config/          ← SecurityConfig, CorsConfig, WebSocketConfig,
+│   │                       AppJwtProperties, AppPayMongoProperties,
+│   │                       AppUploadProperties, AppOAuth2Properties
+│   ├── exception/       ← GlobalExceptionHandler, ResourceNotFoundException,
+│   │                       ErrorResponse
+│   └── util/            ← HaversineCalculator, DateUtils
+└── features/
+    ├── auth/            ← AuthController, AuthService, JwtUtil,
+    │                       AuthRequest, AuthResponse
+    ├── user/            ← UserController, UserService, UserRepository,
+    │                       User (entity), UserRequest, UserResponse
+    ├── product/         ← ProductController, ProductService, ProductRepository,
+    │                       Product (entity), ProductRequest, ProductResponse,
+    │                       ProductDataSeeder
+    ├── cart/            ← CartController, CartService, CartRepository,
+    │                       Cart (entity), CartItem (entity),
+    │                       CartRequest, CartResponse
+    ├── order/           ← OrderController, OrderService, OrderRepository,
+    │                       Order (entity), OrderItem (entity), OrderStatus (enum),
+    │                       OrderRequest, OrderResponse
+    ├── payment/         ← PaymentController, PaymentService, PayMongoClient,
+    │                       PaymentRequest, PaymentResponse
+    ├── delivery/        ← DeliveryController, DeliveryService,
+    │                       DeliveryFeeCalculator, DeliveryRequest, DeliveryResponse
+    └── notification/    ← NotificationController, NotificationService,
+                            NotificationRepository, Notification (entity),
+                            NotificationResponse, WebSocketNotificationObserver
+```
+
+### Target Frontend Structure
+```
+web/src/
+├── shared/
+│   ├── components/      ← Button, Input, Badge, Avatar, Modal (used by 2+ features)
+│   ├── hooks/           ← useAuth, useCart, useOrders
+│   ├── utils/           ← formatPrice, formatDate, apiClient
+│   ├── constants/       ← design tokens, API base URL, delivery tiers
+│   └── types/           ← TypeScript interfaces shared across features
+├── features/
+│   ├── menu/            ← MenuPage, ProductCard, ProductGrid,
+│   │                       CategoryFilter, HeroBanner
+│   ├── cart/            ← OrderBag, OrderBagItem, CartSummary
+│   ├── checkout/        ← CheckoutModal, FulfillmentToggle,
+│   │                       AddressInput, PaymentMethodSelector
+│   ├── orders/          ← MyOrdersPage, OrderCard, OrderDetailDrawer,
+│   │                       OrderStatusBadge, OrderTimeline
+│   ├── auth/            ← LoginPage, RegisterPage
+│   └── profile/         ← ProfilePage
+└── layout/
+    ├── Sidebar.tsx
+    ├── Header.tsx
+    └── AppLayout.tsx
+```
+
+### VSA Rules
+- Each slice imports only from its own folder or from `shared/`
+- No cross-slice imports (feature A never imports from feature B)
+- Entity ownership: one slice owns each database table
+- Shared = used by 2 or more slices
+
+---
+
+## 7. API Communication
 
 - All API calls use **JSON** (`Content-Type: application/json`)
 - Authentication via **Bearer Token** in `Authorization` header
