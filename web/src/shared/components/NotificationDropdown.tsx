@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNotifications } from '../../store/NotificationContext';
-import type { Notification } from '../../types';
+import { useNotifications } from '../hooks/NotificationContext';
+import type { Notification } from '../types';
 import './NotificationDropdown.css';
 
 interface Props {

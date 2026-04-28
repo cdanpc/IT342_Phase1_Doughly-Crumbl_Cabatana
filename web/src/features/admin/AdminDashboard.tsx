@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, ClipboardList, TrendingUp, Clock } from 'lucide-react';
-import { getAdminOrders } from '../../api/orderApi';
-import { getAdminProducts } from '../../api/productApi';
-import { ROUTES } from '../../utils/routes';
-import type { Order, Product } from '../../types';
-import '../../components/common/LoadingSpinner.css';
+import { getAdminOrders } from '../../shared/api/orderApi';
+import { getAdminProducts } from '../../shared/api/productApi';
+import { ROUTES } from '../../shared/utils/routes';
+import type { Order, Product } from '../../shared/types';
+import '../../shared/components/LoadingSpinner.css';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Cookie } from 'lucide-react';
-import { ROUTES } from '../utils/routes';
+import { ROUTES } from '../../shared/utils/routes';
 import './LandingPage.css';
 
 export default function LandingPage() {

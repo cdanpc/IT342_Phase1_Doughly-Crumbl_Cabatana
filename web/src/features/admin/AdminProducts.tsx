@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Plus, Pencil, Trash2, X, Upload } from 'lucide-react';
-import { getAdminProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from '../../api/productApi';
-import { formatPrice } from '../../utils/formatters';
-import type { Product, ProductRequest } from '../../types';
+import { getAdminProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from '../../shared/api/productApi';
+import { formatPrice } from '../../shared/utils/formatters';
+import type { Product, ProductRequest } from '../../shared/types';
 import toast from 'react-hot-toast';
-import '../../components/common/LoadingSpinner.css';
+import '../../shared/components/LoadingSpinner.css';
 
 const EMPTY_FORM: ProductRequest = {
   name: '', description: '', price: 0, imageUrl: '', category: 'CLASSIC', available: true,

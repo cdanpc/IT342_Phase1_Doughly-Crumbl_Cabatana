@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './store/AuthContext';
-import { CartProvider } from './store/CartContext';
-import { NotificationProvider } from './store/NotificationContext';
+import { AuthProvider } from './shared/hooks/AuthContext';
+import { CartProvider } from './shared/hooks/CartContext';
+import { NotificationProvider } from './shared/hooks/NotificationContext';
 import './index.css';
 import App from './App';
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
-import { getAdminOrders } from '../../api/orderApi';
-import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../utils/formatters';
-import type { Order, OrderStatus } from '../../types';
+import { getAdminOrders } from '../../shared/api/orderApi';
+import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../shared/utils/formatters';
+import type { Order, OrderStatus } from '../../shared/types';
 import toast from 'react-hot-toast';
-import '../../components/common/LoadingSpinner.css';
+import '../../shared/components/LoadingSpinner.css';
 import './AdminOrders.css';
 
 const STATUSES: (OrderStatus | 'ALL')[] = [

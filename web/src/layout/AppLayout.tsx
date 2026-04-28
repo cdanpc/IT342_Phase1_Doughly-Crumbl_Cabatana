@@ -3,10 +3,10 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import OrderPanel from './OrderPanel';
-import CheckoutModal from './CheckoutModal';
-import { useAuth } from '../../store/AuthContext';
-import { useCart } from '../../store/CartContext';
-import { ROUTES } from '../../utils/routes';
+import CheckoutModal from '../features/checkout/CheckoutModal';
+import { useAuth } from '../shared/hooks/AuthContext';
+import { useCart } from '../shared/hooks/CartContext';
+import { ROUTES } from '../shared/utils/routes';
 import './AppLayout.css';
 
 export default function AppLayout() {

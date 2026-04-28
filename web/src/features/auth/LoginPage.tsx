@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cookie, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { useAuth } from '../store/AuthContext';
-import { ROUTES } from '../utils/routes';
+import { useAuth } from '../../shared/hooks/AuthContext';
+import { ROUTES } from '../../shared/utils/routes';
 import toast from 'react-hot-toast';
-import '../components/common/LoadingSpinner.css';
+import '../../shared/components/LoadingSpinner.css';
 import './AuthPages.css';
 
 interface FieldErrors {

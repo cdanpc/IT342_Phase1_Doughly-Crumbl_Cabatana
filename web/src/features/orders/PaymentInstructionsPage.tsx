@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Banknote } from 'lucide-react';
-import { getOrderById, submitPayment } from '../api/orderApi';
-import { formatPrice } from '../utils/formatters';
-import { ROUTES } from '../utils/routes';
-import type { Order } from '../types';
+import { getOrderById, submitPayment } from '../../shared/api/orderApi';
+import { formatPrice } from '../../shared/utils/formatters';
+import { ROUTES } from '../../shared/utils/routes';
+import type { Order } from '../../shared/types';
 import toast from 'react-hot-toast';
-import '../components/common/LoadingSpinner.css';
-import ProofUploadForm from '../components/ProofUploadForm';
+import '../../shared/components/LoadingSpinner.css';
+import ProofUploadForm from '../../shared/components/ProofUploadForm';
 import './PaymentInstructionsPage.css';
 
 type PaymentMethod = 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';

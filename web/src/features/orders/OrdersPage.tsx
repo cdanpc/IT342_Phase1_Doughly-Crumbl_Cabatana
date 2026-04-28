@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw } from 'lucide-react';
-import { getMyOrders } from '../api/orderApi';
+import { getMyOrders } from '../../shared/api/orderApi';
 import {
   formatPrice,
   formatDate,
   getStatusColor,
   formatOrderStatus,
   getOrderStatusHelperText,
-} from '../utils/formatters';
-import type { Order } from '../types';
+} from '../../shared/utils/formatters';
+import type { Order } from '../../shared/types';
 import toast from 'react-hot-toast';
-import '../components/common/LoadingSpinner.css';
+import '../../shared/components/LoadingSpinner.css';
 
 const ACTIVE_STATUSES = [
   'ORDER_PLACED', 'AWAITING_DELIVERY_QUOTE',

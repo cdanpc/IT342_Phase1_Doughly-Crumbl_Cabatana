@@ -1,21 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ROUTES } from '../utils/routes';
-import { ProtectedRoute, GuestRoute } from '../components/common/ProtectedRoute';
-import LandingPage from '../pages/LandingPage';
-import LoginPage from '../pages/LoginPage';
-import RegisterPage from '../pages/RegisterPage';
-import AppLayout from '../components/layout/AppLayout';
-import MenuPage from '../pages/MenuPage';
-import OrdersPage from '../pages/OrdersPage';
-import OrderDetailPage from '../pages/OrderDetailPage';
-import PaymentInstructionsPage from '../pages/PaymentInstructionsPage';
-import OrderConfirmationPage from '../pages/OrderConfirmationPage';
-import AdminDashboard from '../pages/admin/AdminDashboard';
-import AdminProducts from '../pages/admin/AdminProducts';
-import AdminOrders from '../pages/admin/AdminOrders';
-import AdminOrderDetail from '../pages/admin/AdminOrderDetail';
-import CareGuidePage from '../pages/CareGuidePage';
-import AboutPage from '../pages/AboutPage';
+import { ROUTES } from '../shared/utils/routes';
+import { ProtectedRoute, GuestRoute } from '../shared/components/ProtectedRoute';
+import LandingPage from '../features/landing/LandingPage';
+import LoginPage from '../features/auth/LoginPage';
+import RegisterPage from '../features/auth/RegisterPage';
+import AppLayout from '../layout/AppLayout';
+import MenuPage from '../features/menu/MenuPage';
+import OrdersPage from '../features/orders/OrdersPage';
+import OrderDetailPage from '../features/orders/OrderDetailPage';
+import PaymentInstructionsPage from '../features/orders/PaymentInstructionsPage';
+import OrderConfirmationPage from '../features/orders/OrderConfirmationPage';
+import AdminDashboard from '../features/admin/AdminDashboard';
+import AdminProducts from '../features/admin/AdminProducts';
+import AdminOrders from '../features/admin/AdminOrders';
+import AdminOrderDetail from '../features/admin/AdminOrderDetail';
+import CareGuidePage from '../features/care-guide/CareGuidePage';
+import AboutPage from '../features/about/AboutPage';
 
 export default function AppRouter() {
   return (

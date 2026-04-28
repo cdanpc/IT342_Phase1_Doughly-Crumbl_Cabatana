@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
-import { getProducts } from '../api/productApi';
-import { useCart } from '../store/CartContext';
-import { formatPrice } from '../utils/formatters';
-import type { Product } from '../types';
+import { getProducts } from '../../shared/api/productApi';
+import { useCart } from '../../shared/hooks/CartContext';
+import { formatPrice } from '../../shared/utils/formatters';
+import type { Product } from '../../shared/types';
 import toast from 'react-hot-toast';
 import './MenuPage.css';
 

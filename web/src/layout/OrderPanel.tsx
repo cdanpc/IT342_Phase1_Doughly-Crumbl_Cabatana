@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
-import { useCart } from '../../store/CartContext';
-import { formatPrice } from '../../utils/formatters';
-import { ROUTES } from '../../utils/routes';
+import { useCart } from '../shared/hooks/CartContext';
+import { formatPrice } from '../shared/utils/formatters';
+import { ROUTES } from '../shared/utils/routes';
 import './OrderPanel.css';
 
 export default function OrderPanel() {

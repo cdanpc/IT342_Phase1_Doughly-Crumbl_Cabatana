@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UtensilsCrossed, ShoppingBag, Info, BookMarked, LogOut, LayoutDashboard, Package, ClipboardList } from 'lucide-react';
-import { useAuth } from '../../store/AuthContext';
-import { ROUTES } from '../../utils/routes';
+import { useAuth } from '../shared/hooks/AuthContext';
+import { ROUTES } from '../shared/utils/routes';
 import './Sidebar.css';
 
 interface NavItem {

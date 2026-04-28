@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Cookie, Search, ShoppingCart, Bell } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useCart } from '../../store/CartContext';
-import { useAuth } from '../../store/AuthContext';
-import { useNotifications } from '../../store/NotificationContext';
-import { ROUTES } from '../../utils/routes';
-import NotificationDropdown from '../common/NotificationDropdown';
+import { useCart } from '../shared/hooks/CartContext';
+import { useAuth } from '../shared/hooks/AuthContext';
+import { useNotifications } from '../shared/hooks/NotificationContext';
+import { ROUTES } from '../shared/utils/routes';
+import NotificationDropdown from '../shared/components/NotificationDropdown';
 import './Header.css';
 
 interface HeaderProps {

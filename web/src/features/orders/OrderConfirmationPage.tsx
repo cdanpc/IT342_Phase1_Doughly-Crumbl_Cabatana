@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Clock, ShoppingBag } from 'lucide-react';
-import { formatPrice, formatDate } from '../utils/formatters';
-import { ROUTES } from '../utils/routes';
-import type { Order } from '../types';
+import { formatPrice, formatDate } from '../../shared/utils/formatters';
+import { ROUTES } from '../../shared/utils/routes';
+import type { Order } from '../../shared/types';
 
 export default function OrderConfirmationPage() {
   const location = useLocation();

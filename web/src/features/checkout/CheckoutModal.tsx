@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Phone, FileText, X, ShoppingBag } from 'lucide-react';
-import { useCart } from '../../store/CartContext';
-import { placeOrder } from '../../api/orderApi';
-import { formatPrice } from '../../utils/formatters';
-import { ROUTES } from '../../utils/routes';
+import { useCart } from '../../shared/hooks/CartContext';
+import { placeOrder } from '../../shared/api/orderApi';
+import { formatPrice } from '../../shared/utils/formatters';
+import { ROUTES } from '../../shared/utils/routes';
 import toast from 'react-hot-toast';
-import '../common/LoadingSpinner.css';
+import '../../shared/components/LoadingSpinner.css';
 
 type FulfillmentMethod = 'PICKUP' | 'DELIVERY';
 type PaymentMethod = 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';

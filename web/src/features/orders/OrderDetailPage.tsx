@@ -1,20 +1,20 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Phone, FileText, Clock, CheckCircle, Package, Truck, CreditCard, X } from 'lucide-react';
-import { getOrderById, submitPayment, cancelOrder } from '../api/orderApi';
+import { getOrderById, submitPayment, cancelOrder } from '../../shared/api/orderApi';
 import {
   formatPrice,
   formatDate,
   getStatusColor,
   formatOrderStatus,
   getOrderStatusHelperText,
-} from '../utils/formatters';
-import { ROUTES } from '../utils/routes';
-import type { Order } from '../types';
+} from '../../shared/utils/formatters';
+import { ROUTES } from '../../shared/utils/routes';
+import type { Order } from '../../shared/types';
 import toast from 'react-hot-toast';
-import '../components/common/LoadingSpinner.css';
-import ProofUploadForm from '../components/ProofUploadForm';
-import StatusTimeline from '../components/StatusTimeline';
+import '../../shared/components/LoadingSpinner.css';
+import ProofUploadForm from '../../shared/components/ProofUploadForm';
+import StatusTimeline from '../../shared/components/StatusTimeline';
 import './OrderDetailPage.css';
 
 function isPickupOrder(order: Order): boolean {
