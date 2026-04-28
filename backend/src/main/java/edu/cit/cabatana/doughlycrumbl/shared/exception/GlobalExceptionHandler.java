@@ -1,6 +1,6 @@
-package edu.cit.cabatana.doughlycrumbl.exception;
+package edu.cit.cabatana.doughlycrumbl.shared.exception;
 
-import edu.cit.cabatana.doughlycrumbl.dto.response.ErrorResponse;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,3 +98,5 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 }
+
+

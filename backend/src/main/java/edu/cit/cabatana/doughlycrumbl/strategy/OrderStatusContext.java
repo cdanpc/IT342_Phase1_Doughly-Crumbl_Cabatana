@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.strategy;
 
-import edu.cit.cabatana.doughlycrumbl.exception.BadRequestException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
 import edu.cit.cabatana.doughlycrumbl.model.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -84,3 +84,4 @@ public class OrderStatusContext {
         return strategies.get(targetStatus);
     }
 }
+

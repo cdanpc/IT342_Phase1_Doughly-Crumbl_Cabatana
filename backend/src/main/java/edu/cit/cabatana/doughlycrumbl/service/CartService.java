@@ -4,7 +4,7 @@ import edu.cit.cabatana.doughlycrumbl.adapter.CartAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.AddToCartRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateCartItemRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.CartResponse;
-import edu.cit.cabatana.doughlycrumbl.exception.ResourceNotFoundException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException;
 import edu.cit.cabatana.doughlycrumbl.model.*;
 import edu.cit.cabatana.doughlycrumbl.repository.CartItemRepository;
 import edu.cit.cabatana.doughlycrumbl.repository.CartRepository;
@@ -41,7 +41,7 @@ public class CartService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product", request.getProductId()));
 
-        // Check if product already in cart — if so, update quantity
+        // Check if product already in cart â€” if so, update quantity
         Optional<CartItem> existingItem = cartItemRepository
                 .findByCartIdAndProductId(cart.getId(), product.getId());
 
@@ -121,3 +121,4 @@ public class CartService {
                 });
     }
 }
+

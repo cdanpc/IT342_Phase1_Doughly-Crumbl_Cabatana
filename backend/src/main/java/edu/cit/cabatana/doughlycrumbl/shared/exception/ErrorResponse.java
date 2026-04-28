@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.dto.response;
+package edu.cit.cabatana.doughlycrumbl.shared.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,3 +20,4 @@ public class ErrorResponse {
     private LocalDateTime timestamp;
     private Map<String, String> fields; // per-field validation errors, null when not applicable
 }
+

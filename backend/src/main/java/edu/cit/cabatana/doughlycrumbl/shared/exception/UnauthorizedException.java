@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.exception;
+package edu.cit.cabatana.doughlycrumbl.shared.exception;
 
 public class UnauthorizedException extends RuntimeException {
 
@@ -6,3 +6,4 @@ public class UnauthorizedException extends RuntimeException {
         super(message);
     }
 }
+

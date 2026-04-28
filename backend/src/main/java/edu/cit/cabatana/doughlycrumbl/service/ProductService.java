@@ -3,7 +3,7 @@ package edu.cit.cabatana.doughlycrumbl.service;
 import edu.cit.cabatana.doughlycrumbl.adapter.ProductAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.ProductRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.ProductResponse;
-import edu.cit.cabatana.doughlycrumbl.exception.ResourceNotFoundException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException;
 import edu.cit.cabatana.doughlycrumbl.model.Product;
 import edu.cit.cabatana.doughlycrumbl.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -82,3 +82,4 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 }
+

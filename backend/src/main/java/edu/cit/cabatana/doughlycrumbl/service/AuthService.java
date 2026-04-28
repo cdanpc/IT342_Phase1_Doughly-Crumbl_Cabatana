@@ -3,7 +3,7 @@ package edu.cit.cabatana.doughlycrumbl.service;
 import edu.cit.cabatana.doughlycrumbl.dto.request.LoginRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.RegisterRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.AuthResponse;
-import edu.cit.cabatana.doughlycrumbl.exception.BadRequestException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
 import edu.cit.cabatana.doughlycrumbl.model.User;
 import edu.cit.cabatana.doughlycrumbl.repository.UserRepository;
 import edu.cit.cabatana.doughlycrumbl.security.CustomUserDetails;
@@ -92,3 +92,4 @@ public class AuthService {
         }
     }
 }
+

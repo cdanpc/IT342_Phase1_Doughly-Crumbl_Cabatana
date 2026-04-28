@@ -4,8 +4,8 @@ import edu.cit.cabatana.doughlycrumbl.adapter.OrderAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.CheckoutRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateOrderStatusRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.response.OrderResponse;
-import edu.cit.cabatana.doughlycrumbl.exception.BadRequestException;
-import edu.cit.cabatana.doughlycrumbl.exception.ResourceNotFoundException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
+import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException;
 import edu.cit.cabatana.doughlycrumbl.factory.OrderFactory;
 import edu.cit.cabatana.doughlycrumbl.model.Cart;
 import edu.cit.cabatana.doughlycrumbl.model.Order;
@@ -301,3 +301,4 @@ public class OrderService {
      * - Follows Single Responsibility Principle
      */
 }
+
