@@ -49,6 +49,8 @@ export default function RegisterPage() {
     }
     if (!phoneNumber.trim()) {
       newErrors.phoneNumber = 'Phone number is required';
+    } else if (!/^(09\d{9}|\+639\d{9})$/.test(phoneNumber.trim())) {
+      newErrors.phoneNumber = 'Enter a valid PH number (e.g. 09171234567)';
     }
     if (!password || password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';

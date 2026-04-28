@@ -1,16 +1,56 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '../shared/hooks/CartContext';
 import { formatPrice } from '../shared/utils/formatters';
 import { ROUTES } from '../shared/utils/routes';
+import toast from 'react-hot-toast';
 import './OrderPanel.css';
 
 export default function OrderPanel() {
   const navigate = useNavigate();
   const { cart, updateQuantity, removeItem, openCheckout } = useCart();
+  const [pendingItemId, setPendingItemId] = useState<number | null>(null);
 
   const items = cart?.items ?? [];
   const subtotal = cart?.totalAmount ?? 0;
+
+  async function handleDecrease(cartItemId: number, quantity: number) {
+    if (pendingItemId !== null) return;
+    setPendingItemId(cartItemId);
+    try {
+      if (quantity > 1) await updateQuantity(cartItemId, quantity - 1);
+      else await removeItem(cartItemId);
+    } catch {
+      toast.error('Failed to update cart. Please try again.');
+    } finally {
+      setPendingItemId(null);
+    }
+  }
+
+  async function handleIncrease(cartItemId: number, quantity: number) {
+    if (pendingItemId !== null) return;
+    setPendingItemId(cartItemId);
+    try {
+      await updateQuantity(cartItemId, quantity + 1);
+    } catch {
+      toast.error('Failed to update cart. Please try again.');
+    } finally {
+      setPendingItemId(null);
+    }
+  }
+
+  async function handleRemove(cartItemId: number) {
+    if (pendingItemId !== null) return;
+    setPendingItemId(cartItemId);
+    try {
+      await removeItem(cartItemId);
+    } catch {
+      toast.error('Failed to remove item. Please try again.');
+    } finally {
+      setPendingItemId(null);
+    }
+  }
 
   return (
     <aside className="order-panel">
@@ -49,25 +89,27 @@ export default function OrderPanel() {
                   <div className="order-panel__item-controls">
                     <button
                       className="order-panel__qty-btn"
-                      onClick={() =>
-                        item.quantity > 1
-                          ? updateQuantity(item.cartItemId, item.quantity - 1)
-                          : removeItem(item.cartItemId)
-                      }
+                      onClick={() => handleDecrease(item.cartItemId, item.quantity)}
+                      disabled={pendingItemId === item.cartItemId}
                     >
                       <Minus size={14} />
                     </button>
                     <span className="order-panel__qty-value">{item.quantity}</span>
                     <button
                       className="order-panel__qty-btn"
-                      onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
+                      onClick={() => handleIncrease(item.cartItemId, item.quantity)}
+                      disabled={pendingItemId === item.cartItemId}
                     >
                       <Plus size={14} />
                     </button>
                     <span className="order-panel__item-price">{formatPrice(item.subtotal)}</span>
                   </div>
                 </div>
-                <button className="order-panel__item-delete" onClick={() => removeItem(item.cartItemId)}>
+                <button
+                  className="order-panel__item-delete"
+                  onClick={() => handleRemove(item.cartItemId)}
+                  disabled={pendingItemId === item.cartItemId}
+                >
                   <Trash2 size={16} />
                 </button>
               </div>

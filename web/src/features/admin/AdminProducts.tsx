@@ -20,6 +20,7 @@ export default function AdminProducts() {
   const [search, setSearch] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
+  const [formErrors, setFormErrors] = useState<{ name?: string; price?: string }>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function AdminProducts() {
     setForm(EMPTY_FORM);
     setImageFile(null);
     setImagePreview('');
+    setFormErrors({});
     setShowModal(true);
   }
 
@@ -61,21 +63,31 @@ export default function AdminProducts() {
     });
     setImageFile(null);
     setImagePreview(product.imageUrl || '');
+    setFormErrors({});
     setShowModal(true);
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image too large. Maximum size is 5 MB.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   }
 
   async function handleSave() {
-    if (!form.name.trim() || form.price <= 0) {
-      toast.error('Please fill in all required fields');
+    const errs: { name?: string; price?: string } = {};
+    if (!form.name.trim()) errs.name = 'Product name is required.';
+    if (form.price <= 0) errs.price = 'Price must be greater than ₱0.';
+    if (Object.keys(errs).length > 0) {
+      setFormErrors(errs);
       return;
     }
+    setFormErrors({});
 
     setIsSaving(true);
     try {
@@ -242,7 +254,12 @@ export default function AdminProducts() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <label style={labelStyle}>Name *</label>
-                <input style={inputStyle} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <input
+                  style={{ ...inputStyle, ...(formErrors.name ? { borderColor: 'var(--color-error)' } : {}) }}
+                  value={form.name}
+                  onChange={(e) => { setForm({ ...form, name: e.target.value }); setFormErrors((p) => ({ ...p, name: undefined })); }}
+                />
+                {formErrors.name && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{formErrors.name}</span>}
               </div>
               <div>
                 <label style={labelStyle}>Description</label>
@@ -254,7 +271,13 @@ export default function AdminProducts() {
               </div>
               <div>
                 <label style={labelStyle}>Price *</label>
-                <input style={inputStyle} type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
+                <input
+                  style={{ ...inputStyle, ...(formErrors.price ? { borderColor: 'var(--color-error)' } : {}) }}
+                  type="number" min="0" step="0.01"
+                  value={form.price}
+                  onChange={(e) => { setForm({ ...form, price: Number(e.target.value) }); setFormErrors((p) => ({ ...p, price: undefined })); }}
+                />
+                {formErrors.price && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{formErrors.price}</span>}
               </div>
               <div>
                 <label style={labelStyle}>Product Image</label>

@@ -23,6 +23,7 @@ export default function MenuPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [addingId, setAddingId] = useState<number | null>(null);
 
   const fetchProducts = useCallback(async () => {
     setIsLoading(true);
@@ -47,8 +48,16 @@ export default function MenuPage() {
 
   async function handleAddToCart(e: React.MouseEvent, product: Product) {
     e.stopPropagation();
-    await addToCart(product.id, 1);
-    openOrderPanel();
+    if (addingId !== null) return;
+    setAddingId(product.id);
+    try {
+      await addToCart(product.id, 1);
+      openOrderPanel();
+    } catch {
+      toast.error('Failed to add item. Please try again.');
+    } finally {
+      setAddingId(null);
+    }
   }
 
   return (
@@ -115,7 +124,12 @@ export default function MenuPage() {
                 <div className="product-card__body">
                   <div className="product-card__name-row">
                     <span className="product-card__name">{product.name}</span>
-                    <button className="product-card__cart-btn" onClick={(e) => handleAddToCart(e, product)}>
+                    <button
+                      className="product-card__cart-btn"
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled={addingId === product.id}
+                      style={{ opacity: addingId === product.id ? 0.5 : 1 }}
+                    >
                       <ShoppingCart size={18} />
                       <span className="sr-only">Add 1 item</span>
                     </button>

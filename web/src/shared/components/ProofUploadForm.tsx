@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Upload, CheckCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface ProofUploadFormProps {
   onSubmit: (file: File) => void | Promise<void>;
@@ -18,6 +19,11 @@ export default function ProofUploadForm({
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
+    if (file && file.size > 10 * 1024 * 1024) {
+      toast.error('File too large. Maximum size is 10 MB.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
     setProofFile(file);
     setProofPreview(file ? URL.createObjectURL(file) : null);
   }

@@ -34,7 +34,9 @@ export default function NotificationDropdown({ onClose }: Props) {
   }, [onClose]);
 
   async function handleClick(n: Notification) {
-    if (!n.read) await markRead(n.id);
+    if (!n.read) {
+      try { await markRead(n.id); } catch { /* low-stakes — badge will correct on next load */ }
+    }
     if (n.orderId) {
       const isAdminNotif = ['NEW_ORDER', 'PAYMENT_SUBMITTED'].includes(n.type);
       navigate(isAdminNotif ? `/admin/orders/${n.orderId}` : `/orders/${n.orderId}`);
@@ -42,12 +44,16 @@ export default function NotificationDropdown({ onClose }: Props) {
     onClose();
   }
 
+  async function handleMarkAllRead() {
+    try { await markAllRead(); } catch { /* low-stakes */ }
+  }
+
   return (
     <div className="notif-dropdown" ref={ref}>
       <div className="notif-dropdown__header">
         <span className="notif-dropdown__title">Notifications</span>
         {unreadCount > 0 && (
-          <button className="notif-dropdown__mark-all" onClick={() => markAllRead()}>
+          <button className="notif-dropdown__mark-all" onClick={handleMarkAllRead}>
             Mark all read
           </button>
         )}
