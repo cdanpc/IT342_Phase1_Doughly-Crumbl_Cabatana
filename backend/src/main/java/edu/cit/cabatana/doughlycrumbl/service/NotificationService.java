@@ -2,7 +2,7 @@ package edu.cit.cabatana.doughlycrumbl.service;
 
 import edu.cit.cabatana.doughlycrumbl.dto.response.NotificationResponse;
 import edu.cit.cabatana.doughlycrumbl.model.Notification;
-import edu.cit.cabatana.doughlycrumbl.model.User;
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

@@ -1,6 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.features.auth;
 
-import edu.cit.cabatana.doughlycrumbl.model.User;
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

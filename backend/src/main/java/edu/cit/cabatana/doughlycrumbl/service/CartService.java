@@ -1,5 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.service;
 
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
+
 import edu.cit.cabatana.doughlycrumbl.adapter.CartAdapter;
 import edu.cit.cabatana.doughlycrumbl.dto.request.AddToCartRequest;
 import edu.cit.cabatana.doughlycrumbl.dto.request.UpdateCartItemRequest;
@@ -9,7 +11,7 @@ import edu.cit.cabatana.doughlycrumbl.model.*;
 import edu.cit.cabatana.doughlycrumbl.repository.CartItemRepository;
 import edu.cit.cabatana.doughlycrumbl.repository.CartRepository;
 import edu.cit.cabatana.doughlycrumbl.repository.ProductRepository;
-import edu.cit.cabatana.doughlycrumbl.repository.UserRepository;
+import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

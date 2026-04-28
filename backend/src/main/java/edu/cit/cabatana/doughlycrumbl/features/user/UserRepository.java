@@ -1,6 +1,6 @@
-package edu.cit.cabatana.doughlycrumbl.repository;
+package edu.cit.cabatana.doughlycrumbl.features.user;
 
-import edu.cit.cabatana.doughlycrumbl.model.User;
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

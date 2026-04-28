@@ -9,11 +9,11 @@ import edu.cit.cabatana.doughlycrumbl.shared.exception.ResourceNotFoundException
 import edu.cit.cabatana.doughlycrumbl.factory.OrderFactory;
 import edu.cit.cabatana.doughlycrumbl.model.Cart;
 import edu.cit.cabatana.doughlycrumbl.model.Order;
-import edu.cit.cabatana.doughlycrumbl.model.User;
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.observer.OrderEventPublisher;
 import edu.cit.cabatana.doughlycrumbl.repository.CartRepository;
 import edu.cit.cabatana.doughlycrumbl.repository.OrderRepository;
-import edu.cit.cabatana.doughlycrumbl.repository.UserRepository;
+import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import edu.cit.cabatana.doughlycrumbl.strategy.OrderStatusContext;
 import edu.cit.cabatana.doughlycrumbl.service.FileUploadService;
 import org.springframework.web.multipart.MultipartFile;

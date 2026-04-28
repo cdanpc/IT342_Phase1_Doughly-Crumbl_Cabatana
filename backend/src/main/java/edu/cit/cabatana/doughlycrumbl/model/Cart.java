@@ -1,5 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.model;
 
+import edu.cit.cabatana.doughlycrumbl.features.user.User;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

@@ -1,4 +1,4 @@
-package edu.cit.cabatana.doughlycrumbl.model;
+package edu.cit.cabatana.doughlycrumbl.features.user;
 
 import jakarta.persistence.*;
 import lombok.*;
