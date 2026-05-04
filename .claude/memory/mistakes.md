@@ -32,6 +32,19 @@ Design tool exported with wrong primary color. All 18 layouts
 had to be updated. Fix: Always grep for old hex values after
 any color system change.
 
+## MOBILE-003 — Data model drift across all entities (BUG-3)
+8 out of 10 Kotlin data classes had field names that did not match
+backend JSON response keys. Root cause: models were written by
+guessing field names instead of reading the actual Java response DTOs.
+Affected: Order, OrderItem, Cart, CartItem, Product, ProductRequest,
+RegisterRequest, UpdateOrderStatusRequest. Notification.kt was missing
+entirely. Fixed by reading OrderResponse.java, CartResponse.java,
+ProductResponse.java, NotificationResponse.java directly.
+Fix: Always read the backend *Response.java before writing any mobile
+data class. Use @SerializedName on every field. Verify with
+docs/data-models.md. Note: backend ProductResponse sends `id` not
+`productId` — do not blindly follow prompt schemas, read the source.
+
 ## MOBILE-002 — poppins.xml not in font folder
 Themes.xml referenced @font/poppins but file did not exist.
 Caused runtime crash. Fix: Verify font file exists before

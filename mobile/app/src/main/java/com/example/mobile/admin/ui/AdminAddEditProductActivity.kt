@@ -59,10 +59,10 @@ class AdminAddEditProductActivity : AppCompatActivity() {
 
     private fun prefill(p: Product) {
         binding.etName.setText(p.name)
-        binding.etDescription.setText(p.description)
+        binding.etDescription.setText(p.description ?: "")
         binding.etPrice.setText(p.price.toString())
         binding.etCategory.setText(p.category)
-        binding.etStock.setText(p.stock.toString())
+        binding.etStock.setText(if (p.available) "1" else "0")
         binding.etImageUrl.setText(p.imageUrl ?: "")
         Glide.with(this).load(p.imageUrl)
             .placeholder(android.R.drawable.ic_menu_gallery)
@@ -112,7 +112,7 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         val desc = binding.etDescription.text.toString().trim()
         val priceStr = binding.etPrice.text.toString().trim()
         val category = binding.etCategory.text.toString().trim()
-        val stockStr = binding.etStock.text.toString().trim()
+        val availableStr = binding.etStock.text.toString().trim()
         val imageUrl = binding.etImageUrl.text.toString().trim().ifEmpty { null }
 
         var valid = true
@@ -121,11 +121,21 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         val price = priceStr.toDoubleOrNull()
         if (price == null || price <= 0) { binding.tilPrice.error = "Enter a valid price"; valid = false } else binding.tilPrice.error = null
         if (category.isEmpty()) { binding.tilCategory.error = "Required"; valid = false } else binding.tilCategory.error = null
-        val stock = stockStr.toIntOrNull()
-        if (stock == null || stock < 0) { binding.tilStock.error = "Enter a valid stock number"; valid = false } else binding.tilStock.error = null
+        val availableInput = availableStr.toIntOrNull()
+        if (availableInput == null) { binding.tilStock.error = "Enter 1 (available) or 0 (unavailable)"; valid = false } else binding.tilStock.error = null
 
         if (!valid) return
 
-        viewModel.save(editingProduct?.id, ProductRequest(name, desc, price!!, category, stock!!, imageUrl))
+        viewModel.save(
+            editingProduct?.id,
+            ProductRequest(
+                name = name,
+                description = desc,
+                price = price!!,
+                imageUrl = imageUrl,
+                category = category,
+                available = availableInput!! != 0
+            )
+        )
     }
 }

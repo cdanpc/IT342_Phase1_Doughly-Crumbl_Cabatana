@@ -16,19 +16,18 @@ class CartItemAdapter(
 
     inner class ViewHolder(private val b: ItemCartBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: CartItem) {
-            b.tvName.text = item.product.name
-            b.tvCategory.text = item.product.category
-            b.tvPrice.text = "₱%.2f".format(item.product.price)
+            b.tvName.text = item.productName
+            b.tvPrice.text = "₱%.2f".format(item.unitPrice)
             b.tvQty.text = item.quantity.toString()
-            Glide.with(b.root).load(item.product.imageUrl)
+            Glide.with(b.root).load(item.productImageUrl)
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .centerCrop().into(b.ivProduct)
             b.btnMinus.setOnClickListener {
                 val newQty = item.quantity - 1
-                if (newQty >= 1) onQtyChanged(item.id, newQty)
+                if (newQty >= 1) onQtyChanged(item.cartItemId, newQty)
             }
-            b.btnPlus.setOnClickListener { onQtyChanged(item.id, item.quantity + 1) }
-            b.btnRemove.setOnClickListener { onRemove(item.id) }
+            b.btnPlus.setOnClickListener { onQtyChanged(item.cartItemId, item.quantity + 1) }
+            b.btnRemove.setOnClickListener { onRemove(item.cartItemId) }
         }
     }
 
@@ -39,7 +38,7 @@ class CartItemAdapter(
 
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<CartItem>() {
-            override fun areItemsTheSame(a: CartItem, b: CartItem) = a.id == b.id
+            override fun areItemsTheSame(a: CartItem, b: CartItem) = a.cartItemId == b.cartItemId
             override fun areContentsTheSame(a: CartItem, b: CartItem) = a == b
         }
     }

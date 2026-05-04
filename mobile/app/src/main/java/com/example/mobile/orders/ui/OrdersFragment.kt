@@ -31,7 +31,7 @@ class OrdersFragment : Fragment() {
 
         adapter = OrderAdapter { order ->
             val intent = Intent(requireContext(), OrderDetailActivity::class.java)
-            intent.putExtra("orderId", order.id)
+            intent.putExtra("orderId", order.orderId)
             startActivity(intent)
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

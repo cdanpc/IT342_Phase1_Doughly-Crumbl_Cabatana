@@ -57,8 +57,8 @@ class CheckoutActivity : AppCompatActivity() {
             cart ?: return@observe
             val count = cart.items.size
             binding.tvItemCount.text = "$count ${if (count == 1) "item" else "items"}"
-            binding.tvSummarySubtotal.text = "₱%.2f".format(cart.totalPrice)
-            binding.tvTotal.text = "Total: ₱%.2f".format(cart.totalPrice)
+            binding.tvSummarySubtotal.text = "₱%.2f".format(cart.totalAmount)
+            binding.tvTotal.text = "Total: ₱%.2f".format(cart.totalAmount)
             buildExpandedItems(cart)
         }
         viewModel.isLoading.observe(this) { loading ->
@@ -69,7 +69,7 @@ class CheckoutActivity : AppCompatActivity() {
         }
         viewModel.orderPlaced.observe(this) { order ->
             order ?: return@observe
-            Toast.makeText(this, "Order #${order.id} placed successfully!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Order #${order.orderId} placed successfully!", Toast.LENGTH_LONG).show()
             setResult(RESULT_OK)
             finish()
         }
@@ -85,9 +85,7 @@ class CheckoutActivity : AppCompatActivity() {
         binding.layoutExpandedItems.removeAllViews()
         cart.items.forEach { item ->
             val tv = TextView(this).apply {
-                text = "${item.product.name}  ×${item.quantity}   ₱%.2f".format(
-                    item.product.price * item.quantity
-                )
+                text = "${item.productName}  ×${item.quantity}   ₱%.2f".format(item.subtotal)
                 textSize = 12f
                 setTextColor(ContextCompat.getColor(this@CheckoutActivity, R.color.colorTextSecondary))
                 setPadding(0, 6, 0, 6)

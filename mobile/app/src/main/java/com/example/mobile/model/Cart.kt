@@ -1,7 +1,17 @@
 package com.example.mobile.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Cart(
-    val id: Long,
-    val items: List<CartItem>,
-    val totalPrice: Double
+    @SerializedName("cartId")
+    val cartId: Long = 0,
+
+    @SerializedName("items")
+    val items: List<CartItem> = emptyList(),
+
+    @SerializedName("totalAmount")
+    val totalAmount: Double = 0.0,
+
+    @SerializedName("itemCount")
+    val itemCount: Int = 0
 )

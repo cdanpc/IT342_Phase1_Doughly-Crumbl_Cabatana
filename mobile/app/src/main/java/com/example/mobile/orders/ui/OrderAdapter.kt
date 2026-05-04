@@ -17,8 +17,8 @@ class OrderAdapter(
 
     inner class ViewHolder(private val b: ItemOrderBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(order: Order) {
-            b.tvOrderId.text = "Order #${order.id}"
-            b.tvDate.text = order.createdAt.take(10)
+            b.tvOrderId.text = "Order #${order.orderId}"
+            b.tvDate.text = order.orderDate.take(10)
             b.tvTotal.text = "₱%.2f".format(order.totalAmount)
             b.chipStatus.text = order.status
             b.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
@@ -40,7 +40,7 @@ class OrderAdapter(
 
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<Order>() {
-            override fun areItemsTheSame(a: Order, b: Order) = a.id == b.id
+            override fun areItemsTheSame(a: Order, b: Order) = a.orderId == b.orderId
             override fun areContentsTheSame(a: Order, b: Order) = a == b
         }
     }

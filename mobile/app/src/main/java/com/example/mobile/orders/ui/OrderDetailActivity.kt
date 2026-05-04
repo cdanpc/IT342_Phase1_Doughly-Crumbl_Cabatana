@@ -46,18 +46,12 @@ class OrderDetailActivity : AppCompatActivity() {
     }
 
     private fun bindOrder(order: Order, adapter: OrderItemAdapter) {
-        supportActionBar?.title = "Order #${order.id}"
-        binding.tvDate.text = order.createdAt.take(10)
+        supportActionBar?.title = "Order #${order.orderId}"
+        binding.tvDate.text = order.orderDate.take(10)
         binding.chipStatus.text = order.status
         binding.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
         adapter.submitList(order.items)
         binding.tvSubtotal.text = "Subtotal: ₱%.2f".format(order.totalAmount)
-        if (order.deliveryFee != null) {
-            binding.tvDeliveryFee.visibility = View.VISIBLE
-            binding.tvDeliveryFee.text = "Delivery fee: ₱%.2f".format(order.deliveryFee)
-            binding.tvGrandTotal.visibility = View.VISIBLE
-            binding.tvGrandTotal.text = "Grand Total: ₱%.2f".format(order.totalAmount + order.deliveryFee)
-        }
     }
 
     private fun statusColor(status: String) = when (status) {

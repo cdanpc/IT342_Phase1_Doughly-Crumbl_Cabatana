@@ -82,8 +82,8 @@ class CartFragment : Fragment() {
             binding.orderSummaryCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
             binding.btnCheckout.isEnabled = !isEmpty
 
-            binding.tvSubtotal.text = "₱%.2f".format(cart?.totalPrice ?: 0.0)
-            binding.tvTotal.text = "₱%.2f".format(cart?.totalPrice ?: 0.0)
+            binding.tvSubtotal.text = "₱%.2f".format(cart?.totalAmount ?: 0.0)
+            binding.tvTotal.text = "₱%.2f".format(cart?.totalAmount ?: 0.0)
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->

@@ -1,12 +1,41 @@
 package com.example.mobile.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Order(
-    val id: Long,
-    val status: String,
-    val totalAmount: Double,
-    val deliveryFee: Double?,
-    val createdAt: String,
-    val items: List<OrderItem>,
-    val customerName: String? = null,
-    val customerEmail: String? = null
+    @SerializedName("orderId")
+    val orderId: Long = 0,
+
+    @SerializedName("orderDate")
+    val orderDate: String = "",
+
+    @SerializedName("status")
+    val status: String = "",
+
+    @SerializedName("paymentStatus")
+    val paymentStatus: String = "",
+
+    @SerializedName("deliveryAddress")
+    val deliveryAddress: String? = null,
+
+    @SerializedName("contactNumber")
+    val contactNumber: String? = null,
+
+    @SerializedName("deliveryNotes")
+    val deliveryNotes: String? = null,
+
+    @SerializedName("proofImageUrl")
+    val proofImageUrl: String? = null,
+
+    @SerializedName("cancellationReason")
+    val cancellationReason: String? = null,
+
+    @SerializedName("items")
+    val items: List<OrderItem> = emptyList(),
+
+    @SerializedName("totalAmount")
+    val totalAmount: Double = 0.0,
+
+    @SerializedName("itemCount")
+    val itemCount: Int? = null
 )

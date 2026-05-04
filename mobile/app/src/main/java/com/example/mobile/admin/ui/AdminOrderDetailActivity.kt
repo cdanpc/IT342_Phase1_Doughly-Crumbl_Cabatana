@@ -61,23 +61,16 @@ class AdminOrderDetailActivity : AppCompatActivity() {
     }
 
     private fun bindOrder(order: Order, adapter: OrderItemAdapter) {
-        supportActionBar?.title = "Order #${order.id}"
-        binding.tvCustomerName.text = order.customerName ?: "Customer #${order.id}"
-        binding.tvCustomerEmail.text = order.customerEmail ?: ""
-        binding.tvDate.text = order.createdAt.take(10)
+        supportActionBar?.title = "Order #${order.orderId}"
+        binding.tvCustomerName.text = "Order #${order.orderId}"
+        binding.tvCustomerEmail.text = order.contactNumber ?: ""
+        binding.tvDate.text = order.orderDate.take(10)
         binding.chipStatus.text = order.status
         binding.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
 
         adapter.submitList(order.items)
 
         binding.tvSubtotal.text = "Subtotal: ₱%.2f".format(order.totalAmount)
-        if (order.deliveryFee != null) {
-            binding.tvDeliveryFeeDisplay.visibility = View.VISIBLE
-            binding.tvDeliveryFeeDisplay.text = "Delivery: ₱%.2f".format(order.deliveryFee)
-            binding.tvGrandTotal.visibility = View.VISIBLE
-            binding.tvGrandTotal.text = "Grand Total: ₱%.2f".format(order.totalAmount + order.deliveryFee)
-            binding.etDeliveryFee.setText(order.deliveryFee.toString())
-        }
 
         // Build status transition buttons
         binding.layoutStatusButtons.removeAllViews()
@@ -85,7 +78,7 @@ class AdminOrderDetailActivity : AppCompatActivity() {
             val btn = MaterialButton(this).apply {
                 text = nextStatus
                 isAllCaps = false
-                setOnClickListener { viewModel.updateStatus(order.id, nextStatus) }
+                setOnClickListener { viewModel.updateStatus(order.orderId, nextStatus) }
             }
             binding.layoutStatusButtons.addView(btn)
         }

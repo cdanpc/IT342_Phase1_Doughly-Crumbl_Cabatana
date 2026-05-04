@@ -17,7 +17,7 @@ class AdminProductAdapter(
     inner class ViewHolder(private val b: ItemAdminProductBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(product: Product) {
             b.tvName.text = product.name
-            b.tvCategory.text = "${product.category} · Stock: ${product.stock}"
+            b.tvCategory.text = "${product.category} · ${if (product.available) "Available" else "Unavailable"}"
             b.tvPrice.text = "₱%.2f".format(product.price)
             Glide.with(b.root)
                 .load(product.imageUrl)

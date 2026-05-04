@@ -12,9 +12,9 @@ class OrderItemAdapter : ListAdapter<OrderItem, OrderItemAdapter.ViewHolder>(DIF
 
     inner class ViewHolder(private val b: ItemOrderItemBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: OrderItem) {
-            b.tvName.text = item.product.name
+            b.tvName.text = item.productName
             b.tvQty.text = "x${item.quantity}"
-            b.tvPrice.text = "₱%.2f".format(item.price * item.quantity)
+            b.tvPrice.text = "₱%.2f".format(item.subtotal)
         }
     }
 
@@ -25,7 +25,7 @@ class OrderItemAdapter : ListAdapter<OrderItem, OrderItemAdapter.ViewHolder>(DIF
 
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<OrderItem>() {
-            override fun areItemsTheSame(a: OrderItem, b: OrderItem) = a.id == b.id
+            override fun areItemsTheSame(a: OrderItem, b: OrderItem) = a.productName == b.productName
             override fun areContentsTheSame(a: OrderItem, b: OrderItem) = a == b
         }
     }

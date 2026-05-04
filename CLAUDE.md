@@ -135,14 +135,12 @@ GROUP 9 — Informational screens: NOT STARTED
 
 ## Active Bugs
 
-BUG-3 (fix now — affects all order screens)
-  Order.kt field names do not match backend OrderResponse:
-  Mobile uses:   id, createdAt, deliveryFee, customerName, customerEmail
-  Backend sends: orderId, orderDate, (no deliveryFee field), (no customer fields)
-  Backend also sends (missing from Order.kt):
-    paymentStatus, deliveryAddress, contactNumber, deliveryNotes,
-    proofImageUrl, cancellationReason, itemCount
-  Fix: rewrite Order.kt to mirror OrderResponse.java exactly
+BUG-3 — FIXED (2026-05-04)
+  All mobile data models now match backend response shapes exactly.
+  Order.kt, OrderItem.kt, Cart.kt, CartItem.kt, Product.kt,
+  ProductRequest.kt, RegisterRequest.kt, UpdateOrderStatusRequest.kt
+  rewritten. Notification.kt created (was missing entirely).
+  Build verified: ./gradlew :app:assembleDebug → BUILD SUCCESS.
 
 BUG-4 (fix after GROUP 9)
   SessionManager uses plain SharedPreferences (Context.MODE_PRIVATE)
@@ -216,6 +214,7 @@ Valid status strings: PENDING, CONFIRMED, PAYMENT_CONFIRMED,
 |---|---|
 | docs/MASTER.md | Gate rules, handoff schema, memory taxonomy |
 | docs/tasks.md | Full AC list AC-10 to AC-18 with Given/When/Then |
+| docs/data-models.md | Single source of truth for all entity shapes (BP-02) |
 | docs/SYSTEM_INTELLIGENCE_REPORT.md | Full codebase audit |
 | docs/mobile/mobile-design-prompts.md | 18 screen design specs |
 | docs/mobile/MOBILE_DESIGN_STATUS.md | Mobile progress tracker |
@@ -223,6 +222,7 @@ Valid status strings: PENDING, CONFIRMED, PAYMENT_CONFIRMED,
 | docs/test-plan/TEST_PLAN.md | Software test plan |
 | docs/test-plan/REGRESSION_REPORT.md | Regression report |
 | docs/designs/mobile/ | Design screenshots by screen number |
+| .claude/memory/best-practices.md | Enforced dev standards BP-01 through BP-13 |
 
 Note: docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
       do not exist yet — create them before implementing GROUP 9.
