@@ -1,0 +1,13 @@
+Last saved: 2026-05-04 16:49
+Branch: main
+Last commit: 6b25cbb chore: verify and sync CLAUDE.md against live codebase
+
+Modified files:
+ M .claude/memory/global.md
+ M .claude/memory/mistakes.md
+ M .claude/memory/patterns.md
+ M .claude/settings.local.json
+ M CLAUDE.md
+?? .claude/commands/handoff.md
+?? .claude/commands/resume.md
+?? .claude/hooks/

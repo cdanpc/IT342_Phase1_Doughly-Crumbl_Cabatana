@@ -1,42 +1,38 @@
-# Known Pitfalls and Past Bugs — Doughly Crumbl
+# Mistakes — Doughly Crumbl
+(Things that went wrong — never repeat these)
 
-## Backend
+## ISS-001 — Package declarations not updated after VSA move
+Files moved with git mv but package declarations still pointed
+to old layer-based packages. Caused 74+ compile errors.
+Fix: Always update package declaration when moving a file.
 
-### this::toResponse does not exist
-- **Bug:** `ProductService.getAllAvailableProducts` used `this::toResponse` as a method reference
-- **Fix:** Use `productAdapter::toDto` — the adapter is already injected
-- **Commit:** `7133a1e`
+## ISS-002 — CartService stale wildcard import
+import edu.cit.cabatana.doughlycrumbl.model.* left after VSA.
+Fix: Never use wildcard imports. Always explicit imports.
 
-### Missing @ConfigurationProperties registration
-- Custom `app.*` properties added to `application.properties` without a matching class
-- Causes IDE warnings and potential NPE at runtime if `@Value` binding fails
-- Always add the field to the relevant class in `config/properties/` in the same commit
+## ISS-003 — BackendApplicationTests needed H2
+Tests failed without live Supabase. Fix: @ActiveProfiles("test")
++ application-test.properties with H2 datasource.
 
-### Short model ID strings cause 400 from Claude API
-- Use `claude-sonnet-4-6` or `claude-sonnet-4-5-20250929`, not `claude-sonnet-4-5`
+## ISS-004 — Spring Security returned 403 not 401
+CartControllerIntegrationTest expected 401 but got 403.
+Fix: Use is4xxClientError() not isUnauthorized() in tests.
+Also: add explicit AuthenticationEntryPoint to SecurityConfig.
 
-### application.properties contains real credentials
-- DB password, Google OAuth secret, Gmail app password, PayMongo test keys are committed
-- Do not add new secrets — use environment variables for any new sensitive values
+## ISS-005 — OrderServiceTest stale imports after VSA
+All imports pointed to old model.* and repository.* packages.
+Fix: Run grep for old package names after every file move.
 
-### N+1 queries on order items
-- Fetching orders with items in a loop triggers N+1 unless `@OneToMany(fetch = EAGER)` or `@EntityGraph` is used
-- Use `JOIN FETCH` in JPQL for order + items queries
+## ISS-006 — Frontend imports broke after VSA
+main.tsx still imported from ./store/X after moving to
+./shared/hooks/X. Fix: grep for old paths after every move.
 
-## Frontend
+## MOBILE-001 — Old orange color #C8874E leaked into layouts
+Design tool exported with wrong primary color. All 18 layouts
+had to be updated. Fix: Always grep for old hex values after
+any color system change.
 
-### settings.local.json blocks branch switches
-- Claude Code writes `.claude/settings.local.json` continuously
-- Add to `.gitignore` or stash before `git checkout`
-
-### CheckoutPage was replaced by CheckoutModal
-- `CheckoutPage.tsx` was deleted; checkout now lives in `CheckoutModal.tsx` as an inline modal
-- Do not recreate `CheckoutPage.tsx`
-
-### Lucide icon mixing
-- Only Lucide icons are allowed — no mixing with react-icons, heroicons, or Font Awesome
-- Import pattern: `import { ShoppingCart, Bell } from 'lucide-react'`
-
-### OpenStreetMap rate limit
-- Nominatim API is limited to 1 request per second
-- Never call it in a loop or on every keystroke — debounce address input (500ms minimum)
+## MOBILE-002 — poppins.xml not in font folder
+Themes.xml referenced @font/poppins but file did not exist.
+Caused runtime crash. Fix: Verify font file exists before
+referencing in themes.

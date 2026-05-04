@@ -210,19 +210,6 @@ Valid status strings: PENDING, CONFIRMED, PAYMENT_CONFIRMED,
 
 ---
 
-## Delivery Fee Tiers (AC-15)
-
-From DeliveryFeeCalculator.java (in features/order/ — NOT wired to any controller):
-
-  ≤3 km    →  ₱80
-  3–8 km   →  ₱120
-  8–15 km  →  ₱160
-  >15 km   →  ₱200
-
-DeliveryFeeCalculator is a @Component — wiring it into OrderController is part of AC-15 scope.
-
----
-
 ## Key Files
 
 | File | Purpose |
@@ -261,6 +248,26 @@ Note: docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.m
   # Session resume
   claude --continue               → resume last session
   claude --resume                 → pick from recent sessions
+
+---
+
+## How to Resume a Session
+
+Option A — Continue the exact last session (best):
+  claude --continue
+
+Option B — Pick from recent sessions:
+  claude --resume
+
+Option C — Fresh session with full context:
+  Open Claude Code normally, then type:
+  /resume
+
+End every session with:
+  /handoff
+
+This saves your progress and updates CLAUDE.md so the
+next session starts instantly with full context.
 
 ---
 
