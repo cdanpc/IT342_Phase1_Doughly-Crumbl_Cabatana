@@ -245,29 +245,17 @@ Note: docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.m
   ./gradlew :app:assembleDebug    → build check (run after every group)
   ./gradlew :app:clean            → clean build artifacts
 
-  # Session resume
-  claude --continue               → resume last session
-  claude --resume                 → pick from recent sessions
-
 ---
 
 ## How to Resume a Session
 
-Option A — Continue the exact last session (best):
-  claude --continue
-
-Option B — Pick from recent sessions:
-  claude --resume
-
-Option C — Fresh session with full context:
-  Open Claude Code normally, then type:
+Start of every new session — type this in the chat:
   /resume
 
-End every session with:
+End of every session — type this in the chat:
   /handoff
 
-This saves your progress and updates CLAUDE.md so the
-next session starts instantly with full context.
+That's it. Two commands. Everything else is automatic.
 
 ---
 
