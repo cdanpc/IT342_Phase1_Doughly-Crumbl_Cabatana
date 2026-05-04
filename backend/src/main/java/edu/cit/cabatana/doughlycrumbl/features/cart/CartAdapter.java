@@ -1,11 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.features.cart;
 
 import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
-
-import edu.cit.cabatana.doughlycrumbl.features.cart.CartResponse;
 import edu.cit.cabatana.doughlycrumbl.features.cart.CartResponse.CartItemResponse;
-import edu.cit.cabatana.doughlycrumbl.features.cart.Cart;
-import edu.cit.cabatana.doughlycrumbl.features.cart.CartItem;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

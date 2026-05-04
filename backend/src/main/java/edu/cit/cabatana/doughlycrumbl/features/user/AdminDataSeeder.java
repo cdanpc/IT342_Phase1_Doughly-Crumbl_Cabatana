@@ -1,7 +1,5 @@
 package edu.cit.cabatana.doughlycrumbl.features.user;
 
-import edu.cit.cabatana.doughlycrumbl.features.user.User;
-import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;

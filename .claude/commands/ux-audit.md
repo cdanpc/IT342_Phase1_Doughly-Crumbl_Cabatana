@@ -1,4 +1,6 @@
-# /ux-audit — UX Safety Audit
+# /ux-audit — UX Safety Audit (Web)
+
+> **Android mobile?** Use `/android-ui` instead — it covers XML layouts, Material Design 3, brand palette, and Kotlin UI code for the mobile app.
 
 Scan every `.tsx` file in `web/src/` and produce a pre-deployment safety report at `docs/UX_SAFETY_AUDIT.md`.
 

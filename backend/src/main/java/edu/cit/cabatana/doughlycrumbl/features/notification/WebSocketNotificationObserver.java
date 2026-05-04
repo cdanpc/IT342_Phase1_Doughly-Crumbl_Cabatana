@@ -5,7 +5,6 @@ import edu.cit.cabatana.doughlycrumbl.features.order.OrderObserver;
 import edu.cit.cabatana.doughlycrumbl.features.order.Order;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
-import edu.cit.cabatana.doughlycrumbl.features.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

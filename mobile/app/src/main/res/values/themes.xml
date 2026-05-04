@@ -1,5 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Mobile" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.DoughlyCrumbl" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorSurface</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@color/colorSurface</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorTextPrimary</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+
+    <!-- Top App Bar -->
+    <style name="Theme.DoughlyCrumbl.AppBar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/colorSurface</item>
+    </style>
+
+    <!-- Status Chip Styles — tinted bg + semantic text color per design spec -->
+    <!-- Using Suggestion (read-only display chip) as the M3 base for status labels -->
+    <style name="StatusChip.OrderPlaced" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusOrderPlacedBg</item>
+        <item name="android:textColor">@color/statusOrderPlaced</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="StatusChip.Preparing" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusPreparingBg</item>
+        <item name="android:textColor">@color/statusPreparing</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="StatusChip.OutForDelivery" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusOutForDeliveryBg</item>
+        <item name="android:textColor">@color/statusOutForDelivery</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="StatusChip.ReadyForPickup" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusReadyForPickupBg</item>
+        <item name="android:textColor">@color/statusReadyForPickup</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="StatusChip.Completed" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusCompletedBg</item>
+        <item name="android:textColor">@color/statusCompleted</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="StatusChip.Cancelled" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/statusCancelledBg</item>
+        <item name="android:textColor">@color/statusCancelled</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Primary Button -->
+    <style name="Widget.DoughlyCrumbl.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/heightButtonPrimary</item>
+        <item name="android:paddingStart">@dimen/paddingButton</item>
+        <item name="android:paddingEnd">@dimen/paddingButton</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorSurface</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Outlined Button (secondary / cancel actions) -->
+    <style name="Widget.DoughlyCrumbl.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/heightButtonSecondary</item>
+        <item name="android:paddingStart">@dimen/paddingButton</item>
+        <item name="android:paddingEnd">@dimen/paddingButton</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <!-- Destructive Outlined Button (cancel order / delete) -->
+    <style name="Widget.DoughlyCrumbl.Button.Destructive" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/heightButtonSecondary</item>
+        <item name="android:paddingStart">@dimen/paddingButton</item>
+        <item name="android:paddingEnd">@dimen/paddingButton</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="strokeColor">@color/colorError</item>
+        <item name="android:textColor">@color/colorError</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <!-- TextInputLayout — outlined style -->
+    <style name="Widget.DoughlyCrumbl.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radiusInput</item>
+        <item name="boxStrokeColor">@color/colorBorder</item>
+        <item name="hintTextColor">@color/colorTextSecondary</item>
+        <item name="android:minHeight">@dimen/heightInput</item>
+    </style>
+
 </resources>

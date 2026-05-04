@@ -307,7 +307,11 @@ export default function OrderDetailPage() {
                   />
                 </div>
               )}
-              <ProofUploadForm onSubmit={handleSubmitProof} />
+              <ProofUploadForm
+                onSubmit={handleSubmitProof}
+                isSubmitting={isSubmittingProof}
+                submitLabel="Submit Payment Proof"
+              />
             </div>
           )}
 

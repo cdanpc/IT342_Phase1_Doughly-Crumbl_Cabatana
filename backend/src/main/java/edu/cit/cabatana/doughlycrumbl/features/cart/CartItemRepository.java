@@ -1,6 +1,5 @@
 package edu.cit.cabatana.doughlycrumbl.features.cart;
 
-import edu.cit.cabatana.doughlycrumbl.features.cart.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

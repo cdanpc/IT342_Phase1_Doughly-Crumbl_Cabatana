@@ -2,7 +2,6 @@ package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
-import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

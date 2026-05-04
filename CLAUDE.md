@@ -39,3 +39,23 @@ Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude
 | `/unfreeze` | Unfreeze merges |
 | `/gstack-upgrade` | Upgrade gstack |
 | `/learn` | Learn mode |
+
+---
+
+## Key Files
+
+| File | Purpose |
+|---|---|
+| CLAUDE.md | this file, project root — auto-loaded every session |
+| docs/MASTER.md | session discipline, gates, memory, handoff schema |
+| docs/tasks.md | AC tracker (AC-10 to AC-18) |
+| docs/SYSTEM_INTELLIGENCE_REPORT.md | full system audit |
+| docs/mobile/mobile-design-prompts.md | 18 screen design specs |
+| docs/mobile/MOBILE_DESIGN_STATUS.md | mobile implementation progress |
+| docs/mobile/ANDROID_UI_AUDIT.md | UI audit findings |
+| docs/content/care-guide.md | cookie care page content |
+| docs/content/about-faqs.md | about and FAQ page content |
+| docs/content/payment-delivery-flow.md | payment and delivery spec |
+| docs/test-plan/TEST_PLAN.md | software test plan |
+| docs/test-plan/REGRESSION_REPORT.md | regression report |
+| docs/designs/mobile/ | design screenshots |
