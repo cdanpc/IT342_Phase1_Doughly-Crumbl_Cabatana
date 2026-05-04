@@ -289,25 +289,45 @@ next session starts instantly with full context.
 
 Last updated: 2026-05-04
 
-Current state: Mobile Groups 1–8 are all implemented (layout + Kotlin files exist).
-GROUP 9 (Informational screens) has not been started.
+Branch: main
 
-Immediate priorities (in order):
-  1. Fix BUG-3 — Order.kt must mirror backend OrderResponse before ORDER screens work correctly
-  2. Create item_admin_order.xml — missing from GROUP 7
+Current state:
+  This session was setup-only — no code written.
+  Docs restructured, CLAUDE.md verified against live codebase,
+  session persistence system fully installed.
+
+Layout files: 23 exist
+Drawable files: 53 exist (bg_* + ic_*)
+
+Completed this session:
+  - docs/ restructured: mobile/, reports/, content/, archive/ subfolders created
+  - docs/CLAUDE.md moved to project root as CLAUDE.md
+  - CLAUDE.md fully rewritten with verified facts (branch, stack, group statuses, bugs, state machine, fee tiers)
+  - Session persistence system installed:
+      .claude/hooks/post-session-save.sh  (PostToolUse → session-state.txt)
+      .claude/hooks/session-handoff.sh    (Stop hook reminder)
+      .claude/commands/handoff.md         (/handoff command)
+      .claude/commands/resume.md          (/resume command)
+      .claude/memory/global.md            (project identity)
+      .claude/memory/patterns.md          (code patterns)
+      .claude/memory/mistakes.md          (known pitfalls)
+
+Nothing in progress:
+  Clean slate. No half-done implementation work.
+
+Next session — start here (in order):
+  1. Fix BUG-3: rewrite Order.kt to mirror backend OrderResponse.java
+     File: mobile/app/src/main/java/com/example/mobile/model/Order.kt
+     Change: id→orderId, createdAt→orderDate, remove deliveryFee/customerName/customerEmail,
+             add paymentStatus, deliveryAddress, contactNumber, deliveryNotes,
+             proofImageUrl, cancellationReason, itemCount
+  2. Create item_admin_order.xml — missing from GROUP 7 admin orders list
   3. Implement GROUP 9 — activity_care_guide.xml, activity_about_faq.xml,
-     activity_payment_instructions.xml (requires content docs that don't exist yet)
-  4. Fix BUG-4 and BUG-5 after GROUP 9
-
-What's in progress:
-  Nothing — clean slate after full file inventory
-
-What's next:
-  Fix BUG-3 first (Order.kt rewrite), then GROUP 9
+     activity_payment_instructions.xml
 
 Blockers:
   docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
-  don't exist yet — needed before GROUP 9 content can be implemented
+  do not exist yet — must be created before GROUP 9 content can be implemented
 
 Last commit:
-  826d0e4 chore: add CLAUDE.md to project root for session persistence
+  aef681f chore: implement session persistence system
