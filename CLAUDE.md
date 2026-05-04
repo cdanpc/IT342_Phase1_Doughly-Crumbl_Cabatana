@@ -20,33 +20,39 @@ Contact: 09165667589 | FB: Doughly Crumbl | IG: @doughlycrumbl
 
 | Platform | Technology |
 |---|---|
-| Backend | Spring Boot 3.5, Java 17, PostgreSQL (Supabase), Hibernate |
-| Web | React 18, Vite, TypeScript, Axios, TailwindCSS |
+| Backend | Spring Boot 3.5.13, Java 17, PostgreSQL (Supabase), Hibernate |
+| Web | React 18, Vite 7, TypeScript 5.9, Axios, plain CSS |
 | Mobile | Android (Kotlin), View-based XML, Retrofit, MVVM, LiveData |
 | Auth | JWT only — OAuth2 config class exists but is unused |
 | Payments | Manual proof-of-payment upload — PayMongo planned but not started |
-| Delivery | Manual admin quote — OpenStreetMap Nominatim planned (AC-15) |
+| Delivery | Manual admin quote — DeliveryFeeCalculator exists but is not wired (AC-15) |
 
 ---
 
 ## Active Branch
 
-refactor/vertical-slice-architecture
+main
 
 ---
 
 ## Architecture — Vertical Slice (applied to all platforms)
 
 Backend: features/<slice>/ + shared/
-  Slices: auth, cart, order, product, notification, payment, user
+  Slices: auth, cart, delivery (empty placeholder), notification,
+          order, payment, product, user
+  Shared: config/, exception/, util/
 
 Web: features/<slice>/ + shared/ + layout/
   Slices: auth, menu, orders, checkout, admin, landing, care-guide, about
+  Shared: api/, components/, hooks/, types/, utils/
+  Layout: AppLayout, Header, Sidebar, OrderPanel
 
 Mobile: com.example.mobile.<feature>/ui/ + <feature>/data/
-  Features: auth, home, cart, orders, checkout (in progress),
-            admin, profile, notifications (not started)
+  Features: auth, home, cart (includes checkout), orders,
+            admin, profile, notifications
   Shared: model/, network/, util/
+  Note: ui/theme/ (Color.kt, Theme.kt, Type.kt) are leftover Compose
+        boilerplate — do not touch, do not add to.
 
 ---
 
@@ -56,65 +62,94 @@ Foundation (complete — do not touch):
   colors.xml     — crimson #6B1A2B, full token palette, zero hardcoded hex
   dimens.xml     — all dimension tokens (radii, heights, spacing, targets)
   themes.xml     — Material3 NoActionBar, Poppins via Google Fonts provider
-  drawables      — bg_input (4 states), bg_button_primary_selector,
-                   bg_card, bg_chip_active/inactive, bg_auth_header,
-                   bg_bottom_sheet, bg_fulfillment_selected/unselected,
-                   bg_payment_selected, bg_timeline_dot_*,
-                   bg_image_upload (dashed), bg_warning_banner,
-                   bg_button_success, bg_button_danger_outlined
+  drawables      — bg_input (4 states: default/focused/error/disabled),
+                   bg_button_primary_selector (default/pressed/disabled),
+                   bg_button_outlined, bg_card, bg_card_login,
+                   bg_card_top_rounded, bg_chip_active, bg_chip_inactive,
+                   bg_chip_selected, bg_chip_unselected,
+                   bg_auth_header, bg_bottom_sheet,
+                   bg_fulfillment_selected/unselected,
+                   bg_payment_selected/unselected,
+                   bg_dashed_circle (image upload placeholder),
+                   bg_error_banner, bg_skeleton_rect, bg_badge_dot,
+                   bg_gradient_crimson, bg_divider, bg_google_btn,
+                   bg_image_rounded, bg_logo_gcash, bg_logo_maya,
+                   bg_strength_track/weak/medium/strong/empty,
+                   bg_circle_white, bg_circle_white_alpha
+
+  Missing drawables (needed for ORDER screens — create in GROUP 4 fix):
+    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
+    bg_button_success, bg_button_danger_outlined, bg_warning_banner
 
 GROUP 1 — Auth screens: COMPLETE
   activity_splash.xml + SplashActivity.kt
-  activity_login.xml + LoginActivity.kt (with error banner)
-  activity_register.xml + RegisterActivity.kt (password strength bar)
+  activity_login.xml + LoginActivity.kt
+  activity_register.xml + RegisterActivity.kt + RegisterViewModel.kt
 
 GROUP 2 — Customer shell + Home: COMPLETE
   activity_main.xml — 5-tab bottom nav (Menu, Cart, Orders, Alerts, Profile)
   fragment_home.xml — hero banner, search, category chips, product grid
   item_product.xml + item_product_skeleton.xml
-  HomeFragment.kt — category chip filter wired
+  HomeFragment.kt + HomeViewModel.kt + ProductAdapter.kt + SkeletonAdapter.kt
 
-GROUP 3 — Cart + Checkout: IN PROGRESS
-  fragment_cart.xml  DONE
-  item_cart.xml      DONE
-  CartFragment.kt    DONE (Proceed to Checkout opens CheckoutActivity)
-  activity_checkout.xml   IN PROGRESS
-  CheckoutActivity.kt     NOT STARTED
-  CheckoutViewModel.kt    NOT STARTED
+GROUP 3 — Cart + Checkout: COMPLETE
+  fragment_cart.xml + item_cart.xml
+  CartFragment.kt + CartViewModel.kt + CartItemAdapter.kt
+  activity_checkout.xml
+  CheckoutActivity.kt — fulfillment toggle, address fields, payment selector,
+                         validation, placeOrder() with CheckoutRequest
+  CheckoutViewModel.kt — loadCart() + placeOrder(request: CheckoutRequest)
 
-GROUP 4 — Orders + Order Detail + Payment:  NOT STARTED
-GROUP 5 — Notifications + Profile:          NOT STARTED
-GROUP 6 — Admin Shell + Dashboard:          NOT STARTED
-GROUP 7 — Admin Orders + Order Detail:      NOT STARTED
-GROUP 8 — Admin Products + Add/Edit:        NOT STARTED
-GROUP 9 — Informational screens:            NOT STARTED
+GROUP 4 — Orders + Order Detail: COMPLETE (files exist — verify logic)
+  fragment_orders.xml + item_order.xml + item_order_item.xml
+  activity_order_detail.xml
+  OrdersFragment.kt + OrdersViewModel.kt + OrderAdapter.kt
+  OrderDetailActivity.kt + OrderDetailViewModel.kt + OrderItemAdapter.kt
+  Missing: item_admin_order.xml (needed for admin orders list)
+
+GROUP 5 — Notifications + Profile: COMPLETE (files exist — verify logic)
+  fragment_notifications.xml + NotificationsFragment.kt
+  fragment_profile.xml + ProfileFragment.kt
+
+GROUP 6 — Admin Shell + Dashboard: COMPLETE (files exist — verify logic)
+  activity_admin.xml + AdminActivity.kt
+  fragment_admin_dashboard.xml + AdminDashboardFragment.kt + AdminDashboardViewModel.kt
+
+GROUP 7 — Admin Orders + Order Detail: COMPLETE (files exist — verify logic)
+  fragment_admin_orders.xml + AdminOrdersFragment.kt + AdminOrdersViewModel.kt
+  activity_admin_order_detail.xml + AdminOrderDetailActivity.kt + AdminOrderDetailViewModel.kt
+  Missing: item_admin_order.xml
+
+GROUP 8 — Admin Products + Add/Edit: COMPLETE (files exist — verify logic)
+  fragment_admin_products.xml + item_admin_product.xml
+  AdminProductsFragment.kt + AdminProductsViewModel.kt + AdminProductAdapter.kt
+  activity_admin_add_edit_product.xml
+  AdminAddEditProductActivity.kt + AdminAddEditProductViewModel.kt
+
+GROUP 9 — Informational screens: NOT STARTED
+  activity_care_guide.xml    — not created
+  activity_about_faq.xml     — not created
+  activity_payment_instructions.xml — not created
 
 ---
 
-## Active Bugs (do not regress — fix in the group listed)
+## Active Bugs
 
-BUG-1 (fix in GROUP 4)
-  ApiService.getOrders() calls GET /api/orders
-  Must be: GET /api/orders/my-orders
-
-BUG-2 (fix in GROUP 3 — CheckoutActivity)
-  CartViewModel.placeOrder() sends POST /api/orders with no body
-  Must send full CheckoutRequest:
-  { fulfillmentType, street, barangay, city, landmark,
-    phoneNumber, paymentMethod, orderNotes }
-
-BUG-3 (fix in GROUP 4)
-  Order.kt data class field names do not match backend response
-  Backend returns: orderId, orderDate, totalAmount, fulfillmentType,
-  paymentMethod, paymentStatus, deliveryFee, orderNotes,
-  cancellationReason
+BUG-3 (fix now — affects all order screens)
+  Order.kt field names do not match backend OrderResponse:
+  Mobile uses:   id, createdAt, deliveryFee, customerName, customerEmail
+  Backend sends: orderId, orderDate, (no deliveryFee field), (no customer fields)
+  Backend also sends (missing from Order.kt):
+    paymentStatus, deliveryAddress, contactNumber, deliveryNotes,
+    proofImageUrl, cancellationReason, itemCount
+  Fix: rewrite Order.kt to mirror OrderResponse.java exactly
 
 BUG-4 (fix after GROUP 9)
-  SessionManager uses plain SharedPreferences
+  SessionManager uses plain SharedPreferences (Context.MODE_PRIVATE)
   Must migrate to EncryptedSharedPreferences
 
 BUG-5 (fix after GROUP 9)
-  No 401 auto-redirect in AuthInterceptor
+  AuthInterceptor adds Bearer token but does NOT handle 401 responses
   Must: catch 401 → clear session → redirect to LoginActivity
 
 ---
@@ -160,23 +195,31 @@ If the two conflict — design file wins as visual truth.
 
 ## Order Status State Machine
 
-Valid transitions only — never skip states:
+Valid transitions only — never skip states.
+Status strings are plain strings in the database (not a Java enum).
 
-  ORDER_PLACED → CONFIRMED → PREPARING → OUT_FOR_DELIVERY → COMPLETED
-                                       → READY_FOR_PICKUP  → COMPLETED
-  Any state before COMPLETED → CANCELLED (with reason)
+  PENDING → CONFIRMED
+  CONFIRMED | PAYMENT_CONFIRMED | ORDER_PLACED → PREPARING
+  PREPARING → READY
+  READY → DELIVERED
+  Any state except DELIVERED / COMPLETED / CANCELLED → CANCELLED (with reason)
+
+Valid status strings: PENDING, CONFIRMED, PAYMENT_CONFIRMED,
+                      ORDER_PLACED, PREPARING, READY, DELIVERED,
+                      COMPLETED, CANCELLED
 
 ---
 
 ## Delivery Fee Tiers (AC-15)
 
-  0–3 km   →  ₱80
+From DeliveryFeeCalculator.java (in features/order/ — NOT wired to any controller):
+
+  ≤3 km    →  ₱80
   3–8 km   →  ₱120
   8–15 km  →  ₱160
-  >15 km   →  Not available
+  >15 km   →  ₱200
 
-Calculator: DeliveryFeeCalculator.java exists but is NOT yet
-wired into any controller. Fix is part of AC-15 scope.
+DeliveryFeeCalculator is a @Component — wiring it into OrderController is part of AC-15 scope.
 
 ---
 
@@ -190,25 +233,25 @@ wired into any controller. Fix is part of AC-15 scope.
 | docs/mobile/mobile-design-prompts.md | 18 screen design specs |
 | docs/mobile/MOBILE_DESIGN_STATUS.md | Mobile progress tracker |
 | docs/mobile/ANDROID_UI_AUDIT.md | UI audit findings |
-| docs/content/care-guide.md | Cookie care page content |
-| docs/content/about-faqs.md | About and FAQ page content |
-| docs/content/payment-delivery-flow.md | Payment and delivery spec |
 | docs/test-plan/TEST_PLAN.md | Software test plan |
 | docs/test-plan/REGRESSION_REPORT.md | Regression report |
 | docs/designs/mobile/ | Design screenshots by screen number |
+
+Note: docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
+      do not exist yet — create them before implementing GROUP 9.
 
 ---
 
 ## Commands
 
   # Backend
-  ./mvnw spring-boot:run          → starts on port 8080
+  ./mvnw spring-boot:run          → starts on port 8080 (run from /backend)
   ./mvnw compile                  → compile check only
   ./mvnw test                     → all backend tests
   ./mvnw test -Dtest=ClassName    → single test class
 
   # Web
-  npm run dev                     → starts on port 5173 (from /web)
+  npm run dev                     → starts on port 5173 (run from /web)
   npm run build                   → TypeScript + Vite build check
 
   # Mobile
@@ -237,24 +280,27 @@ wired into any controller. Fix is part of AC-15 scope.
 
 ## Where We Are Right Now
 
-Last updated: [DATE — update this every session]
+Last updated: 2026-05-04
 
-Current focus: Mobile — GROUP 3 Cart + Checkout
-Next file to work on: activity_checkout.xml
+Current state: Mobile Groups 1–8 are all implemented (layout + Kotlin files exist).
+GROUP 9 (Informational screens) has not been started.
 
-What's done this session:
-  [fill in at end of session]
+Immediate priorities (in order):
+  1. Fix BUG-3 — Order.kt must mirror backend OrderResponse before ORDER screens work correctly
+  2. Create item_admin_order.xml — missing from GROUP 7
+  3. Implement GROUP 9 — activity_care_guide.xml, activity_about_faq.xml,
+     activity_payment_instructions.xml (requires content docs that don't exist yet)
+  4. Fix BUG-4 and BUG-5 after GROUP 9
 
 What's in progress:
-  activity_checkout.xml — fulfillment toggle, address fields,
-  payment method selector, sticky total + Place Order button
+  Nothing — clean slate after full file inventory
 
-What's next after current group:
-  GROUP 4 — Orders + Order Detail + Payment
-  Fix BUG-1 and BUG-3 in this group
+What's next:
+  Fix BUG-3 first (Order.kt rewrite), then GROUP 9
 
 Blockers:
-  None currently
+  docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
+  don't exist yet — needed before GROUP 9 content can be implemented
 
 Last commit:
-  [paste last git log --oneline -1 output here]
+  826d0e4 chore: add CLAUDE.md to project root for session persistence
