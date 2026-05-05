@@ -280,59 +280,65 @@ Last updated: 2026-05-05
 Branch: main
 
 Current state:
-  VISUAL POLISH COMPLETE. Full M3 design system applied to all 23 layout files.
-  BUILD SUCCESS confirmed (6113e68).
+  GROUP 9 COMPLETE + admin orders/logout complete.
+  BUILD SUCCESS confirmed (22e1202).
 
-Layout files: 23 exist
-Drawable files: 57 exist (added ripple_card, divider_horizontal, scrim_bottom, bg_skeleton)
-Font variants: poppins_bold.xml, poppins_semibold.xml, poppins_medium.xml created
-New value files: styles.xml, type.xml created
+Layout files: 28 exist
+Drawable files: 58 exist (added ic_back.xml)
 
-Completed this session — VISUAL POLISH PASS (42 files changed):
-  Values:
-    themes.xml — M3 color roles, shape system, window chrome, ripple theming
-    type.xml   — 10 TextAppearance styles + base TextAppearance.DoughlyCrumbl
-    styles.xml — Card, Button.Primary, Outlined, Destructive, BottomNav, Input, Chip
-    dimens.xml — spacing_4→spacing_64 (8dp grid), text size tokens, layout heights
-  Color state lists: input_stroke_color, chip_background/stroke/text_color
-  Drawables: ripple_card, divider_horizontal, scrim_bottom, bg_skeleton
-  Animations: slide_in_right, slide_out_left, fade_in, slide_up, button_scale (animator)
-  Font variants: poppins_bold.xml, poppins_semibold.xml, poppins_medium.xml
-  Layouts (14 files updated):
-    item_product.xml, item_cart.xml, item_order.xml, item_order_item.xml,
-    item_admin_product.xml, fragment_home.xml, fragment_cart.xml,
-    fragment_orders.xml, fragment_notifications.xml, fragment_profile.xml,
-    fragment_admin_dashboard.xml, fragment_admin_orders.xml, fragment_admin_products.xml,
-    activity_login.xml, activity_register.xml, activity_splash.xml,
-    activity_main.xml, activity_admin.xml, activity_order_detail.xml,
-    activity_admin_order_detail.xml, activity_admin_add_edit_product.xml,
-    activity_checkout.xml
+Completed this session:
+
+  GROUP 9 — Profile menu rows + informational screens (commit b1506a2):
+    fragment_profile.xml — rewritten: user info card + 3 menu rows
+                           (Care Guide, About & FAQ, Payment Instructions) + logout
+    activity_care_guide.xml — created (storage, reheating, best enjoyed cards)
+    activity_about_faq.xml — created (about card + FAQ Q&A card)
+    activity_payment_instructions.xml — created (GCash, Maya, BDO, after-paying steps)
+    CareGuideActivity.kt — created (profile.ui package)
+    AboutFaqActivity.kt — created (profile.ui package)
+    PaymentInstructionsActivity.kt — created (profile.ui package)
+    ProfileFragment.kt — wired rowCareGuide/rowFaq/rowPayment click handlers
+    AndroidManifest.xml — registered 3 new profile info activities
+    ic_back.xml — back arrow vector drawable (used by all 3 info screens)
+    item_order.xml — chipStatus clickable=false (fixes order card click-through bug)
+
+  Admin order card + logout (commit 22e1202):
+    item_admin_order.xml — admin order card: order ID, status chip, date,
+                           contact number, payment status chip, total
+    AdminOrderAdapter.kt — new adapter for item_admin_order
+    AdminOrdersFragment.kt — switched from OrderAdapter to AdminOrderAdapter
+    fragment_admin_profile.xml — admin profile with user info card + logout button
+    AdminProfileFragment.kt — reads session name/email/role, logout → LoginActivity
+    admin_nav_menu.xml — added 4th tab: Profile
+    AdminActivity.kt — handle nav_admin_profile → AdminProfileFragment
+
+  Bugs fixed this session:
+    MOBILE-004 — Google Fonts provider cert crash fixed (user applied TTF fallback)
+                 mistakes.md updated with root cause and rule
+    Order click-through — chipStatus clickable=false in item_order.xml
 
 Nothing in progress:
-  Clean slate. All polish committed.
+  Clean slate. All layout groups complete.
 
 Next session — start here (in order):
-  1. Create item_admin_order.xml — missing from GROUP 7 admin orders list
-     (AdminOrdersFragment uses OrderAdapter which uses item_order.xml — verify this is acceptable
-      or create a dedicated admin variant)
-  2. Create docs/content/care-guide.md, about-faqs.md, payment-delivery-flow.md
-     (required content before GROUP 9 layouts can be populated)
-  3. Implement GROUP 9 — activity_care_guide.xml, activity_about_faq.xml,
-     activity_payment_instructions.xml + their Activity/ViewModel classes
-  4. After GROUP 9: BUG-4 (EncryptedSharedPreferences), BUG-5 (401 handling)
+  1. BUG-4: Migrate SessionManager from SharedPreferences to
+     EncryptedSharedPreferences (security requirement)
+  2. BUG-5: AuthInterceptor — catch 401 → clear session → redirect to LoginActivity
+  3. Missing drawables for order timeline screens (if order detail timeline UI is needed):
+       bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
+       bg_button_success, bg_button_danger_outlined, bg_warning_banner
 
 Blockers:
-  docs/content/ files do not exist yet — must be created before GROUP 9 UI work
-  Missing drawables for order timeline screens (still needed):
-    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
-    bg_button_success, bg_button_danger_outlined, bg_warning_banner
+  None — all layout groups are complete.
 
 Decisions made this session:
-  - Skills auto-activate via SKILL.md description trigger keywords — no settings.json
-    routing rules needed. skillOverrides only controls visibility, not routing.
-  - Backend source of truth over prompt schemas: Product uses `id` not `productId`,
-    Notification uses `id` not `notificationId`, OrderItem is flat (no nested Product).
-  - BUG-3 marked FIXED in doughly-crumbl-android skill + mistakes.md updated (MOBILE-003).
+  - GROUP 9 informational screens (Care Guide, FAQ, Payment Instructions) placed
+    inside the Profile tab as menu rows — not separate nav tabs.
+  - Admin logout added as a 4th "Profile" tab in the admin bottom nav.
+  - item_admin_order.xml created as a dedicated admin variant (not reusing item_order.xml)
+    because admin needs contact number + payment status visible in the list.
+  - PowerShell Set-Content -Encoding utf8 adds UTF-8 BOM which AAPT2 rejects.
+    Rule: always use the Write tool (not PowerShell Set-Content) for XML resource files.
 
 Last commit:
-  aed1f32 fix(mobile): sync all data models with backend response shapes
+  22e1202 feat(mobile): admin order card + admin logout

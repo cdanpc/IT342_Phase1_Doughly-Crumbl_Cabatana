@@ -1,6 +1,6 @@
-Last saved: 2026-05-05 14:55
+Last saved: 2026-05-05 21:41
 Branch: main
-Last commit: 6113e68 feat(mobile): premium visual polish — M3 design system, type scale, 8dp grid
+Last commit: 22e1202 feat(mobile): admin order card + admin logout
 
 Modified files:
  M .claude/session-state.txt
