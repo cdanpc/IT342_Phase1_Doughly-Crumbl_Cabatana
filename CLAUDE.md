@@ -275,50 +275,41 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-04
+Last updated: 2026-05-05
 
 Branch: main
 
 Current state:
-  BUG-3 FIXED. All 9 Kotlin data models now match backend response shapes.
-  Android skills installed and auto-wired. BUILD SUCCESS confirmed.
+  VISUAL POLISH COMPLETE. Full M3 design system applied to all 23 layout files.
+  BUILD SUCCESS confirmed (6113e68).
 
 Layout files: 23 exist
-Drawable files: 53 exist (bg_* + ic_*)
+Drawable files: 57 exist (added ripple_card, divider_horizontal, scrim_bottom, bg_skeleton)
+Font variants: poppins_bold.xml, poppins_semibold.xml, poppins_medium.xml created
+New value files: styles.xml, type.xml created
 
-Completed this session:
-  BUG-3 fix — data model layer (9 model files rewritten, 12 referencing files updated):
-    mobile/app/src/main/java/com/example/mobile/model/Order.kt
-    mobile/app/src/main/java/com/example/mobile/model/OrderItem.kt
-    mobile/app/src/main/java/com/example/mobile/model/Cart.kt
-    mobile/app/src/main/java/com/example/mobile/model/CartItem.kt
-    mobile/app/src/main/java/com/example/mobile/model/Product.kt
-    mobile/app/src/main/java/com/example/mobile/model/ProductRequest.kt
-    mobile/app/src/main/java/com/example/mobile/model/RegisterRequest.kt
-    mobile/app/src/main/java/com/example/mobile/model/UpdateOrderStatusRequest.kt
-    mobile/app/src/main/java/com/example/mobile/model/Notification.kt  ← CREATED (was missing)
-  Referencing files updated (field name sync):
-    orders/ui/OrderAdapter.kt, OrderItemAdapter.kt, OrderDetailActivity.kt
-    orders/ui/OrdersFragment.kt
-    admin/ui/AdminOrderDetailActivity.kt, AdminOrdersFragment.kt
-    cart/ui/CartItemAdapter.kt, CartFragment.kt, CheckoutActivity.kt
-    admin/ui/AdminProductAdapter.kt, AdminAddEditProductActivity.kt
-
-  Standards + tooling:
-    .claude/memory/best-practices.md  — BP-01 through BP-13 enforced standards
-    docs/data-models.md               — canonical entity shapes, verified vs backend Java
-    .claude/skills/android-dev/       ← installed
-    .claude/skills/android-ux/        ← installed
-    .claude/skills/android-retrofit/  ← installed
-    .claude/skills/android-data-layer/ ← installed
-    .claude/skills/android-debugging/ ← installed
-    .claude/skills/kotlin-coroutines/ ← installed
-    .claude/skills/kotlin-flows/      ← installed
-    .claude/skills/android-gradle-logic/ ← installed (bonus)
-    .claude/skills/doughly-crumbl-android/ ← CREATED (project-specific conventions)
+Completed this session — VISUAL POLISH PASS (42 files changed):
+  Values:
+    themes.xml — M3 color roles, shape system, window chrome, ripple theming
+    type.xml   — 10 TextAppearance styles + base TextAppearance.DoughlyCrumbl
+    styles.xml — Card, Button.Primary, Outlined, Destructive, BottomNav, Input, Chip
+    dimens.xml — spacing_4→spacing_64 (8dp grid), text size tokens, layout heights
+  Color state lists: input_stroke_color, chip_background/stroke/text_color
+  Drawables: ripple_card, divider_horizontal, scrim_bottom, bg_skeleton
+  Animations: slide_in_right, slide_out_left, fade_in, slide_up, button_scale (animator)
+  Font variants: poppins_bold.xml, poppins_semibold.xml, poppins_medium.xml
+  Layouts (14 files updated):
+    item_product.xml, item_cart.xml, item_order.xml, item_order_item.xml,
+    item_admin_product.xml, fragment_home.xml, fragment_cart.xml,
+    fragment_orders.xml, fragment_notifications.xml, fragment_profile.xml,
+    fragment_admin_dashboard.xml, fragment_admin_orders.xml, fragment_admin_products.xml,
+    activity_login.xml, activity_register.xml, activity_splash.xml,
+    activity_main.xml, activity_admin.xml, activity_order_detail.xml,
+    activity_admin_order_detail.xml, activity_admin_add_edit_product.xml,
+    activity_checkout.xml
 
 Nothing in progress:
-  Clean slate. All model fixes committed. No half-done implementation work.
+  Clean slate. All polish committed.
 
 Next session — start here (in order):
   1. Create item_admin_order.xml — missing from GROUP 7 admin orders list
