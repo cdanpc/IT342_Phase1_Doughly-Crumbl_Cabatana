@@ -26,6 +26,17 @@ class ProfileFragment : Fragment() {
         binding.tvName.text = session.getName() ?: "—"
         binding.tvEmail.text = session.getEmail() ?: "—"
         binding.tvRole.text = session.getRole() ?: "—"
+
+        binding.rowCareGuide.setOnClickListener {
+            startActivity(Intent(requireContext(), CareGuideActivity::class.java))
+        }
+        binding.rowFaq.setOnClickListener {
+            startActivity(Intent(requireContext(), AboutFaqActivity::class.java))
+        }
+        binding.rowPayment.setOnClickListener {
+            startActivity(Intent(requireContext(), PaymentInstructionsActivity::class.java))
+        }
+
         binding.btnLogout.setOnClickListener {
             session.clearSession()
             startActivity(Intent(requireContext(), LoginActivity::class.java))

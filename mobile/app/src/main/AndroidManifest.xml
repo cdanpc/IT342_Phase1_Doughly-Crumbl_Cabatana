@@ -41,6 +41,11 @@
         <activity android:name=".admin.ui.AdminAddEditProductActivity" android:exported="false" />
         <activity android:name=".admin.ui.AdminOrderDetailActivity" android:exported="false" />
 
+        <!-- Profile info screens -->
+        <activity android:name=".profile.ui.CareGuideActivity" android:exported="false" />
+        <activity android:name=".profile.ui.AboutFaqActivity" android:exported="false" />
+        <activity android:name=".profile.ui.PaymentInstructionsActivity" android:exported="false" />
+
     </application>
 
 </manifest>

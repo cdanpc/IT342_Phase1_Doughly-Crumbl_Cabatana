@@ -1,67 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@color/colorBackground">
 
-    <com.google.android.material.card.MaterialCardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        app:cardCornerRadius="@dimen/radiusCard"
-        app:cardElevation="@dimen/elevationCard"
-        app:cardBackgroundColor="@color/colorSurface"
-        app:strokeColor="@color/colorBorder"
-        app:strokeWidth="0.5dp">
+        android:orientation="vertical"
+        android:padding="@dimen/marginPage">
 
-        <LinearLayout
+        <!-- User info card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:layout_marginBottom="@dimen/spacing_16"
+            app:cardBackgroundColor="@color/colorSurface"
+            app:cardCornerRadius="@dimen/radiusCard"
+            app:cardElevation="@dimen/elevationCard"
+            app:strokeColor="@color/colorBorder"
+            app:strokeWidth="0.5dp">
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="12dp"
-                android:src="@android:drawable/ic_menu_myplaces"
-                android:contentDescription="Profile avatar"
-                android:importantForAccessibility="no" />
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_24">
 
-            <TextView
-                android:id="@+id/tvEmail"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="@dimen/spacing_12"
+                    android:contentDescription="Profile avatar"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/ic_menu_myplaces" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_4"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tvRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_8"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textColor="@color/colorSurface"
+                    app:chipBackgroundColor="@color/colorPrimary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Menu card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_16"
+            app:cardBackgroundColor="@color/colorSurface"
+            app:cardCornerRadius="@dimen/radiusCard"
+            app:cardElevation="@dimen/elevationCard"
+            app:strokeColor="@color/colorBorder"
+            app:strokeWidth="0.5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
+                android:orientation="vertical">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/tvRole"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorSurface"
-                app:chipBackgroundColor="@color/colorPrimary" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <!-- Care Guide row -->
+                <LinearLayout
+                    android:id="@+id/rowCareGuide"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/heightListItem"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/spacing_16">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogout"
-        style="@style/Style.DoughlyCrumbl.Button.Destructive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        android:textAllCaps="false"
-        xmlns:app="http://schemas.android.com/apk/res-auto" />
-</LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Care Guide"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/spacing_16"
+                    android:background="@color/colorBorder" />
+
+                <!-- About & FAQ row -->
+                <LinearLayout
+                    android:id="@+id/rowFaq"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/heightListItem"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/spacing_16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="About &amp; FAQ"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/spacing_16"
+                    android:background="@color/colorBorder" />
+
+                <!-- Payment Instructions row -->
+                <LinearLayout
+                    android:id="@+id/rowPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/heightListItem"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/spacing_16">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Payment Instructions"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Logout -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Style.DoughlyCrumbl.Button.Destructive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>
