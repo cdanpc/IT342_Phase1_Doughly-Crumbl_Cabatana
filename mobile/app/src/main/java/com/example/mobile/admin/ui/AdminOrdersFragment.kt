@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobile.databinding.FragmentAdminOrdersBinding
-import com.example.mobile.orders.ui.OrderAdapter
 import com.example.mobile.util.SessionManager
 
 class AdminOrdersFragment : Fragment() {
@@ -18,7 +17,7 @@ class AdminOrdersFragment : Fragment() {
     private var _binding: FragmentAdminOrdersBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: AdminOrdersViewModel
-    private lateinit var adapter: OrderAdapter
+    private lateinit var adapter: AdminOrderAdapter
 
     private val statuses = listOf(null, "PENDING", "CONFIRMED", "PREPARING", "READY", "DELIVERED", "CANCELLED")
     private val statusLabels = listOf("All", "Pending", "Confirmed", "Preparing", "Ready", "Delivered", "Cancelled")
@@ -33,7 +32,7 @@ class AdminOrdersFragment : Fragment() {
         val session = SessionManager(requireContext())
         viewModel = ViewModelProvider(this, AdminOrdersViewModelFactory(session))[AdminOrdersViewModel::class.java]
 
-        adapter = OrderAdapter { order ->
+        adapter = AdminOrderAdapter { order ->
             val intent = Intent(requireContext(), AdminOrderDetailActivity::class.java)
             intent.putExtra("orderId", order.orderId)
             startActivity(intent)
