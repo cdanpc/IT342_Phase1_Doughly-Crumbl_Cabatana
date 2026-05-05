@@ -49,3 +49,15 @@ docs/data-models.md. Note: backend ProductResponse sends `id` not
 Themes.xml referenced @font/poppins but file did not exist.
 Caused runtime crash. Fix: Verify font file exists before
 referencing in themes.
+
+## MOBILE-004 — Google Fonts provider cert crash on splash
+Downloadable font XML references @array/com_google_android_gms_fonts_certs
+but cert validation failed at runtime: IllegalArgumentException: bad base-64
+at FontResourcesParserCompat.readCerts → crash before any screen renders.
+The cert array existed in font_certs.xml but GMS validation still rejected it.
+Fix: Switched to prepackaged TTF files in res/font/ (poppins_regular.ttf,
+poppins_medium.ttf, poppins_semibold.ttf, poppins_bold.ttf) and updated
+poppins.xml to reference them directly via <font> elements.
+Rule: Always use prepackaged TTF files for custom fonts — downloadable fonts
+add a fragile runtime dependency on GMS cert validation that fails without
+a clear error message. Never use the Google Fonts provider XML approach.

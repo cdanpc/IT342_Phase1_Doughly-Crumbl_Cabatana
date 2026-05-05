@@ -112,6 +112,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
 
+
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,48 +135,35 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- ── EMAIL ── -->
+            <!-- ── EMAIL ── -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:hint="Email address"
-                app:errorEnabled="true"
                 android:background="@drawable/bg_input"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/colorPrimary"
+                app:errorEnabled="false"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvSectionLabel"
-
-                >
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_email"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
-
+                app:layout_constraintTop_toBottomOf="@id/tvSectionLabel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
+                    android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Email address"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:background="@null"
                     android:textSize="14sp" />
-
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -184,47 +174,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Password"
                 android:background="@drawable/bg_input"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/colorPrimary"
                 app:endIconMode="password_toggle"
-                app:errorEnabled="true"
-                android:fontFamily="@font/poppins"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:textSize="14sp"
+                app:boxBackgroundMode="none"
+                app:errorEnabled="false"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilEmail"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/colorPrimary">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_lock"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
-
+                app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
+                    android:background="@null"
                     android:fontFamily="@font/poppins"
-                    android:imeOptions="actionNext"
+                    android:gravity="center_vertical"
+                    android:hint="Password"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:background="@null"
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
