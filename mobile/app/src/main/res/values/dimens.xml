@@ -41,4 +41,32 @@
     <dimen name="elevationCard">2dp</dimen>
     <dimen name="elevationBottomNav">8dp</dimen>
     <dimen name="elevationFab">6dp</dimen>
+
+    <!-- 8dp grid spacing -->
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_32">32dp</dimen>
+    <dimen name="spacing_48">48dp</dimen>
+    <dimen name="spacing_64">64dp</dimen>
+
+    <!-- Typography sizes -->
+    <dimen name="textDisplayLarge">26sp</dimen>
+    <dimen name="textHeadlineLarge">22sp</dimen>
+    <dimen name="textHeadlineMedium">18sp</dimen>
+    <dimen name="textTitleLarge">16sp</dimen>
+    <dimen name="textTitleMedium">14sp</dimen>
+    <dimen name="textBodyLarge">14sp</dimen>
+    <dimen name="textBodyMedium">13sp</dimen>
+    <dimen name="textLabel">13sp</dimen>
+    <dimen name="textCaption">11sp</dimen>
+
+    <!-- Component heights -->
+    <dimen name="heightListItem">56dp</dimen>
+    <dimen name="heightHeroBanner">200dp</dimen>
+    <dimen name="heightProductImage">130dp</dimen>
+    <dimen name="heightAdminProductImage">72dp</dimen>
+    <dimen name="heightProofOfPayment">180dp</dimen>
 </resources>

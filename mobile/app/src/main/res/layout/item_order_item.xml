@@ -3,29 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:paddingHorizontal="@dimen/spacing_8"
+    android:paddingVertical="@dimen/spacing_8">
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="14sp" />
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyLarge" />
 
     <TextView
         android:id="@+id/tvQty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:textColor="@color/colorTextSecondary"
-        android:textSize="14sp" />
+        android:layout_marginHorizontal="@dimen/spacing_8"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price" />
 </LinearLayout>

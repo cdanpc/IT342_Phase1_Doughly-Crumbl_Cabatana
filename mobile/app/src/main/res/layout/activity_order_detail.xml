@@ -42,8 +42,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="14sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipStatus"
@@ -70,8 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="15sp" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
 
             <TextView
                 android:id="@+id/tvDeliveryFee"
@@ -79,8 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:gravity="end"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="14sp"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                 android:visibility="gone" />
 
             <TextView
@@ -89,9 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:gravity="end"
-                android:textColor="@color/colorPrimary"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>

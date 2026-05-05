@@ -21,10 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/marginPage"
-            android:fontFamily="@font/poppins"
             android:text="Welcome to Doughly Crumbl"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
             android:textColor="@color/colorSurface"
-            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@id/tvHeroTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,11 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginStart="@dimen/marginPage"
-            android:fontFamily="@font/poppins"
             android:text="Freshly Baked Happiness"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
             android:textColor="@color/colorSurface"
-            android:textSize="22sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/btnExploreMenu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvHeroSub" />
@@ -112,67 +109,59 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAll"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="All"
                 android:checked="true" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipCookies"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Cookies" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipCroissants"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Croissants" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipDonuts"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Donuts" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipSourdough"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Sourdough" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipCakes"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Cakes" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipPastries"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Pastries" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipBeverages"
-                style="@style/Widget.Material3.Chip.Filter"
+                style="@style/Style.DoughlyCrumbl.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/heightChip"
-                android:fontFamily="@font/poppins"
                 android:text="Beverages" />
 
         </com.google.android.material.chip.ChipGroup>
@@ -197,22 +186,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/poppins"
             android:text="Featured Delights"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
             android:minHeight="@dimen/minTouchTarget"
             android:gravity="center_vertical"
             android:padding="4dp"
             android:text="See all"
-            android:textColor="@color/colorPrimary"
-            android:textSize="13sp" />
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+            android:textColor="@color/colorPrimary" />
 
     </LinearLayout>
 
@@ -264,26 +249,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
                     android:text="No products found"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
 
                 <TextView
                     android:id="@+id/tvEmpty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="Try a different search or category"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="13sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClearFilters"
-                    style="@style/Widget.DoughlyCrumbl.Button.Outlined"
+                    style="@style/Style.DoughlyCrumbl.Button.Outlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

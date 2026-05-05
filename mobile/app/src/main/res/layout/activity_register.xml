@@ -36,11 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/poppins"
             android:text="Create Account"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
             android:textColor="@color/colorSurface"
-            android:textSize="22sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tvSubtitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,10 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/poppins"
             android:text="Join Doughly Crumbl today"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
             android:textColor="@color/colorPrimaryLight"
-            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -298,11 +295,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:fontFamily="@font/poppins"
-                    android:textSize="11sp"
-                    android:textColor="@color/colorTextMuted"
                     android:minWidth="48dp"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
             </LinearLayout>
 
@@ -350,11 +345,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="By registering you agree to our Terms of Service and Privacy Policy"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
             <!-- Loading indicator -->
             <ProgressBar
@@ -368,7 +361,7 @@
             <!-- Create Account button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
-                style="@style/Widget.DoughlyCrumbl.Button.Primary"
+                style="@style/Style.DoughlyCrumbl.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -382,13 +375,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:minHeight="48dp"
                 android:padding="8dp"
                 android:text="Already have an account? Sign In"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -36,8 +36,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,9 +59,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipStatus"
@@ -72,16 +73,14 @@
                         android:id="@+id/tvCustomerEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="13sp" />
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                     <TextView
                         android:id="@+id/tvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="12sp" />
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -90,8 +89,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,8 +123,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -135,8 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="14sp" />
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
 
                     <TextView
                         android:id="@+id/tvDeliveryFeeDisplay"
@@ -144,8 +148,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="end"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="13sp"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:visibility="gone" />
 
                     <TextView
@@ -154,9 +157,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="end"
-                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
                         android:textSize="16sp"
-                        android:textStyle="bold"
                         android:visibility="gone" />
 
                     <View
@@ -208,8 +210,11 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

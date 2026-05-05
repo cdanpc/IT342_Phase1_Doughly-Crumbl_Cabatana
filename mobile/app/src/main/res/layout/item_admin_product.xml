@@ -4,28 +4,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp">
+    android:layout_marginHorizontal="@dimen/spacing_8"
+    android:layout_marginVertical="@dimen/spacing_4"
+    android:foreground="@drawable/ripple_card"
+    app:cardCornerRadius="@dimen/radiusCard"
+    app:cardElevation="@dimen/elevationCard"
+    app:cardBackgroundColor="@color/colorSurface"
+    app:strokeColor="@color/colorBorder"
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="@dimen/spacing_12">
 
         <ImageView
             android:id="@+id/ivProduct"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="@dimen/heightAdminProductImage"
+            android:layout_height="@dimen/heightAdminProductImage"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/spacing_12"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -35,26 +39,21 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
 
             <TextView
                 android:id="@+id/tvCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price" />
         </LinearLayout>
 
         <LinearLayout

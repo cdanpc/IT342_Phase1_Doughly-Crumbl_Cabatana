@@ -50,26 +50,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:fontFamily="@font/poppins"
                     android:text="Your cart is empty"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
                 <TextView
                     android:id="@+id/tvEmpty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="Add some delicious items from our menu"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="13sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnBrowseMenu"
-                    style="@style/Widget.DoughlyCrumbl.Button.Outlined"
+                    style="@style/Style.DoughlyCrumbl.Button.Outlined"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginTop="16dp"
@@ -119,19 +114,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/poppins"
                     android:text="Subtotal"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="13sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <TextView
                     android:id="@+id/tvSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
                     android:text="₱0.00"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="13sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                    android:textColor="@color/colorTextPrimary" />
 
             </LinearLayout>
 
@@ -146,18 +138,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/poppins"
                     android:text="Delivery Fee"
-                    android:textColor="@color/colorTextSecondary"
-                    android:textSize="13sp" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
                     android:text="To be quoted"
-                    android:textColor="@color/colorTextMuted"
-                    android:textSize="13sp"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
                     android:textStyle="italic" />
 
             </LinearLayout>
@@ -179,21 +167,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/poppins"
                     android:text="Total"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
                 <TextView
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
                     android:text="₱0.00"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -225,10 +208,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
-                        android:fontFamily="@font/poppins"
                         android:text="Delivery fee will be calculated based on your location"
-                        android:textColor="@color/colorTextMuted"
-                        android:textSize="11sp"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivDeliveryPin"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -244,7 +225,7 @@
     <!-- Checkout button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCheckout"
-        style="@style/Widget.DoughlyCrumbl.Button.Primary"
+        style="@style/Style.DoughlyCrumbl.Button.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

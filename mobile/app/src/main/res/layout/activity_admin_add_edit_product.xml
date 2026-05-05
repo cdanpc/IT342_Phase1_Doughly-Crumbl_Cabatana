@@ -43,7 +43,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChooseImage"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Style.DoughlyCrumbl.Button.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -52,7 +52,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilImageUrl"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -66,7 +66,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -81,7 +81,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDescription"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -97,7 +97,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPrice"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -113,7 +113,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCategory"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -128,7 +128,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilStock"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -143,6 +143,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
+                style="@style/Style.DoughlyCrumbl.Button.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Save Product"

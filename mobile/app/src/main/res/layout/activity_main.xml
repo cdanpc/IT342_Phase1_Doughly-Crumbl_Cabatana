@@ -35,11 +35,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/poppins"
                 android:text="Doughly Crumbl"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
+                android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
 
@@ -107,11 +105,9 @@
     <!-- Bottom navigation with badge support -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
+        style="@style/Style.DoughlyCrumbl.BottomNav"
         android:layout_width="match_parent"
         android:layout_height="@dimen/heightBottomNav"
-        android:background="@color/colorSurface"
-        app:itemIconTint="@color/nav_item_color"
-        app:itemTextColor="@color/nav_item_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/customer_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"

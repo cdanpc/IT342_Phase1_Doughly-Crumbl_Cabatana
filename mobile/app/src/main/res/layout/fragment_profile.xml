@@ -12,8 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="3dp">
+        app:cardCornerRadius="@dimen/radiusCard"
+        app:cardElevation="@dimen/elevationCard"
+        app:cardBackgroundColor="@color/colorSurface"
+        app:strokeColor="@color/colorBorder"
+        app:strokeWidth="0.5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,17 +37,14 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium" />
 
             <TextView
                 android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="14sp" />
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/tvRole"
@@ -58,12 +58,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Style.DoughlyCrumbl.Button.Destructive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Log Out"
         android:textAllCaps="false"
-        android:textColor="@color/colorError"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:strokeColor="@color/colorError" />
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 </LinearLayout>
