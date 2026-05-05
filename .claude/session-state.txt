@@ -1,6 +1,29 @@
-Last saved: 2026-05-04 16:52
+Last saved: 2026-05-05
 Branch: main
-Last commit: aef681f chore: implement session persistence system
+Last commit: aed1f32 fix(mobile): sync all data models with backend response shapes
 
-Modified files:
- M .claude/session-state.txt
+Session summary:
+  BUG-3 FIXED — all 9 Kotlin data models rewritten to match backend response shapes
+  12 referencing files updated (field name sync)
+  BUILD SUCCESS confirmed
+
+Standards + tooling added:
+  .claude/memory/best-practices.md  — BP-01 through BP-13
+  docs/data-models.md               — canonical entity shapes
+  .claude/skills/android-dev/
+  .claude/skills/android-ux/
+  .claude/skills/android-retrofit/
+  .claude/skills/android-data-layer/
+  .claude/skills/android-debugging/
+  .claude/skills/kotlin-coroutines/
+  .claude/skills/kotlin-flows/
+  .claude/skills/android-gradle-logic/
+  .claude/skills/doughly-crumbl-android/  ← custom project skill
+
+Layout files: 23
+Drawable files: 53
+
+Next task:
+  1. Create item_admin_order.xml (GROUP 7 missing file)
+  2. Create docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
+  3. Implement GROUP 9 informational screens

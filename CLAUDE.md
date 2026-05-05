@@ -280,42 +280,68 @@ Last updated: 2026-05-04
 Branch: main
 
 Current state:
-  This session was setup-only — no code written.
-  Docs restructured, CLAUDE.md verified against live codebase,
-  session persistence system fully installed.
+  BUG-3 FIXED. All 9 Kotlin data models now match backend response shapes.
+  Android skills installed and auto-wired. BUILD SUCCESS confirmed.
 
 Layout files: 23 exist
 Drawable files: 53 exist (bg_* + ic_*)
 
 Completed this session:
-  - docs/ restructured: mobile/, reports/, content/, archive/ subfolders created
-  - docs/CLAUDE.md moved to project root as CLAUDE.md
-  - CLAUDE.md fully rewritten with verified facts (branch, stack, group statuses, bugs, state machine, fee tiers)
-  - Session persistence system installed:
-      .claude/hooks/post-session-save.sh  (PostToolUse → session-state.txt)
-      .claude/hooks/session-handoff.sh    (Stop hook reminder)
-      .claude/commands/handoff.md         (/handoff command)
-      .claude/commands/resume.md          (/resume command)
-      .claude/memory/global.md            (project identity)
-      .claude/memory/patterns.md          (code patterns)
-      .claude/memory/mistakes.md          (known pitfalls)
+  BUG-3 fix — data model layer (9 model files rewritten, 12 referencing files updated):
+    mobile/app/src/main/java/com/example/mobile/model/Order.kt
+    mobile/app/src/main/java/com/example/mobile/model/OrderItem.kt
+    mobile/app/src/main/java/com/example/mobile/model/Cart.kt
+    mobile/app/src/main/java/com/example/mobile/model/CartItem.kt
+    mobile/app/src/main/java/com/example/mobile/model/Product.kt
+    mobile/app/src/main/java/com/example/mobile/model/ProductRequest.kt
+    mobile/app/src/main/java/com/example/mobile/model/RegisterRequest.kt
+    mobile/app/src/main/java/com/example/mobile/model/UpdateOrderStatusRequest.kt
+    mobile/app/src/main/java/com/example/mobile/model/Notification.kt  ← CREATED (was missing)
+  Referencing files updated (field name sync):
+    orders/ui/OrderAdapter.kt, OrderItemAdapter.kt, OrderDetailActivity.kt
+    orders/ui/OrdersFragment.kt
+    admin/ui/AdminOrderDetailActivity.kt, AdminOrdersFragment.kt
+    cart/ui/CartItemAdapter.kt, CartFragment.kt, CheckoutActivity.kt
+    admin/ui/AdminProductAdapter.kt, AdminAddEditProductActivity.kt
+
+  Standards + tooling:
+    .claude/memory/best-practices.md  — BP-01 through BP-13 enforced standards
+    docs/data-models.md               — canonical entity shapes, verified vs backend Java
+    .claude/skills/android-dev/       ← installed
+    .claude/skills/android-ux/        ← installed
+    .claude/skills/android-retrofit/  ← installed
+    .claude/skills/android-data-layer/ ← installed
+    .claude/skills/android-debugging/ ← installed
+    .claude/skills/kotlin-coroutines/ ← installed
+    .claude/skills/kotlin-flows/      ← installed
+    .claude/skills/android-gradle-logic/ ← installed (bonus)
+    .claude/skills/doughly-crumbl-android/ ← CREATED (project-specific conventions)
 
 Nothing in progress:
-  Clean slate. No half-done implementation work.
+  Clean slate. All model fixes committed. No half-done implementation work.
 
 Next session — start here (in order):
-  1. Fix BUG-3: rewrite Order.kt to mirror backend OrderResponse.java
-     File: mobile/app/src/main/java/com/example/mobile/model/Order.kt
-     Change: id→orderId, createdAt→orderDate, remove deliveryFee/customerName/customerEmail,
-             add paymentStatus, deliveryAddress, contactNumber, deliveryNotes,
-             proofImageUrl, cancellationReason, itemCount
-  2. Create item_admin_order.xml — missing from GROUP 7 admin orders list
+  1. Create item_admin_order.xml — missing from GROUP 7 admin orders list
+     (AdminOrdersFragment uses OrderAdapter which uses item_order.xml — verify this is acceptable
+      or create a dedicated admin variant)
+  2. Create docs/content/care-guide.md, about-faqs.md, payment-delivery-flow.md
+     (required content before GROUP 9 layouts can be populated)
   3. Implement GROUP 9 — activity_care_guide.xml, activity_about_faq.xml,
-     activity_payment_instructions.xml
+     activity_payment_instructions.xml + their Activity/ViewModel classes
+  4. After GROUP 9: BUG-4 (EncryptedSharedPreferences), BUG-5 (401 handling)
 
 Blockers:
-  docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
-  do not exist yet — must be created before GROUP 9 content can be implemented
+  docs/content/ files do not exist yet — must be created before GROUP 9 UI work
+  Missing drawables for order timeline screens (still needed):
+    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
+    bg_button_success, bg_button_danger_outlined, bg_warning_banner
+
+Decisions made this session:
+  - Skills auto-activate via SKILL.md description trigger keywords — no settings.json
+    routing rules needed. skillOverrides only controls visibility, not routing.
+  - Backend source of truth over prompt schemas: Product uses `id` not `productId`,
+    Notification uses `id` not `notificationId`, OrderItem is flat (no nested Product).
+  - BUG-3 marked FIXED in doughly-crumbl-android skill + mistakes.md updated (MOBILE-003).
 
 Last commit:
-  aef681f chore: implement session persistence system
+  aed1f32 fix(mobile): sync all data models with backend response shapes
