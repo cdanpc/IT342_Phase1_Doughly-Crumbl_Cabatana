@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UtensilsCrossed, ShoppingBag, Info, BookMarked, LogOut, LayoutDashboard, Package, ClipboardList } from 'lucide-react';
 import { useAuth } from '../shared/hooks/AuthContext';
@@ -14,6 +15,18 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isAdmin } = useAuth();
+  const [showAvatarMenu, setShowAvatarMenu] = useState(false);
+  const avatarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
+        setShowAvatarMenu(false);
+      }
+    }
+    if (showAvatarMenu) document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showAvatarMenu]);
 
   const customerNav: NavItem[] = [
     { icon: <UtensilsCrossed size={24} />, label: 'Menu', route: ROUTES.MENU },
@@ -43,11 +56,32 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar__profile">
-        <div className="sidebar__avatar">
+      <div className="sidebar__profile" ref={avatarRef}>
+        <div
+          className="sidebar__avatar sidebar__avatar--clickable"
+          onClick={() => setShowAvatarMenu((v) => !v)}
+          title="Account"
+        >
           {user ? getInitials(user.name) : '??'}
         </div>
         <span className="sidebar__username">{user?.name?.split(' ')[0] || 'User'}</span>
+
+        {showAvatarMenu && (
+          <div className="sidebar__avatar-menu">
+            <div className="sidebar__avatar-menu-header">
+              <span className="sidebar__avatar-menu-name">{user?.name}</span>
+              <span className="sidebar__avatar-menu-email">{user?.email}</span>
+            </div>
+            <hr className="sidebar__avatar-menu-divider" />
+            <button
+              className="sidebar__avatar-menu-signout"
+              onClick={() => { setShowAvatarMenu(false); handleLogout(); }}
+            >
+              <LogOut size={14} />
+              Sign Out
+            </button>
+          </div>
+        )}
       </div>
 
       <nav className="sidebar__nav">

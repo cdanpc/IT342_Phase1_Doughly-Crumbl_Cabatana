@@ -240,24 +240,24 @@
 - [x] `PAYMENT_CONFIRMED` — advances to Preparing
 - [x] My Orders — full status timeline stepper with all new states
 
-### 🔲 Backlog
+### ✅ Admin Panel (all done)
+- [x] Admin — input field to enter quoted delivery fee per order
+- [x] Admin — trigger status update to notify customer fee has been quoted
+- [x] Admin — view uploaded proof of payment per order (image + lightbox in AdminOrderDetail)
+- [x] Admin — confirm payment button → advances to Payment Confirmed → Preparing
+- [x] Admin — manual order status override at any stage (force-status dropdown, collapsed by default)
+- [x] Admin — cancel order with optional reason field
 
-**Admin Panel**
-- [ ] Admin — input field to enter quoted delivery fee per order
-- [ ] Admin — trigger status update to notify customer fee has been quoted
-- [ ] Admin — view uploaded proof of payment per order
-- [ ] Admin — confirm payment button → advances to Payment Confirmed → Preparing
-- [ ] Admin — manual order status override at any stage
-- [ ] Admin — cancel order with optional reason field
+### ✅ General UI (done)
+- [x] Right sidebar — cart icon button toggles Order Bag drawer
+- [x] Order Bag — empty state with "Browse Menu" CTA
+- [x] User avatar dropdown — name, email, Sign Out (click avatar in sidebar)
+- [x] Responsive layout — sidebar collapses to bottom nav bar on mobile
 
-**General UI**
-- [ ] Right sidebar — shop/grid button opens and closes Order Bag drawer
-- [ ] Order Bag — illustrated empty state with "Browse Menu" CTA
-- [ ] User avatar dropdown — My Profile, Settings, Sign Out
-- [ ] My Orders — Reorder button (adds all items back to cart in one click)
-- [ ] Responsive layout — mobile/tablet breakpoints
+### 🔲 General UI (remaining)
+- [ ] My Orders — Reorder button (blocked: OrderItem has no productId; backend change required)
 
-**Future / Post-Launch**
-- [ ] PayMongo integration — replaces manual proof of payment upload
-- [ ] Lalamove API integration — replaces manual seller delivery fee quote
-- [ ] Push notifications — active alerts for status changes
+### 🚫 Dropped — out of scope
+- PayMongo integration — will not implement
+- Lalamove API integration — will not implement
+- Push notifications — will not implement
