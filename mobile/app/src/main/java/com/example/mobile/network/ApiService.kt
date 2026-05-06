@@ -82,10 +82,13 @@ interface ApiService {
     @GET("notifications")
     suspend fun getNotifications(): Response<List<Notification>>
 
+    @GET("notifications/unread-count")
+    suspend fun getNotificationsUnreadCount(): Response<Map<String, @JvmSuppressWildcards Any>>
+
     @PUT("notifications/{id}/read")
     suspend fun markNotificationRead(@Path("id") id: Long): Response<Void>
 
-    @PUT("notifications/mark-all-read")
+    @PUT("notifications/read-all")
     suspend fun markAllNotificationsRead(): Response<Void>
 
     // --- Admin: Products ---
