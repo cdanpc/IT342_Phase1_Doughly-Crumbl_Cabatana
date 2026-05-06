@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // Emulator localhost — change to deployed URL for release
-    private const val BASE_URL = "http://10.0.2.2:8080/api/"
+    // Local WiFi — laptop must be on same network as the phone (192.168.1.52)
+    private const val BASE_URL = "http://192.168.1.52:8080/api/"
 
     fun getInstance(sessionManager: SessionManager): Retrofit {
         val logging = HttpLoggingInterceptor().apply {

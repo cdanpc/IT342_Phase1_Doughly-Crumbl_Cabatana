@@ -17,11 +17,10 @@
 
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_circle_white"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:padding="6dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/logo_doughly_white"
             android:contentDescription="Doughly Crumbl logo"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@id/tvTitle"
@@ -83,38 +82,28 @@
                 android:id="@+id/tilName"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_input"
-                android:hint="Full Name"
                 app:boxBackgroundMode="none"
-                app:errorEnabled="true">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_nav_profile"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_nav_profile"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Full Name"
+                    android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    />
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Email -->
@@ -122,37 +111,28 @@
                 android:id="@+id/tilEmail"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Email address"
                 android:background="@drawable/bg_input"
                 app:boxBackgroundMode="none"
-                app:errorEnabled="true">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_email"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Email address"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Phone -->
@@ -160,37 +140,28 @@
                 android:id="@+id/tilPhone"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Phone number"
                 android:background="@drawable/bg_input"
                 app:boxBackgroundMode="none"
-                app:errorEnabled="true">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_email"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPhone"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Phone number"
+                    android:imeOptions="actionNext"
                     android:inputType="phone"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Delivery Address -->
@@ -198,38 +169,30 @@
                 android:id="@+id/tilAddress"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Delivery address"
                 android:background="@drawable/bg_input"
                 app:boxBackgroundMode="none"
-                app:errorEnabled="true">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_email"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etAddress"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
-                    android:inputType="textMultiLine|textPostalAddress"
+                    android:gravity="center_vertical"
+                    android:hint="Delivery address"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPostalAddress"
                     android:maxLines="3"
-                    android:minLines="2" />
+                    android:minLines="1"
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password -->
@@ -237,47 +200,37 @@
                 android:id="@+id/tilPassword"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="4dp"
-                android:hint="Password (min 8 characters)"
-                app:boxBackgroundMode="none"
                 android:background="@drawable/bg_input"
+                app:boxBackgroundMode="none"
+                app:endIconMode="password_toggle"
                 app:errorEnabled="true"
-                app:endIconMode="password_toggle">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_lock"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Password (min 8 characters)"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password strength bar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ProgressBar
                     android:id="@+id/strengthBar"
@@ -295,49 +248,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:minWidth="48dp"
                     android:gravity="end"
+                    android:minWidth="48dp"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
             </LinearLayout>
-
             <!-- Confirm Password -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilConfirmPassword"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginBottom="20dp"
-                android:hint="Confirm password"
-                app:boxBackgroundMode="none"
-                app:errorEnabled="true"
                 android:background="@drawable/bg_input"
-                app:endIconMode="password_toggle">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="0dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_lock"
-                        android:scaleType="fitCenter" />
-
-                </LinearLayout>
+                app:boxBackgroundMode="none"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="56dp"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
+                    android:gravity="center_vertical"
+                    android:hint="Confirm password"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Terms -->
@@ -346,6 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
+                android:textSize="10dp"
                 android:text="By registering you agree to our Terms of Service and Privacy Policy"
                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
