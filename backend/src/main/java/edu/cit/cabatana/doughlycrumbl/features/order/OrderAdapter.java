@@ -52,6 +52,7 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
 
     private OrderItemResponse toItemResponse(OrderItem item) {
         return OrderItemResponse.builder()
+                .productId(item.getProduct() != null ? item.getProduct().getId() : null)
                 .productName(item.getProductName())
                 .quantity(item.getQuantity())
                 .unitPrice(item.getUnitPrice())

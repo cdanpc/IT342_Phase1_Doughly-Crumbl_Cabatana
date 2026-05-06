@@ -33,6 +33,7 @@ public class OrderResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class OrderItemResponse {
+        private Long productId;
         private String productName;
         private Integer quantity;
         private BigDecimal unitPrice;

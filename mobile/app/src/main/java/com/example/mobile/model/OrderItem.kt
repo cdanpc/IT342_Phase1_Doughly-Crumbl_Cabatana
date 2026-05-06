@@ -3,6 +3,9 @@ package com.example.mobile.model
 import com.google.gson.annotations.SerializedName
 
 data class OrderItem(
+    @SerializedName("productId")
+    val productId: Long? = null,
+
     @SerializedName("productName")
     val productName: String = "",
 

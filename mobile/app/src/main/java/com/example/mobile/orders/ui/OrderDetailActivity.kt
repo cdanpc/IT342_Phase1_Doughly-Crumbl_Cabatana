@@ -52,11 +52,23 @@ class OrderDetailActivity : AppCompatActivity() {
             if (success == true) Toast.makeText(this, "Order cancelled", Toast.LENGTH_SHORT).show()
         }
 
+        viewModel.reorderResult.observe(this) { result ->
+            result ?: return@observe
+            if (result.startsWith("success:")) {
+                val count = result.substringAfter("success:").toIntOrNull() ?: 0
+                Toast.makeText(this, "$count item${if (count > 1) "s" else ""} added to cart!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra("openTab", "cart")
+                })
+            } else {
+                Toast.makeText(this, result.substringAfter("error:"), Toast.LENGTH_LONG).show()
+            }
+        }
+
         binding.btnCancel.setOnClickListener { showCancelDialog() }
         binding.btnReorder.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            })
+            viewModel.order.value?.let { viewModel.reorder(it) }
         }
 
         viewModel.loadOrder(orderId)

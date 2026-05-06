@@ -516,6 +516,29 @@
   background: #FEF2F2;
 }
 
+.cod__reorder-btn {
+  width: 100%;
+  padding: 11px 0;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.cod__reorder-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.cod__reorder-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 /* ===== LIGHTBOX ===== */
 .cod__lightbox {
   position: fixed;

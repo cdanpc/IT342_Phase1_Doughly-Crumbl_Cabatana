@@ -26,7 +26,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (savedInstanceState == null) loadFragment(HomeFragment())
+        val openTab = intent.getStringExtra("openTab")
+        if (savedInstanceState == null) {
+            if (openTab == "cart") {
+                binding.bottomNav.selectedItemId = R.id.nav_cart
+                loadFragment(CartFragment())
+            } else {
+                loadFragment(HomeFragment())
+            }
+        }
 
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {

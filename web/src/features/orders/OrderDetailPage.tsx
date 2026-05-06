@@ -11,6 +11,7 @@ import {
 } from '../../shared/utils/formatters';
 import { ROUTES } from '../../shared/utils/routes';
 import type { Order } from '../../shared/types';
+import { useCart } from '../../shared/hooks/CartContext';
 import toast from 'react-hot-toast';
 import '../../shared/components/LoadingSpinner.css';
 import ProofUploadForm from '../../shared/components/ProofUploadForm';
@@ -62,6 +63,7 @@ const ACTIVE_STATUSES = [
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addToCart, openOrderPanel } = useCart();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +72,7 @@ export default function OrderDetailPage() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isReordering, setIsReordering] = useState(false);
 
   // Payment modal state
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -138,6 +141,26 @@ export default function OrderDetailPage() {
       toast.error('Failed to submit proof. Please try again.');
     } finally {
       setIsSubmittingProof(false);
+    }
+  }
+
+  async function handleReorder() {
+    if (!order) return;
+    const orderable = order.items.filter((i) => i.productId != null);
+    if (orderable.length === 0) {
+      toast.error('No items could be added — products may have been removed from the menu.');
+      return;
+    }
+    setIsReordering(true);
+    try {
+      await Promise.all(orderable.map((i) => addToCart(i.productId!, i.quantity)));
+      openOrderPanel();
+      navigate(ROUTES.MENU);
+      toast.success(`${orderable.length} item${orderable.length > 1 ? 's' : ''} added to your cart!`);
+    } catch {
+      toast.error('Failed to add some items. Please try again.');
+    } finally {
+      setIsReordering(false);
     }
   }
 
@@ -487,6 +510,17 @@ export default function OrderDetailPage() {
           {canCancel && !isPaymentRequired && (
             <button className="cod__cancel-btn" onClick={() => setShowCancelModal(true)}>
               Cancel Order
+            </button>
+          )}
+
+          {/* ── Reorder (completed orders only) ── */}
+          {order.status === 'COMPLETED' && (
+            <button
+              className="cod__reorder-btn"
+              onClick={handleReorder}
+              disabled={isReordering}
+            >
+              {isReordering ? 'Adding to cart…' : 'Reorder'}
             </button>
           )}
 
