@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard } from 'lucide-react';
+import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard, ChevronDown } from 'lucide-react';
 import { getAdminOrderById, updateOrderStatus, quoteDeliveryFee } from '../../shared/api/orderApi';
 import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../shared/utils/formatters';
 import { ROUTES } from '../../shared/utils/routes';
@@ -9,6 +9,19 @@ import toast from 'react-hot-toast';
 import '../../shared/components/LoadingSpinner.css';
 import StatusTimeline from '../../shared/components/StatusTimeline';
 import './AdminOrderDetail.css';
+
+const ALL_STATUSES: OrderStatus[] = [
+  'ORDER_PLACED',
+  'AWAITING_DELIVERY_QUOTE',
+  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
+  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
+  'PAYMENT_CONFIRMED',
+  'PREPARING',
+  'READY',
+  'OUT_FOR_DELIVERY',
+  'COMPLETED',
+  'CANCELLED',
+];
 
 function isPickupOrder(order: Order): boolean {
   return order.deliveryAddress?.startsWith('Pickup') ?? false;
@@ -42,6 +55,8 @@ export default function AdminOrderDetail() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [proofExpanded, setProofExpanded] = useState(false);
+  const [showOverride, setShowOverride] = useState(false);
+  const [overrideStatus, setOverrideStatus] = useState<OrderStatus | ''>('');
 
   useEffect(() => {
     async function fetchOrder() {
@@ -209,6 +224,58 @@ export default function AdminOrderDetail() {
               </button>
             </div>
           )}
+
+          {/* ── Manual Status Override ── */}
+          <div className="od__override">
+            <button
+              className="od__override-toggle"
+              onClick={() => setShowOverride((v) => !v)}
+            >
+              Override Status
+              <ChevronDown
+                size={14}
+                style={{ transform: showOverride ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+              />
+            </button>
+            {showOverride && (
+              <div className="od__override-body">
+                <p className="od__override-warning">
+                  Force this order to any status, bypassing the normal flow. Use only to correct mistakes.
+                </p>
+                <div className="od__override-row">
+                  <div className="od__override-select-wrap">
+                    <select
+                      className="od__override-select"
+                      value={overrideStatus}
+                      onChange={(e) => setOverrideStatus(e.target.value as OrderStatus)}
+                    >
+                      <option value="">Select target status…</option>
+                      {ALL_STATUSES.filter((s) => s !== order.status).map((s) => (
+                        <option key={s} value={s}>{formatOrderStatus(s)}</option>
+                      ))}
+                    </select>
+                    <ChevronDown size={14} className="od__override-select-icon" />
+                  </div>
+                  <button
+                    className="od__btn od__btn--override"
+                    disabled={!overrideStatus || isUpdating}
+                    onClick={() => {
+                      if (!overrideStatus) return;
+                      if (overrideStatus === 'CANCELLED') {
+                        setShowCancelModal(true);
+                      } else {
+                        handleStatusUpdate(overrideStatus);
+                        setShowOverride(false);
+                        setOverrideStatus('');
+                      }
+                    }}
+                  >
+                    {isUpdating ? 'Applying…' : 'Apply'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* RIGHT COLUMN — action panels + customer info + order items */}

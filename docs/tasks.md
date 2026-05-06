@@ -108,36 +108,58 @@
 
 ## 📱 Mobile Tasks
 
-### Setup
-- [ ] Initialize Android project with Kotlin + Jetpack Compose
-- [ ] Set up Retrofit + OkHttp with JWT interceptor
-- [ ] Set up Navigation with NavHost
-- [ ] Configure Material3 theme (colors, typography)
-- [ ] Set up `EncryptedSharedPreferences` for token storage
+> **Note:** Mobile is View-based XML (not Compose). Architecture: MVVM + ViewBinding + Retrofit.
+> Last updated: 2026-05-06
 
-> **Note:** Only the default Android project template exists (MainActivity with `Greeting("Android")`). No custom screens, ViewModels, API clients, or navigation have been implemented.
+### Setup
+- [x] Initialize Android project (Kotlin, View-based XML, MVVM)
+- [x] Set up Retrofit + OkHttp with JWT Bearer interceptor
+- [x] Configure Material3 theme, Poppins font, color/dimen tokens
+- [x] Set up `EncryptedSharedPreferences` for token storage (BUG-4 fixed 2026-05-06)
+- [x] AuthInterceptor catches 401 → clears session → redirects to LoginActivity (BUG-5 fixed 2026-05-06)
 
 ### Auth
-- [ ] `LoginScreen` — email/password form + API call
-- [ ] `RegisterScreen` — registration form
-- [ ] `AuthViewModel` — handle login/register state
-- [ ] Persist token and auto-login on app open
+- [x] `SplashActivity` — role-based routing (admin → AdminActivity, customer → MainActivity)
+- [x] `LoginActivity` + `LoginViewModel` — email/password + API call
+- [x] `RegisterActivity` + `RegisterViewModel` — registration form + validation
+- [x] JWT persisted in EncryptedSharedPreferences via `SessionManager`
 
-### Products
-- [ ] `ProductListScreen` — grid/list of products + search
-- [ ] `ProductDetailScreen` — product info + add to cart
-- [ ] `ProductViewModel`
+### Products / Home
+- [x] `HomeFragment` + `HomeViewModel` — hero banner, search, category chips, product grid
+- [x] `ProductAdapter` + `SkeletonAdapter` — loading state shimmer
+- [ ] Product detail screen — skipped by design decision (add-to-cart from grid)
 
 ### Cart
-- [ ] `CartScreen` — items list, quantities, total
-- [ ] `CartViewModel` — add, update, remove, clear
-- [ ] Bottom nav badge showing cart item count
+- [x] `CartFragment` + `CartViewModel` + `CartItemAdapter` — items, quantity stepper, remove
+- [x] `CheckoutActivity` + `CheckoutViewModel` — fulfillment toggle, address, payment selector, `placeOrder()`
 
-### Checkout & Orders
-- [ ] `CheckoutScreen` — delivery form + review
-- [ ] `OrderConfirmationScreen`
-- [ ] `OrderHistoryScreen`
-- [ ] `OrderDetailScreen`
+### Orders
+- [x] `OrdersFragment` + `OrdersViewModel` + `OrderAdapter` — order history list
+- [x] `OrderDetailActivity` + `OrderDetailViewModel` — status banner, 5-step timeline, delivery details, cancel + reorder buttons
+- [x] `OrderDetailViewModel.cancelOrder()` — calls `PUT /orders/{id}/cancel`
+
+### Notifications
+- [x] `NotificationsFragment` + `NotificationsViewModel` + `NotificationAdapter` — real API call to `GET /notifications`
+- [x] Mark-as-read on tap; Mark-all-read button
+- [ ] Badge count on nav tab (requires unread count polling)
+
+### Profile
+- [x] `ProfileFragment` + `ProfileViewModel` — crimson header, initials avatar, order stats row
+- [x] `CareGuideActivity`, `AboutFaqActivity`, `PaymentInstructionsActivity` — informational screens
+
+### Admin
+- [x] `AdminActivity` — 4-tab shell (Dashboard, Orders, Products, Profile)
+- [x] `AdminDashboardFragment` + `AdminDashboardViewModel` — stats cards, recent orders
+- [x] `AdminOrdersFragment` + `AdminOrdersViewModel` + `AdminOrderAdapter`
+- [x] `AdminOrderDetailActivity` + `AdminOrderDetailViewModel` — status update, delivery fee input
+- [x] `AdminProductsFragment` + `AdminProductsViewModel` + `AdminProductAdapter`
+- [x] `AdminAddEditProductActivity` + `AdminAddEditProductViewModel` — create/edit product
+- [x] `AdminProfileFragment` — admin info + logout
+
+### Remaining / Low Priority
+- [ ] Pagination on home screen (currently fetches page=0&size=20)
+- [ ] Unread badge count on Notifications tab (needs polling or WebSocket)
+- [ ] Reorder button — currently navigates to menu (no productId in OrderItem to re-add items)
 
 ---
 
@@ -218,24 +240,24 @@
 - [x] `PAYMENT_CONFIRMED` — advances to Preparing
 - [x] My Orders — full status timeline stepper with all new states
 
-### 🔲 Backlog
+### ✅ Admin Panel (all done)
+- [x] Admin — input field to enter quoted delivery fee per order
+- [x] Admin — trigger status update to notify customer fee has been quoted
+- [x] Admin — view uploaded proof of payment per order (image + lightbox in AdminOrderDetail)
+- [x] Admin — confirm payment button → advances to Payment Confirmed → Preparing
+- [x] Admin — manual order status override at any stage (force-status dropdown, collapsed by default)
+- [x] Admin — cancel order with optional reason field
 
-**Admin Panel**
-- [ ] Admin — input field to enter quoted delivery fee per order
-- [ ] Admin — trigger status update to notify customer fee has been quoted
-- [ ] Admin — view uploaded proof of payment per order
-- [ ] Admin — confirm payment button → advances to Payment Confirmed → Preparing
-- [ ] Admin — manual order status override at any stage
-- [ ] Admin — cancel order with optional reason field
+### ✅ General UI (done)
+- [x] Right sidebar — cart icon button toggles Order Bag drawer
+- [x] Order Bag — empty state with "Browse Menu" CTA
+- [x] User avatar dropdown — name, email, Sign Out (click avatar in sidebar)
+- [x] Responsive layout — sidebar collapses to bottom nav bar on mobile
 
-**General UI**
-- [ ] Right sidebar — shop/grid button opens and closes Order Bag drawer
-- [ ] Order Bag — illustrated empty state with "Browse Menu" CTA
-- [ ] User avatar dropdown — My Profile, Settings, Sign Out
-- [ ] My Orders — Reorder button (adds all items back to cart in one click)
-- [ ] Responsive layout — mobile/tablet breakpoints
+### 🔲 General UI (remaining)
+- [ ] My Orders — Reorder button (blocked: OrderItem has no productId; backend change required)
 
-**Future / Post-Launch**
-- [ ] PayMongo integration — replaces manual proof of payment upload
-- [ ] Lalamove API integration — replaces manual seller delivery fee quote
-- [ ] Push notifications — active alerts for status changes
+### 🚫 Dropped — out of scope
+- PayMongo integration — will not implement
+- Lalamove API integration — will not implement
+- Push notifications — will not implement
