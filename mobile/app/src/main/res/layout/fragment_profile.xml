@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,14 +9,61 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/marginPage">
+        android:orientation="vertical">
 
-        <!-- User info card -->
+        <!-- Crimson header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="40dp"
+            android:paddingHorizontal="@dimen/marginPage"
+            android:paddingTop="@dimen/spacing_24">
+
+            <FrameLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_circle_white">
+
+                <TextView
+                    android:id="@+id/tvAvatarInitials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:textColor="@color/colorSurface"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_4"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <!-- Stats card — overlaps header by 20dp -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_16"
+            android:layout_marginHorizontal="@dimen/marginPage"
+            android:layout_marginTop="-20dp"
+            android:layout_marginBottom="@dimen/spacing_12"
             app:cardBackgroundColor="@color/colorSurface"
             app:cardCornerRadius="@dimen/radiusCard"
             app:cardElevation="@dimen/elevationCard"
@@ -25,40 +73,96 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/spacing_24">
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginBottom="@dimen/spacing_12"
-                    android:contentDescription="Profile avatar"
-                    android:importantForAccessibility="no"
-                    android:src="@android:drawable/ic_menu_myplaces" />
-
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
 
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_4"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
+                    <TextView
+                        android:id="@+id/tvOrderCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/tvRole"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Orders"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBorder" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_8"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:textColor="@color/colorSurface"
-                    app:chipBackgroundColor="@color/colorPrimary" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:id="@+id/tvCompletedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorSuccess"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Completed"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBorder" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:id="@+id/tvCancelledCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorError"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cancelled"
+                        android:textColor="@color/colorTextMuted"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -66,6 +170,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginPage"
             android:layout_marginBottom="@dimen/spacing_16"
             app:cardBackgroundColor="@color/colorSurface"
             app:cardCornerRadius="@dimen/radiusCard"
@@ -78,7 +183,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Care Guide row -->
                 <LinearLayout
                     android:id="@+id/rowCareGuide"
                     android:layout_width="match_parent"
@@ -104,6 +208,7 @@
                         android:text="›"
                         android:textColor="@color/colorTextMuted"
                         android:textSize="20sp" />
+
                 </LinearLayout>
 
                 <View
@@ -112,7 +217,6 @@
                     android:layout_marginHorizontal="@dimen/spacing_16"
                     android:background="@color/colorBorder" />
 
-                <!-- About & FAQ row -->
                 <LinearLayout
                     android:id="@+id/rowFaq"
                     android:layout_width="match_parent"
@@ -138,6 +242,7 @@
                         android:text="›"
                         android:textColor="@color/colorTextMuted"
                         android:textSize="20sp" />
+
                 </LinearLayout>
 
                 <View
@@ -146,7 +251,6 @@
                     android:layout_marginHorizontal="@dimen/spacing_16"
                     android:background="@color/colorBorder" />
 
-                <!-- Payment Instructions row -->
                 <LinearLayout
                     android:id="@+id/rowPayment"
                     android:layout_width="match_parent"
@@ -172,7 +276,9 @@
                         android:text="›"
                         android:textColor="@color/colorTextMuted"
                         android:textSize="20sp" />
+
                 </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -182,6 +288,8 @@
             style="@style/Style.DoughlyCrumbl.Button.Destructive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginPage"
+            android:layout_marginBottom="@dimen/spacing_24"
             android:text="Log Out"
             android:textAllCaps="false" />
 

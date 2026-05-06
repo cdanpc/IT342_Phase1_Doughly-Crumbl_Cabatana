@@ -283,44 +283,61 @@ Last updated: 2026-05-06
 Branch: mobile/core-features
 
 Current state:
-  All layout groups complete. BUG-4 + BUG-5 fixed.
-  BUILD SUCCESS confirmed.
+  All mobile backlog items complete. BUILD SUCCESS confirmed.
 
-Layout files: 28 exist
-Drawable files: 58 exist
+Layout files: 30 exist (added item_notification.xml, rebuilt activity_order_detail.xml)
+Drawable files: 64 exist (added 6 timeline/button/banner drawables)
 
 Completed this session:
 
-  BUG-4 — EncryptedSharedPreferences migration:
-    libs.versions.toml — added security-crypto:1.0.0
-    build.gradle.kts — added security-crypto dependency
-    SessionManager.kt — now uses EncryptedSharedPreferences
-                        (AES256_GCM key, AES256_SIV key scheme, AES256_GCM value scheme)
-    DoughlyApp.kt — new Application subclass; exposes appContext companion val
-    AndroidManifest.xml — registered android:name=".DoughlyApp"
+  Missing drawables (6 new):
+    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
+    bg_button_success, bg_button_danger_outlined, bg_warning_banner
 
-  BUG-5 — AuthInterceptor 401 handling:
-    AuthInterceptor.kt — catches 401: clears session + starts LoginActivity
-                         with FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK
-    RetrofitClient.kt — passes DoughlyApp.appContext to AuthInterceptor
-                        (no changes to repositories or ViewModels required)
+  Order Detail screen — full rebuild:
+    activity_order_detail.xml — ConstraintLayout root, status banner, 5-step timeline,
+                                 items card, delivery card, cancellation card, cancel/reorder buttons
+    OrderDetailActivity.kt — binds all new views, timeline stepping logic, cancel dialog
+    OrderDetailViewModel.kt — added cancelOrder() + cancelSuccess LiveData
+    OrderRepository.kt — added cancelOrder()
+    ApiService.kt — added cancelOrder + getNotifications + markNotificationRead
+                    + markAllNotificationsRead endpoints
+
+  Notifications screen — full implementation:
+    item_notification.xml — notification card (icon circle, title, message, time, unread dot)
+    fragment_notifications.xml — added "Mark all read" header
+    NotificationsRepository.kt — new (GET /notifications, PUT mark read, PUT mark-all-read)
+    NotificationsViewModel.kt — new (load, markRead, markAllRead)
+    NotificationAdapter.kt — new ListAdapter with GradientDrawable icon coloring
+    NotificationsFragment.kt — full implementation with ViewModel + adapter
+
+  Profile screen — crimson header + stats:
+    fragment_profile.xml — crimson header section with avatar initials,
+                           -20dp overlap stats card (Orders / Completed / Cancelled)
+    ProfileViewModel.kt — new (loads orders to compute stats)
+    ProfileFragment.kt — binds initials, stats observer, keeps menu row + logout wiring
+
+  Docs:
+    docs/tasks.md — mobile section fully updated (was "Not started", now accurate)
 
 Nothing in progress:
-  Clean slate. All bugs resolved.
+  Clean slate.
 
 Next session — start here (in order):
-  1. Missing drawables for order timeline screens (if order detail timeline UI is needed):
-       bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
-       bg_button_success, bg_button_danger_outlined, bg_warning_banner
-  2. End-to-end testing / QA pass on all screens
+  1. End-to-end QA pass: run app on emulator, test all screens
+  2. Unread notification badge on nav tab (low priority)
+  3. Web admin panel backlog (delivery fee input, proof-of-payment view, payment confirm)
 
 Blockers:
   None.
 
 Decisions made this session:
-  - DoughlyApp Application class used to provide appContext to AuthInterceptor
-    without changing repository/ViewModel signatures (zero-impact approach).
-  - security-crypto 1.0.0 (stable) chosen over 1.1.0-alpha06.
+  - bg_timeline_dot_active uses layer-list (outer crimsonLight ring + inner crimson dot)
+    to simulate a "pulsing active" indicator without animation.
+  - NotificationAdapter sets icon circle color programmatically via GradientDrawable
+    (no per-type XML drawables needed).
+  - Profile stats computed client-side from GET /orders/my-orders (no dedicated stats endpoint).
+  - Reorder button navigates to MainActivity (cannot re-add items — OrderItem has no productId).
 
 Last commit:
-  (this session — pending commit)
+  (pending)

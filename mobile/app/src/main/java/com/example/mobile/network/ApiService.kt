@@ -6,6 +6,7 @@ import com.example.mobile.model.Cart
 import com.example.mobile.model.CartItemRequest
 import com.example.mobile.model.CheckoutRequest
 import com.example.mobile.model.MessageResponse
+import com.example.mobile.model.Notification
 import com.example.mobile.model.Order
 import com.example.mobile.model.PagedResponse
 import com.example.mobile.model.Product
@@ -70,6 +71,22 @@ interface ApiService {
 
     @GET("orders/{id}")
     suspend fun getOrderDetail(@Path("id") id: Long): Response<Order>
+
+    @PUT("orders/{id}/cancel")
+    suspend fun cancelOrder(
+        @Path("id") id: Long,
+        @Query("reason") reason: String? = null
+    ): Response<Order>
+
+    // --- Notifications ---
+    @GET("notifications")
+    suspend fun getNotifications(): Response<List<Notification>>
+
+    @PUT("notifications/{id}/read")
+    suspend fun markNotificationRead(@Path("id") id: Long): Response<Void>
+
+    @PUT("notifications/mark-all-read")
+    suspend fun markAllNotificationsRead(): Response<Void>
 
     // --- Admin: Products ---
     @GET("admin/products")

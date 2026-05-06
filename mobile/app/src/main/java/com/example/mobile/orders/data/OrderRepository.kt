@@ -11,4 +11,6 @@ class OrderRepository(sessionManager: SessionManager) {
 
     suspend fun getOrders(): Response<List<Order>> = api.getOrders()
     suspend fun getOrderDetail(id: Long): Response<Order> = api.getOrderDetail(id)
+    suspend fun cancelOrder(id: Long, reason: String? = null): Response<Order> =
+        api.cancelOrder(id, reason)
 }
