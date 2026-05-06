@@ -1,6 +1,6 @@
-Last saved: 2026-05-05 21:41
-Branch: main
-Last commit: 22e1202 feat(mobile): admin order card + admin logout
+Last saved: 2026-05-06 14:34
+Branch: mobile/core-features
+Last commit: a9a64d2 test(backend): add 42 unit + integration tests, all passing
 
 Modified files:
  M .claude/session-state.txt

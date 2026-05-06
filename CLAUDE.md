@@ -283,61 +283,73 @@ Last updated: 2026-05-06
 Branch: mobile/core-features
 
 Current state:
-  All mobile backlog items complete. BUILD SUCCESS confirmed.
+  All mobile backlog complete. All web admin backlog complete.
+  All backend tests passing (42 total). BUILD SUCCESS confirmed.
 
-Layout files: 30 exist (added item_notification.xml, rebuilt activity_order_detail.xml)
-Drawable files: 64 exist (added 6 timeline/button/banner drawables)
+Layout files: 29 exist
+Drawable files: 64 exist
 
-Completed this session:
+Completed this session (two sessions since last handoff):
 
-  Missing drawables (6 new):
-    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
-    bg_button_success, bg_button_danger_outlined, bg_warning_banner
+  Mobile — unread notification badge:
+    MainActivity.kt — polling via repeatOnLifecycle(STARTED), 30s interval,
+                      clears badge when alerts tab selected, openTab extra for reorder nav
+    ApiService.kt — added getNotificationsUnreadCount() endpoint
+    NotificationsRepository.kt — added getUnreadCount() with Gson Double→Int coercion
+    ApiService.kt fix — mark-all-read URL corrected: notifications/mark-all-read → notifications/read-all
 
-  Order Detail screen — full rebuild:
-    activity_order_detail.xml — ConstraintLayout root, status banner, 5-step timeline,
-                                 items card, delivery card, cancellation card, cancel/reorder buttons
-    OrderDetailActivity.kt — binds all new views, timeline stepping logic, cancel dialog
-    OrderDetailViewModel.kt — added cancelOrder() + cancelSuccess LiveData
-    OrderRepository.kt — added cancelOrder()
-    ApiService.kt — added cancelOrder + getNotifications + markNotificationRead
-                    + markAllNotificationsRead endpoints
+  Web admin — status override panel:
+    AdminOrderDetail.tsx — collapsible "Override Status" panel with all valid statuses;
+                           CANCELLED triggers cancel modal, others call handleStatusUpdate
+    AdminOrderDetail.css — .od__override* styles
 
-  Notifications screen — full implementation:
-    item_notification.xml — notification card (icon circle, title, message, time, unread dot)
-    fragment_notifications.xml — added "Mark all read" header
-    NotificationsRepository.kt — new (GET /notifications, PUT mark read, PUT mark-all-read)
-    NotificationsViewModel.kt — new (load, markRead, markAllRead)
-    NotificationAdapter.kt — new ListAdapter with GradientDrawable icon coloring
-    NotificationsFragment.kt — full implementation with ViewModel + adapter
+  Web — sidebar avatar dropdown:
+    Sidebar.tsx — clickable avatar, outside-click dismissal, name/email/Sign Out dropdown
+    Sidebar.css — .sidebar__avatar-menu positioned left:120px anchored by position:relative
 
-  Profile screen — crimson header + stats:
-    fragment_profile.xml — crimson header section with avatar initials,
-                           -20dp overlap stats card (Orders / Completed / Cancelled)
-    ProfileViewModel.kt — new (loads orders to compute stats)
-    ProfileFragment.kt — binds initials, stats observer, keeps menu row + logout wiring
+  Reorder from completed orders (all three platforms):
+    backend: OrderItemResponse.java — added productId field (null-safe lazy FK access)
+    backend: OrderAdapter.java — toItemResponse() now includes productId
+    web: index.ts — added productId? to OrderItem interface
+    web: OrderDetailPage.tsx — handleReorder() loops items, calls addToCart, opens panel
+    web: OrderDetailPage.css — .cod__reorder-btn
+    mobile: OrderItem.kt — added @SerializedName("productId") val productId: Long? = null
+    mobile: OrderDetailViewModel.kt — added CartRepository dep + reorder() function
+    mobile: OrderDetailActivity.kt — reorder result observer, navigates to cart tab on success
+
+  Backend tests — 42 passing (0 failures):
+    AuthServiceTest.java — 6 unit tests (password mismatch, dupe email, valid register,
+                           email not found, wrong password, valid login)
+    AuthControllerIntegrationTest.java — 6 @WebMvcTest tests (register/login flows)
+    CartServiceTest.java — 7 unit tests (getCart, addItem, removeItem, clearCart)
+    CartControllerIntegrationTest.java — 3 @WebMvcTest tests (auth required, CRUD)
+    ProductControllerIntegrationTest.java — 5 @WebMvcTest tests (filter, search, 404)
+    Fix: @WebMvcTest context requires @MockBean JwtTokenProvider + UserDetailsService
+         + @Import(SecurityConfig.class) to apply permitAll() rules
 
   Docs:
-    docs/tasks.md — mobile section fully updated (was "Not started", now accurate)
+    docs/tasks.md — PayMongo/Lalamove/push-notifications marked dropped (out of scope)
 
 Nothing in progress:
-  Clean slate.
+  Clean slate — all planned features implemented and tested.
 
 Next session — start here (in order):
   1. End-to-end QA pass: run app on emulator, test all screens
-  2. Unread notification badge on nav tab (low priority)
-  3. Web admin panel backlog (delivery fee input, proof-of-payment view, payment confirm)
+  2. Unread notification badge — verify polling works on physical device
+  3. Web Vitest setup (optional): install vitest + @testing-library/react if test coverage needed
 
 Blockers:
   None.
 
 Decisions made this session:
-  - bg_timeline_dot_active uses layer-list (outer crimsonLight ring + inner crimson dot)
-    to simulate a "pulsing active" indicator without animation.
-  - NotificationAdapter sets icon circle color programmatically via GradientDrawable
-    (no per-type XML drawables needed).
-  - Profile stats computed client-side from GET /orders/my-orders (no dedicated stats endpoint).
-  - Reorder button navigates to MainActivity (cannot re-add items — OrderItem has no productId).
+  - PayMongo payment integration dropped from scope entirely — manual proof-of-payment stays.
+  - Reorder re-adds items to cart via CartRepository.addToCart() (mobile) /
+    CartContext.addToCart() (web); then navigates to cart. Works now that productId
+    is included in OrderItemResponse.
+  - @WebMvcTest slices require both JwtTokenProvider AND UserDetailsService mocked
+    (JwtAuthFilter has two constructor deps). SecurityConfig must be @Imported to
+    get permitAll() rules — otherwise default Spring Security redirects all anonymous requests.
+  - Sidebar avatar dropdown positioned at left:120px (fixed sidebar width) with
+    position:relative on .sidebar__profile container.
 
-Last commit:
-  (pending)
+Last commit: a9a64d2 test(backend): add 42 unit + integration tests, all passing
