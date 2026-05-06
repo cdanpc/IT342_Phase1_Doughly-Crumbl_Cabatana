@@ -31,7 +31,7 @@ Contact: 09165667589 | FB: Doughly Crumbl | IG: @doughlycrumbl
 
 ## Active Branch
 
-main
+mobile/core-features
 
 ---
 
@@ -280,7 +280,7 @@ That's it. Two commands. Everything else is automatic.
 
 Last updated: 2026-05-06
 
-Branch: main
+Branch: mobile/core-features
 
 Current state:
   All layout groups complete. BUG-4 + BUG-5 fixed.
