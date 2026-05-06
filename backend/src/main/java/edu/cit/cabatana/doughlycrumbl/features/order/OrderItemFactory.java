@@ -1,7 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.cart.CartItem;
-import edu.cit.cabatana.doughlycrumbl.features.order.OrderItem;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

@@ -35,7 +35,7 @@ export default function NotificationDropdown({ onClose }: Props) {
 
   async function handleClick(n: Notification) {
     if (!n.read) {
-      try { await markRead(n.id); } catch { /* low-stakes — badge will correct on next load */ }
+      try { await markRead(n.id); } catch { /* badge self-corrects on next load */ }
     }
     if (n.orderId) {
       const isAdminNotif = ['NEW_ORDER', 'PAYMENT_SUBMITTED'].includes(n.type);
@@ -45,7 +45,7 @@ export default function NotificationDropdown({ onClose }: Props) {
   }
 
   async function handleMarkAllRead() {
-    try { await markAllRead(); } catch { /* low-stakes */ }
+    try { await markAllRead(); } catch { /* badge self-corrects on next load */ }
   }
 
   return (

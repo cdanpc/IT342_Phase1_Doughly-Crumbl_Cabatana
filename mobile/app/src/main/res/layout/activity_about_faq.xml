@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorSurface"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="About &amp; FAQ"
+        app:titleTextAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+        app:titleTextColor="@color/colorTextPrimary" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/marginPage">
+
+            <!-- About -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_16"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_8"
+                        android:text="About Doughly Crumbl"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
+                        android:textColor="@color/colorSurface" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.6"
+                        android:text="Doughly Crumbl is a home-based artisan cookie shop located at Don Gil Garcia St., Capitol Site, Cebu City. We craft small-batch cookies made with premium ingredients.\n\nContact: 09165667589\nFacebook: Doughly Crumbl\nInstagram: @doughlycrumbl"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorPrimaryLight" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- FAQ card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_16"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:text="Frequently Asked Questions"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
+                        android:textColor="@color/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_4"
+                        android:text="How do I place an order?"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:lineSpacingMultiplier="1.6"
+                        android:text="Browse the Menu tab, add items to your cart, then proceed to checkout. Choose delivery or pickup, fill in your details, and place your order."
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:background="@color/colorBorder" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_4"
+                        android:text="What payment methods are accepted?"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:lineSpacingMultiplier="1.6"
+                        android:text="We accept GCash, Maya, Bank Transfer, and Cash on Pickup. Upload your proof of payment in the order detail screen after placing your order."
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:background="@color/colorBorder" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_4"
+                        android:text="How long does delivery take?"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:lineSpacingMultiplier="1.6"
+                        android:text="The admin will quote a delivery fee and estimated time when your order is confirmed. Same-day delivery is available for orders placed before 12 noon."
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="@dimen/spacing_16"
+                        android:background="@color/colorBorder" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_4"
+                        android:text="Can I cancel my order?"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.6"
+                        android:text="Orders can be cancelled while still in PENDING status. Once confirmed and preparation has started, contact us via Facebook or call 09165667589."
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextPrimary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

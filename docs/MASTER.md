@@ -318,14 +318,61 @@ These happen automatically — Claude does not wait to be asked.
 
 ## Document Index
 
+### Session Control
+
 | File | Purpose |
 |---|---|
-| `MASTER.md` | This file — session discipline, gates, memory, handoff schema |
-| `FEATURES.md` | Checkbox inventory of all features — updated after every task |
-| `tasks.md` | Full AC list with Given/When/Then/And detail — In Progress / Backlog / Completed |
-| `care-guide.md` | Cookie Care page content — ready to implement |
-| `about-faqs.md` | About & FAQ page content — ready to implement |
-| `payment-delivery-flow.md` | Full payment and delivery flow spec — checkout, status states, admin requirements |
+| CLAUDE.md (root) | Auto-loaded every session — stack, progress, commands |
+| docs/MASTER.md | Gate rules, handoff schema, memory taxonomy |
+| docs/tasks.md | Full AC list AC-10 to AC-18 |
+
+### System Reference
+
+| File | Purpose |
+|---|---|
+| docs/SYSTEM_INTELLIGENCE_REPORT.md | Full codebase audit |
+| docs/architecture.md | System architecture |
+| docs/api.md | REST endpoint reference |
+| docs/database.md | Schema and relationships |
+| docs/flow.md | Order and payment flows |
+| docs/setup.md | Local dev setup |
+| docs/conventions.md | Naming and code style |
+
+### Mobile
+
+| File | Purpose |
+|---|---|
+| docs/mobile/mobile-design-prompts.md | 18 screen design specs |
+| docs/mobile/MOBILE_DESIGN_STATUS.md | Current implementation progress |
+| docs/mobile/MOBILE_DEVELOPMENT_PLAN.md | Dev plan and groupings |
+| docs/mobile/ANDROID_UI_AUDIT.md | UI audit findings |
+| docs/mobile/UX_SAFETY_AUDIT.md | UX safety findings |
+
+### Content
+
+| File | Purpose |
+|---|---|
+| docs/content/care-guide.md | Cookie care page content |
+| docs/content/about-faqs.md | About and FAQ page content |
+| docs/content/payment-delivery-flow.md | Payment and delivery spec |
+
+### Reports (academic submission)
+
+| File | Purpose |
+|---|---|
+| docs/reports/DESIGN_PATTERNS_REPORT.md | Design patterns report |
+| docs/reports/DESIGN_PATTERNS_SUMMARY.md | Summary |
+| docs/reports/SECTION_A_RESEARCH_OUTPUT.md | Research output |
+| docs/reports/SECTION_C_Refactoring_Report.md | Refactoring report |
+| docs/test-plan/TEST_PLAN.md | Software test plan |
+| docs/test-plan/REGRESSION_REPORT.md | Regression report |
+
+### Archive (reference only)
+
+| File | Purpose |
+|---|---|
+| docs/archive/wireframes.md | Original wireframes |
+| docs/archive/verticalSlicePrompt.md | VSA refactor prompt |
 
 ---
 

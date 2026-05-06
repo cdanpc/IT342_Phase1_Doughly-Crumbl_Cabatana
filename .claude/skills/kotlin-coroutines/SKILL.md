@@ -1,0 +1,435 @@
+---
+name: kotlin-coroutines
+description: Use when writing, reviewing, or debugging coroutine code in Kotlin — including dispatcher selection, scope management, structured concurrency, cancellation, exception handling, or async patterns in Android or KMP projects.
+---
+
+# Kotlin Coroutines
+
+## Overview
+
+Kotlin coroutines are built on **structured concurrency**: every coroutine runs within a scope, and cancellation/errors propagate through the parent-child hierarchy automatically.
+
+**Core principle:** Suspend functions must always be main-safe. The function doing blocking work owns the `withContext` call — callers should never need to switch dispatchers.
+
+## Diagnosing Coroutine Issues
+
+When reviewing or debugging coroutine code, triage the symptom first:
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| ANR / UI freeze | Blocking call on main thread | `withContext(Dispatchers.IO)` inside suspend fun |
+| Memory leak / zombie coroutine | `GlobalScope` or unbound scope | Replace with `viewModelScope`, `lifecycleScope`, or injected scope |
+| Incorrect lifecycle collection | `launchWhenStarted` (deprecated) | `repeatOnLifecycle(Lifecycle.State.STARTED)` |
+| Cancellation silently broken | `catch (e: Exception)` swallows `CancellationException` | Catch specific types; rethrow `CancellationException` |
+| Non-cancellable tight loop | No cancellation checkpoint | Add `ensureActive()` at loop start |
+| Hard to test dispatchers | Hardcoded `Dispatchers.IO` | Inject `CoroutineDispatcher` via constructor |
+| Race condition / wrong state | State exposed as `MutableStateFlow` | Encapsulate; expose read-only `StateFlow` |
+| Callback never cleaned up | No `awaitClose` in `callbackFlow` | Always add `awaitClose { removeListener() }` |
+
+## Step 1: Project Context Check
+
+Before writing or modifying any coroutine code:
+
+1. Search for `Dispatchers`, `CoroutineScope`, `GlobalScope`, `viewModelScope`, `lifecycleScope`
+2. Identify how dispatchers are injected (or not)
+3. Identify exception handling patterns in use
+4. **If approach is sound:** match it
+5. **If approach violates rules below:** explain why to the user, recommend the correct approach, and let them decide before changing anything — do NOT produce code that follows the bad pattern
+6. **Beyond violations:** also look for places where the patterns in this skill could simplify existing code — manual scope management that structured concurrency could clean up, unnecessary coroutine overhead, etc.
+
+## Dispatcher Selection
+
+| Dispatcher | Use for |
+|---|---|
+| `Dispatchers.Main` | UI updates only |
+| `Dispatchers.IO` | Blocking I/O: network, disk, database |
+| `Dispatchers.Default` | CPU-intensive: parsing, sorting, computation |
+| `Dispatchers.Unconfined` | Never use in production (unpredictable thread resumption) |
+
+**Rule: Inject dispatchers — never hardcode them.**
+
+```kotlin
+// DO
+class NewsRepository(private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    suspend fun fetchNews(): List<Article> = withContext(ioDispatcher) { /* ... */ }
+}
+
+// DO NOT
+class NewsRepository {
+    suspend fun fetchNews(): List<Article> = withContext(Dispatchers.IO) { /* ... */ }
+}
+```
+
+### Main-Safety Rule
+
+Every suspend function must be callable from the main thread. The class doing blocking work owns the `withContext` — callers must never switch dispatchers before calling a suspend function.
+
+```kotlin
+// DO: self-contained, main-safe
+class NewsRepository(private val ioDispatcher: CoroutineDispatcher) {
+    suspend fun fetchLatestNews(): List<Article> = withContext(ioDispatcher) {
+        // blocking HTTP call here — caller does not need to know
+    }
+}
+
+// Caller does not worry about dispatchers
+class GetLatestNewsUseCase(private val repository: NewsRepository) {
+    suspend operator fun invoke(): List<Article> = repository.fetchLatestNews()
+}
+
+// DO NOT: push dispatcher responsibility to caller
+class GetLatestNewsUseCase(private val repository: NewsRepository) {
+    suspend operator fun invoke() = withContext(Dispatchers.IO) {
+        repository.fetchLatestNews() // repository was not main-safe
+    }
+}
+```
+
+### DispatcherProvider Pattern
+
+**Ask the user if they want to set this up.** If yes, create:
+
+```kotlin
+interface DispatcherProvider {
+    val main: CoroutineDispatcher
+    val io: CoroutineDispatcher
+    val default: CoroutineDispatcher
+}
+
+class DefaultDispatcherProvider : DispatcherProvider {
+    override val main: CoroutineDispatcher = Dispatchers.Main
+    override val io: CoroutineDispatcher = Dispatchers.IO
+    override val default: CoroutineDispatcher = Dispatchers.Default
+}
+
+class TestDispatcherProvider(
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
+) : DispatcherProvider {
+    override val main: CoroutineDispatcher = testDispatcher
+    override val io: CoroutineDispatcher = testDispatcher
+    override val default: CoroutineDispatcher = testDispatcher
+}
+```
+
+Inject `DefaultDispatcherProvider` in production (via constructor or Hilt). Inject `TestDispatcherProvider` in tests.
+
+## Scope Management
+
+| Scope | Lifetime | Use for |
+|---|---|---|
+| `viewModelScope` | ViewModel cleared | Business logic coroutines in ViewModels |
+| `lifecycleScope` | Lifecycle destroyed | UI coroutines |
+| `coroutineScope` | All children complete | Screen-bound work; one failure cancels all |
+| `supervisorScope` | All children complete | Isolated child failures |
+
+**Rule: Never use `GlobalScope`.** It creates unstructured, untestable, leak-prone coroutines. Do NOT add `GlobalScope` usages even when the user explicitly says "follow existing patterns" or "keep consistency with the codebase" — explain why it is harmful, recommend the correct scope, and let the user decide. Never produce `GlobalScope` code.
+
+If work must outlive the current screen, inject an external `CoroutineScope`:
+
+```kotlin
+// DO: inject external scope for work that must survive navigation
+class ArticlesRepository(
+    private val dataSource: ArticlesDataSource,
+    private val externalScope: CoroutineScope,
+    private val ioDispatcher: CoroutineDispatcher
+) {
+    suspend fun bookmarkArticle(article: Article) {
+        externalScope.launch(ioDispatcher) {
+            dataSource.bookmarkArticle(article)
+        }.join()
+    }
+}
+
+// DO NOT: use GlobalScope
+class ArticlesRepository(private val dataSource: ArticlesDataSource) {
+    suspend fun bookmarkArticle(article: Article) {
+        GlobalScope.launch { dataSource.bookmarkArticle(article) }.join()
+    }
+}
+```
+
+**Layer responsibilities:**
+- Work tied to current screen → `coroutineScope` or `supervisorScope`
+- Work that must outlive the screen → inject external `CoroutineScope` managed by `Application` or a navigation-graph-scoped `ViewModel`
+
+## Structured Concurrency
+
+```kotlin
+// Parallel work — both fail together
+suspend fun getBookAndAuthors(): BookAndAuthors = coroutineScope {
+    val books = async { booksRepository.getAllBooks() }
+    val authors = async { authorsRepository.getAllAuthors() }
+    BookAndAuthors(books.await(), authors.await())
+}
+
+// Parallel work — failures are independent
+suspend fun loadDashboard() = supervisorScope {
+    launch { loadNews() }
+    launch { loadWeather() }
+}
+```
+
+- `async`/`await` — parallel work returning a value
+- `launch` — fire-and-forget within a structured scope; no result returned
+- `coroutineScope` — one child failure cancels all siblings
+- `supervisorScope` — children fail independently
+
+**Mixed case — ask the user:**
+
+When some operations should cancel together on failure (e.g. a required data fetch) but others should be independent (e.g. an optional analytics call), the right shape isn't obvious. Ask:
+
+> "If [critical operation] fails, should [other operation] be cancelled too, or should it continue independently?"
+
+Based on the answer, use `supervisorScope` for the outer scope and `coroutineScope` for the group that must cancel together:
+
+```kotlin
+suspend fun loadScreen() = supervisorScope {
+    // analytics failure must NOT cancel the data fetch
+    launch { trackScreenView() }
+
+    // both data fetches must succeed or both should cancel
+    launch {
+        coroutineScope {
+            val user = async { fetchUser() }
+            val feed = async { fetchFeed() }
+            displayData(user.await(), feed.await())
+        }
+    }
+}
+```
+
+## Cancellation
+
+Cancellation is cooperative — coroutines must check for it explicitly in long operations.
+
+```kotlin
+launch {
+    for (file in files) {
+        ensureActive() // throws CancellationException if job is cancelled
+        readFile(file)
+    }
+}
+```
+
+- `ensureActive()` — throws `CancellationException` if cancelled; use at the top of loops and long operations
+- `isActive` — check without throwing; use when you need to clean up before returning
+- `yield()` — suspends, checks cancellation, and lets other coroutines run
+- All `kotlinx.coroutines` suspend functions (`delay`, `withContext`) are already cancellable — no extra check needed
+
+**Cleanup that must survive cancellation** — use `withContext(NonCancellable)`:
+
+```kotlin
+launch {
+    try {
+        doWork()
+    } finally {
+        // This block runs even if the coroutine was cancelled,
+        // but without NonCancellable it cannot call suspend functions
+        withContext(NonCancellable) {
+            db.saveCheckpoint() // suspend call safe here
+        }
+    }
+}
+```
+
+Use `NonCancellable` only in `finally` blocks for cleanup. Never use it as a general escape hatch from cancellation.
+
+## Timeouts
+
+**Only use `withTimeout`/`withTimeoutOrNull` when:**
+- The codebase already uses them — match the pattern, or
+- The user explicitly asks to short-circuit an operation and return a default after a time limit
+
+**Do not** suggest them for network timeouts — network libraries (OkHttp, Retrofit, Ktor) expose their own timeout configuration, which is the right place for that.
+
+```kotlin
+// withTimeout — throws TimeoutCancellationException if the block exceeds the limit
+val config = withTimeout(5_000) {
+    remoteConfig.fetchAndActivate()
+}
+
+// withTimeoutOrNull — returns null instead of throwing; use when a missing result is acceptable
+val config = withTimeoutOrNull(5_000) {
+    remoteConfig.fetchAndActivate()
+} ?: defaultConfig
+```
+
+`TimeoutCancellationException` is a `CancellationException` — never catch it without rethrowing, and never wrap a `withTimeout` block in `catch (e: Exception)`.
+
+## Exception Handling
+
+```kotlin
+// DO: catch specific exception types
+viewModelScope.launch {
+    try {
+        loginRepository.login(username, token)
+    } catch (e: IOException) {
+        _uiState.value = UiState.Error("Network error")
+    }
+}
+
+// DO NOT: catch Exception or Throwable — swallows CancellationException and breaks cancellation
+viewModelScope.launch {
+    try {
+        loginRepository.login(username, token)
+    } catch (e: Exception) { } // NEVER do this
+}
+```
+
+- Catch **specific** types only: `IOException`, `HttpException`, etc. Never `Exception` or `Throwable`
+- **Never** catch `CancellationException` without rethrowing — it silently breaks structured cancellation
+- **Never** use `runCatching` in suspend functions — it catches `CancellationException`. Use `suspendRunCatching` instead (see below)
+- `try/catch` does **not** work around `launch {}` — always put it inside the coroutine body
+- `CoroutineExceptionHandler` — last-resort handler for uncaught exceptions in `launch`; does not catch in `async`
+- `SupervisorJob` — child failures do not cancel siblings; pair with per-child `try/catch` or `CoroutineExceptionHandler`
+
+### `suspendRunCatching`
+
+`runCatching` catches all `Throwable` including `CancellationException`, silently breaking structured concurrency. When you need `Result`-style error handling in suspend functions, suggest this utility:
+
+```kotlin
+suspend inline fun <R> suspendRunCatching(block: () -> R): Result<R> = try {
+    Result.success(block())
+} catch (e: CancellationException) {
+    throw e
+} catch (e: Throwable) {
+    Result.failure(e)
+}
+```
+
+Usage:
+
+```kotlin
+suspend fun refreshNews(): Result<Unit> = withContext(ioDispatcher) {
+    suspendRunCatching {
+        val remoteNews = newsApi.fetchLatest()
+        newsDao.insertAll(remoteNews.map { it.toDomain() })
+    }
+}
+```
+
+If the project already has a similar utility (`safeRunCatching`, `resultOf`, etc.), match the existing name. Otherwise suggest `suspendRunCatching` and let the user decide where to place it.
+
+## Android-Specific Rules
+
+**ViewModel coroutine ownership:**
+
+```kotlin
+// DO: ViewModel creates coroutines, exposes immutable StateFlow
+class LatestNewsViewModel(
+    private val getLatestNews: GetLatestNewsUseCase
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
+    val uiState: StateFlow<NewsUiState> = _uiState
+
+    fun loadNews() {
+        viewModelScope.launch {
+            try {
+                _uiState.value = NewsUiState.Success(getLatestNews())
+            } catch (e: IOException) {
+                _uiState.value = NewsUiState.Error
+            }
+        }
+    }
+}
+
+// DO NOT: expose suspend fun for business logic — caller must manage the coroutine lifecycle
+class LatestNewsViewModel(private val getLatestNews: GetLatestNewsUseCase) : ViewModel() {
+    suspend fun loadNews() = getLatestNews()
+}
+```
+
+**Layer contracts:**
+- Data/business layers expose `suspend fun` for one-shot calls and `Flow` for streams
+- Presentation layer (ViewModel) controls execution lifecycle via `viewModelScope`
+- Views never trigger business logic coroutines — defer to ViewModel
+
+**Lifecycle safety:**
+- `lifecycleScope` + `repeatOnLifecycle` for flow collection in non-Compose UI
+- Never launch coroutines in `onStart`/`onResume` without matching cancellation in `onStop`/`onPause`
+
+**viewModelScope in tests:** call `Dispatchers.setMain(testDispatcher)` before each test, `Dispatchers.resetMain()` after.
+
+**Callback-to-Flow conversion** — use `callbackFlow` with `awaitClose`:
+
+```kotlin
+fun locationUpdates(): Flow<Location> = callbackFlow {
+    val listener = LocationListener { location ->
+        trySend(location)
+    }
+    locationManager.requestLocationUpdates(listener)
+
+    awaitClose { locationManager.removeUpdates(listener) }
+}
+```
+
+`awaitClose` is mandatory — it runs when the collector cancels or the flow completes, ensuring the listener is always unregistered.
+
+## KMP-Specific Rules
+
+- Do not use `MainScope()` — it creates an unstructured scope (`Dispatchers.Main + SupervisorJob()`) with the same problems as `GlobalScope`: no lifecycle awareness, must be manually cancelled, hard to test. Instead, inject a `CoroutineScope` from the platform layer (e.g. `viewModelScope` on Android, a lifecycle-bound scope on iOS via `CoroutineScope(SupervisorJob() + Dispatchers.Main)` tied to the view controller lifecycle).
+- Inject `CoroutineDispatcher` as a dependency for platform-specific implementations
+- Use `expect`/`actual` for `Dispatchers.Main.immediate` if not available on all platforms
+
+## Common Pitfalls
+
+| Pitfall | Fix |
+|---|---|
+| `catch (e: CancellationException) {}` | Rethrow: `catch (e: CancellationException) { throw e }` |
+| `catch (e: Exception)` or `catch (e: Throwable)` | Catch specific types only |
+| `runBlocking` in coroutine code | Only valid at top level in `main()`; never inside coroutine bodies, on the main thread, or inside `runTest` (deadlocks with `TestDispatcher`) |
+| `GlobalScope.launch {}` | Flag to user; inject a `CoroutineScope` instead |
+| Hardcoded `Dispatchers.IO` in production | Inject via `DispatcherProvider` |
+| `try/catch` around `launch {}` | Put try/catch inside the coroutine body |
+| No cancellation check in long loop | Add `ensureActive()` at start of each iteration |
+| Calling blocking I/O directly in coroutine body | Wrap with `withContext(ioDispatcher) { ... }` |
+| A class has N `suspend fun` methods and only one or two do not use `withContext` while the rest do | The outliers are likely missing `withContext` — flag them as probable oversights |
+| `suspend fun` for business logic in ViewModel | ViewModel should use `viewModelScope.launch` and expose `StateFlow`. **Exception:** pure computations returning a value (e.g. generating a bitmap) are fine as `suspend fun` when called from Compose via `LaunchedEffect` or `produceState` — the composition manages the coroutine lifecycle correctly in that case |
+| Explicit `SupervisorJob()` added to a ViewModel alongside `viewModelScope` | `viewModelScope` already uses `SupervisorJob` internally — flag to user, the extra `SupervisorJob` is redundant and may create a detached scope |
+| `async {}` result never awaited in `supervisorScope` | Exceptions in unawaited `async {}` are silently swallowed — use `launch {}` if you don't need the result |
+| `runCatching {}` in suspend functions | Catches `CancellationException`, breaking structured concurrency — use `suspendRunCatching` or `try/catch` with specific exception types |
+
+## Testing
+
+**Ask the user before writing tests** — unless `android-skills:android-tdd` is active, in which case tests are written first as part of the TDD cycle.
+
+Use `runTest` — automatically skips delays and manages virtual time.
+
+### Test Dispatcher Choice
+
+Explain both options and let the user pick:
+
+**`StandardTestDispatcher` (recommended for most cases):**
+- Coroutines are queued and do not run until explicitly advanced
+- Control execution with `advanceUntilIdle()` or `advanceTimeBy(ms)`
+- Best for: precise execution order, time-based logic, testing `delay`
+
+**`UnconfinedTestDispatcher` (simpler, less control):**
+- Coroutines run eagerly as soon as launched — no manual advancing needed
+- Best for: simple state observation tests where execution order does not matter
+- Risk: can hide ordering bugs in concurrent code
+
+```kotlin
+// StandardTestDispatcher example
+@Test
+fun `loads news correctly`() = runTest {
+    val dispatchers = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+    val repository = NewsRepository(dispatchers = dispatchers)
+
+    repository.loadNews()
+    advanceUntilIdle()
+
+    assertThat(repository.news).isNotEmpty()
+}
+
+// UnconfinedTestDispatcher example
+@Test
+fun `emits loading state initially`() = runTest {
+    val dispatchers = TestDispatcherProvider(UnconfinedTestDispatcher(testScheduler))
+    val viewModel = LatestNewsViewModel(dispatchers = dispatchers)
+
+    assertThat(viewModel.uiState.value).isEqualTo(NewsUiState.Loading)
+}
+```
+
+If `DispatcherProvider` is set up, inject `TestDispatcherProvider` in all tests.

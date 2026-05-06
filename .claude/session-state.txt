@@ -1,0 +1,8 @@
+Last saved: 2026-05-05 21:41
+Branch: main
+Last commit: 22e1202 feat(mobile): admin order card + admin logout
+
+Modified files:
+ M .claude/session-state.txt
+?? "images/Doughly Crumbl Red Logo.png"
+?? "images/Doughly Crumbl White logo.png"

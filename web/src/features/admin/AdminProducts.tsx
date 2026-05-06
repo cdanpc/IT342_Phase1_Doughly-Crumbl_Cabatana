@@ -21,6 +21,8 @@ export default function AdminProducts() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [formErrors, setFormErrors] = useState<{ name?: string; price?: string }>({});
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -70,6 +72,11 @@ export default function AdminProducts() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are accepted (PNG, JPG, WebP, GIF).');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image too large. Maximum size is 5 MB.');
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -112,14 +119,18 @@ export default function AdminProducts() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+  async function confirmDelete() {
+    if (deleteTargetId === null) return;
+    setIsDeleting(true);
     try {
-      await deleteProduct(id);
+      await deleteProduct(deleteTargetId);
       toast.success('Product deleted');
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      setProducts((prev) => prev.filter((p) => p.id !== deleteTargetId));
+      setDeleteTargetId(null);
     } catch {
       toast.error('Failed to delete product');
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -216,7 +227,7 @@ export default function AdminProducts() {
                   <button onClick={() => openEdit(product)} style={actionBtnStyle}>
                     <Pencil size={15} />
                   </button>
-                  <button onClick={() => handleDelete(product.id)} style={{ ...actionBtnStyle, color: 'var(--color-error)' }}>
+                  <button onClick={() => setDeleteTargetId(product.id)} style={{ ...actionBtnStyle, color: 'var(--color-error)' }}>
                     <Trash2 size={15} />
                   </button>
                 </td>
@@ -342,6 +353,58 @@ export default function AdminProducts() {
                 cursor: isSaving ? 'not-allowed' : 'pointer', opacity: isSaving ? 0.6 : 1,
               }}>
                 {isSaving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirmation modal */}
+      {deleteTargetId !== null && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200,
+          }}
+          onClick={() => { if (!isDeleting) setDeleteTargetId(null); }}
+        >
+          <div
+            style={{
+              background: '#fff', borderRadius: 'var(--radius-md)', padding: 28,
+              width: 380, boxShadow: 'var(--shadow-card)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
+              Delete Product
+            </h3>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24, lineHeight: 1.5 }}>
+              Are you sure you want to delete this product? This action cannot be undone.
+            </p>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setDeleteTargetId(null)}
+                disabled={isDeleting}
+                style={{
+                  padding: '9px 18px', borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--color-border)', background: '#fff',
+                  fontSize: 14, cursor: isDeleting ? 'not-allowed' : 'pointer',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={isDeleting}
+                style={{
+                  padding: '9px 18px', borderRadius: 'var(--radius-sm)',
+                  border: 'none', background: 'var(--color-error)', color: '#fff',
+                  fontWeight: 700, fontSize: 14,
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  opacity: isDeleting ? 0.7 : 1,
+                }}
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

@@ -19,10 +19,17 @@ export default function ProofUploadForm({
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
-    if (file && file.size > 10 * 1024 * 1024) {
-      toast.error('File too large. Maximum size is 10 MB.');
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error('Only image files are accepted (PNG, JPG, etc.).');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('File too large. Maximum size is 10 MB.');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
     }
     setProofFile(file);
     setProofPreview(file ? URL.createObjectURL(file) : null);

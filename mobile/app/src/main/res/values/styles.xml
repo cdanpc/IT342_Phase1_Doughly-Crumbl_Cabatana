@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Card -->
+    <style name="Style.DoughlyCrumbl.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/radiusCard</item>
+        <item name="cardElevation">@dimen/elevationCard</item>
+        <item name="cardBackgroundColor">@color/colorSurface</item>
+        <item name="contentPaddingLeft">@dimen/paddingCard</item>
+        <item name="contentPaddingRight">@dimen/paddingCard</item>
+        <item name="contentPaddingTop">@dimen/paddingCard</item>
+        <item name="contentPaddingBottom">@dimen/paddingCard</item>
+        <item name="strokeColor">@color/colorBorder</item>
+        <item name="strokeWidth">0.5dp</item>
+    </style>
+
+    <!-- Primary button -->
+    <style name="Style.DoughlyCrumbl.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/heightButtonPrimary</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorSurface</item>
+        <item name="android:textAppearance">@style/TextAppearance.DoughlyCrumbl.LabelLarge</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/colorPrimaryLight</item>
+    </style>
+
+    <!-- Outlined button -->
+    <style name="Style.DoughlyCrumbl.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/heightButtonSecondary</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1.5dp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.DoughlyCrumbl.LabelLarge</item>
+        <item name="rippleColor">@color/colorPrimaryLight</item>
+    </style>
+
+    <!-- Destructive outlined button -->
+    <style name="Style.DoughlyCrumbl.Button.Destructive" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/heightButtonSecondary</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="strokeColor">@color/colorError</item>
+        <item name="strokeWidth">1.5dp</item>
+        <item name="android:textColor">@color/colorError</item>
+        <item name="android:textAppearance">@style/TextAppearance.DoughlyCrumbl.LabelLarge</item>
+        <item name="rippleColor">@color/colorErrorBg</item>
+    </style>
+
+    <!-- Bottom navigation -->
+    <style name="Style.DoughlyCrumbl.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/nav_item_color</item>
+        <item name="itemTextColor">@color/nav_item_color</item>
+        <item name="itemActiveIndicatorStyle">@style/Style.DoughlyCrumbl.BottomNav.Indicator</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="elevation">@dimen/elevationBottomNav</item>
+    </style>
+
+    <style name="Style.DoughlyCrumbl.BottomNav.Indicator">
+        <item name="android:color">@color/colorPrimaryLight</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.DoughlyCrumbl.Large</item>
+    </style>
+
+    <!-- Input (TextInputLayout) -->
+    <style name="Style.DoughlyCrumbl.Input" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/input_stroke_color</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/radiusInput</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/radiusInput</item>
+        <item name="hintTextColor">@color/colorTextMuted</item>
+        <item name="android:textColorHint">@color/colorTextMuted</item>
+    </style>
+
+    <!-- Filter chip -->
+    <style name="Style.DoughlyCrumbl.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="android:minHeight">@dimen/heightChip</item>
+        <item name="chipCornerRadius">@dimen/radiusPill</item>
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.DoughlyCrumbl.LabelLarge</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="rippleColor">@color/colorPrimaryLight</item>
+    </style>
+
+</resources>

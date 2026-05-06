@@ -1,46 +1,60 @@
 package com.example.mobile
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.mobile.ui.theme.MobileTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.mobile.cart.ui.CartFragment
+import com.example.mobile.databinding.ActivityMainBinding
+import com.example.mobile.home.ui.HomeFragment
+import com.example.mobile.notifications.ui.NotificationsFragment
+import com.example.mobile.orders.ui.OrdersFragment
+import com.example.mobile.profile.ui.ProfileFragment
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MobileTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        if (savedInstanceState == null) loadFragment(HomeFragment())
+
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home          -> loadFragment(HomeFragment())
+                R.id.nav_cart          -> loadFragment(CartFragment())
+                R.id.nav_orders        -> loadFragment(OrdersFragment())
+                R.id.nav_notifications -> loadFragment(NotificationsFragment())
+                R.id.nav_profile       -> loadFragment(ProfileFragment())
             }
+            true
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    fun setCartBadge(count: Int) {
+        if (count > 0) {
+            binding.bottomNav.getOrCreateBadge(R.id.nav_cart).apply {
+                isVisible = true
+                number = count
+            }
+        } else {
+            binding.bottomNav.removeBadge(R.id.nav_cart)
+        }
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MobileTheme {
-        Greeting("Android")
+    fun setAlertsBadge(show: Boolean) {
+        if (show) {
+            binding.bottomNav.getOrCreateBadge(R.id.nav_notifications).isVisible = true
+        } else {
+            binding.bottomNav.removeBadge(R.id.nav_notifications)
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }

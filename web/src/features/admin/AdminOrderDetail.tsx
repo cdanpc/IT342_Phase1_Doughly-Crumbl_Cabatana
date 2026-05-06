@@ -386,8 +386,8 @@ export default function AdminOrderDetail() {
 
       {/* ── Cancel Modal ── */}
       {showCancelModal && (
-        <div className="od__modal-overlay">
-          <div className="od__modal">
+        <div className="od__modal-overlay" onClick={() => { if (!isUpdating) { setShowCancelModal(false); setCancelReason(''); } }}>
+          <div className="od__modal" onClick={(e) => e.stopPropagation()}>
             <h3 className="od__modal-title">Cancel Order #{order.orderId}</h3>
             <p className="od__modal-desc">
               Provide a reason for cancellation (optional). The customer will see this.
@@ -404,6 +404,7 @@ export default function AdminOrderDetail() {
                 className="od__btn"
                 style={{ background: '#f5f5f5', color: 'var(--color-text-primary)' }}
                 onClick={() => { setShowCancelModal(false); setCancelReason(''); }}
+                disabled={isUpdating}
               >
                 Go Back
               </button>

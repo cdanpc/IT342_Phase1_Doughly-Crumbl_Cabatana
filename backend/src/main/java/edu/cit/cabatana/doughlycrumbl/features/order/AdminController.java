@@ -1,11 +1,8 @@
 package edu.cit.cabatana.doughlycrumbl.features.order;
 
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductRequest;
-import edu.cit.cabatana.doughlycrumbl.features.order.UpdateOrderStatusRequest;
-import edu.cit.cabatana.doughlycrumbl.features.order.OrderResponse;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
 import edu.cit.cabatana.doughlycrumbl.features.payment.FileUploadService;
-import edu.cit.cabatana.doughlycrumbl.features.order.OrderService;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

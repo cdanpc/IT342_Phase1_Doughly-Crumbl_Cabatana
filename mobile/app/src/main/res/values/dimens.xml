@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Border Radius -->
+    <dimen name="radiusCard">12dp</dimen>
+    <dimen name="radiusButton">12dp</dimen>
+    <dimen name="radiusInput">12dp</dimen>
+    <dimen name="radiusPill">24dp</dimen>
+    <dimen name="radiusAvatar">100dp</dimen>
+    <dimen name="radiusSmall">8dp</dimen>
+
+    <!-- Heights -->
+    <dimen name="heightButtonPrimary">52dp</dimen>
+    <dimen name="heightButtonSecondary">44dp</dimen>
+    <dimen name="heightInput">52dp</dimen>
+    <dimen name="heightBottomNav">64dp</dimen>
+    <dimen name="heightTopAppBar">56dp</dimen>
+    <dimen name="heightChip">36dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="marginPage">16dp</dimen>
+    <dimen name="screenPaddingHorizontal">16dp</dimen>
+    <dimen name="gapCard">12dp</dimen>
+    <dimen name="gapSmall">8dp</dimen>
+    <dimen name="paddingCard">16dp</dimen>
+    <dimen name="paddingButton">16dp</dimen>
+
+    <!-- Touch targets -->
+    <dimen name="minTouchTarget">48dp</dimen>
+
+    <!-- Icons -->
+    <dimen name="iconSize">24dp</dimen>
+    <dimen name="iconSizeLarge">40dp</dimen>
+    <dimen name="iconSizeSmall">20dp</dimen>
+
+    <!-- Avatars -->
+    <dimen name="avatarSmall">40dp</dimen>
+    <dimen name="avatarMedium">56dp</dimen>
+    <dimen name="avatarLarge">72dp</dimen>
+
+    <!-- Elevation / Shadow -->
+    <dimen name="elevationCard">2dp</dimen>
+    <dimen name="elevationBottomNav">8dp</dimen>
+    <dimen name="elevationFab">6dp</dimen>
+
+    <!-- 8dp grid spacing -->
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_32">32dp</dimen>
+    <dimen name="spacing_48">48dp</dimen>
+    <dimen name="spacing_64">64dp</dimen>
+
+    <!-- Typography sizes -->
+    <dimen name="textDisplayLarge">26sp</dimen>
+    <dimen name="textHeadlineLarge">22sp</dimen>
+    <dimen name="textHeadlineMedium">18sp</dimen>
+    <dimen name="textTitleLarge">16sp</dimen>
+    <dimen name="textTitleMedium">14sp</dimen>
+    <dimen name="textBodyLarge">14sp</dimen>
+    <dimen name="textBodyMedium">13sp</dimen>
+    <dimen name="textLabel">13sp</dimen>
+    <dimen name="textCaption">11sp</dimen>
+
+    <!-- Component heights -->
+    <dimen name="heightListItem">56dp</dimen>
+    <dimen name="heightHeroBanner">200dp</dimen>
+    <dimen name="heightProductImage">130dp</dimen>
+    <dimen name="heightAdminProductImage">72dp</dimen>
+    <dimen name="heightProofOfPayment">180dp</dimen>
+</resources>

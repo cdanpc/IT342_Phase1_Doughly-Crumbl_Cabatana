@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary Brand -->
+    <color name="colorPrimary">#6B1A2B</color>
+    <color name="colorPrimaryDark">#4A1020</color>
+    <color name="colorPrimaryLight">#F5E8EB</color>
+
+    <!-- Backgrounds -->
+    <color name="colorBackground">#FAF7F4</color>
+    <color name="colorSurface">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="colorTextPrimary">#1A1A2E</color>
+    <color name="colorTextSecondary">#6B6B6B</color>
+    <color name="colorTextMuted">#AAAAAA</color>
+
+    <!-- Border -->
+    <color name="colorBorder">#E8E0D8</color>
+
+    <!-- Semantic -->
+    <color name="colorSuccess">#1A7A4A</color>
+    <color name="colorSuccessBg">#E8F5EE</color>
+    <color name="colorWarning">#F59E0B</color>
+    <color name="colorWarningBg">#FFF8E1</color>
+    <color name="colorError">#DC2626</color>
+    <color name="colorErrorBg">#FDECEA</color>
+
+    <!-- Order Status -->
+    <color name="statusOrderPlaced">#F59E0B</color>
+    <color name="statusOrderPlacedBg">#FFF8E1</color>
+    <color name="statusPreparing">#2563EB</color>
+    <color name="statusPreparingBg">#EFF6FF</color>
+    <color name="statusOutForDelivery">#EA580C</color>
+    <color name="statusOutForDeliveryBg">#FFF7ED</color>
+    <color name="statusReadyForPickup">#0D9488</color>
+    <color name="statusReadyForPickupBg">#F0FDFA</color>
+    <color name="statusCompleted">#1A7A4A</color>
+    <color name="statusCompletedBg">#E8F5EE</color>
+    <color name="statusCancelled">#DC2626</color>
+    <color name="statusCancelledBg">#FDECEA</color>
+
+    <!-- Bottom Nav -->
+    <color name="navActive">#6B1A2B</color>
+    <color name="navInactive">#AAAAAA</color>
+
+    <!-- Hero banner overlay (20% white for pill button bg) -->
+    <color name="colorHeroOverlay">#33FFFFFF</color>
+
+    <!-- Aliases for layout compatibility -->
+    <color name="colorErrorSurface">#FDECEA</color>
 </resources>

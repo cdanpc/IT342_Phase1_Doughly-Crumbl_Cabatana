@@ -1,10 +1,6 @@
 package edu.cit.cabatana.doughlycrumbl.features.cart;
 
-import edu.cit.cabatana.doughlycrumbl.features.cart.AddToCartRequest;
-import edu.cit.cabatana.doughlycrumbl.features.cart.UpdateCartItemRequest;
-import edu.cit.cabatana.doughlycrumbl.features.cart.CartResponse;
 import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
-import edu.cit.cabatana.doughlycrumbl.features.cart.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

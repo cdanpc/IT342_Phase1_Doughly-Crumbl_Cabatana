@@ -1,6 +1,5 @@
 package edu.cit.cabatana.doughlycrumbl.features.notification;
 
-import edu.cit.cabatana.doughlycrumbl.features.notification.Notification;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,7 +1,40 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./mvnw compile:*)"
+      "Bash(./mvnw compile:*)",
+      "Bash(./mvnw clean *)",
+      "Bash(./mvnw test *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git add *)",
+      "Bash(./gradlew compileDebugKotlin --no-daemon)",
+      "Bash(npm run *)",
+      "Bash(./gradlew :app:clean)",
+      "Bash(./gradlew :app:assembleDebug)",
+      "Bash(./gradlew :app:assembleDebug --no-daemon)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-handoff.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-session-save.sh"
+          }
+        ]
+      }
     ]
   }
 }
