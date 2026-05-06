@@ -142,13 +142,16 @@ BUG-3 — FIXED (2026-05-04)
   rewritten. Notification.kt created (was missing entirely).
   Build verified: ./gradlew :app:assembleDebug → BUILD SUCCESS.
 
-BUG-4 (fix after GROUP 9)
-  SessionManager uses plain SharedPreferences (Context.MODE_PRIVATE)
-  Must migrate to EncryptedSharedPreferences
+BUG-4 — FIXED (2026-05-06)
+  SessionManager migrated to EncryptedSharedPreferences (AES256_GCM key,
+  AES256_SIV key scheme, AES256_GCM value scheme).
+  DoughlyApp.kt created as Application subclass; registered in manifest.
+  security-crypto:1.0.0 added to libs.versions.toml + build.gradle.kts.
 
-BUG-5 (fix after GROUP 9)
-  AuthInterceptor adds Bearer token but does NOT handle 401 responses
-  Must: catch 401 → clear session → redirect to LoginActivity
+BUG-5 — FIXED (2026-05-06)
+  AuthInterceptor now catches 401: clears session + starts LoginActivity
+  with FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK.
+  Context sourced from DoughlyApp.appContext — no repository changes needed.
 
 ---
 
@@ -275,70 +278,49 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-05
+Last updated: 2026-05-06
 
 Branch: main
 
 Current state:
-  GROUP 9 COMPLETE + admin orders/logout complete.
-  BUILD SUCCESS confirmed (22e1202).
+  All layout groups complete. BUG-4 + BUG-5 fixed.
+  BUILD SUCCESS confirmed.
 
 Layout files: 28 exist
-Drawable files: 58 exist (added ic_back.xml)
+Drawable files: 58 exist
 
 Completed this session:
 
-  GROUP 9 — Profile menu rows + informational screens (commit b1506a2):
-    fragment_profile.xml — rewritten: user info card + 3 menu rows
-                           (Care Guide, About & FAQ, Payment Instructions) + logout
-    activity_care_guide.xml — created (storage, reheating, best enjoyed cards)
-    activity_about_faq.xml — created (about card + FAQ Q&A card)
-    activity_payment_instructions.xml — created (GCash, Maya, BDO, after-paying steps)
-    CareGuideActivity.kt — created (profile.ui package)
-    AboutFaqActivity.kt — created (profile.ui package)
-    PaymentInstructionsActivity.kt — created (profile.ui package)
-    ProfileFragment.kt — wired rowCareGuide/rowFaq/rowPayment click handlers
-    AndroidManifest.xml — registered 3 new profile info activities
-    ic_back.xml — back arrow vector drawable (used by all 3 info screens)
-    item_order.xml — chipStatus clickable=false (fixes order card click-through bug)
+  BUG-4 — EncryptedSharedPreferences migration:
+    libs.versions.toml — added security-crypto:1.0.0
+    build.gradle.kts — added security-crypto dependency
+    SessionManager.kt — now uses EncryptedSharedPreferences
+                        (AES256_GCM key, AES256_SIV key scheme, AES256_GCM value scheme)
+    DoughlyApp.kt — new Application subclass; exposes appContext companion val
+    AndroidManifest.xml — registered android:name=".DoughlyApp"
 
-  Admin order card + logout (commit 22e1202):
-    item_admin_order.xml — admin order card: order ID, status chip, date,
-                           contact number, payment status chip, total
-    AdminOrderAdapter.kt — new adapter for item_admin_order
-    AdminOrdersFragment.kt — switched from OrderAdapter to AdminOrderAdapter
-    fragment_admin_profile.xml — admin profile with user info card + logout button
-    AdminProfileFragment.kt — reads session name/email/role, logout → LoginActivity
-    admin_nav_menu.xml — added 4th tab: Profile
-    AdminActivity.kt — handle nav_admin_profile → AdminProfileFragment
-
-  Bugs fixed this session:
-    MOBILE-004 — Google Fonts provider cert crash fixed (user applied TTF fallback)
-                 mistakes.md updated with root cause and rule
-    Order click-through — chipStatus clickable=false in item_order.xml
+  BUG-5 — AuthInterceptor 401 handling:
+    AuthInterceptor.kt — catches 401: clears session + starts LoginActivity
+                         with FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK
+    RetrofitClient.kt — passes DoughlyApp.appContext to AuthInterceptor
+                        (no changes to repositories or ViewModels required)
 
 Nothing in progress:
-  Clean slate. All layout groups complete.
+  Clean slate. All bugs resolved.
 
 Next session — start here (in order):
-  1. BUG-4: Migrate SessionManager from SharedPreferences to
-     EncryptedSharedPreferences (security requirement)
-  2. BUG-5: AuthInterceptor — catch 401 → clear session → redirect to LoginActivity
-  3. Missing drawables for order timeline screens (if order detail timeline UI is needed):
+  1. Missing drawables for order timeline screens (if order detail timeline UI is needed):
        bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
        bg_button_success, bg_button_danger_outlined, bg_warning_banner
+  2. End-to-end testing / QA pass on all screens
 
 Blockers:
-  None — all layout groups are complete.
+  None.
 
 Decisions made this session:
-  - GROUP 9 informational screens (Care Guide, FAQ, Payment Instructions) placed
-    inside the Profile tab as menu rows — not separate nav tabs.
-  - Admin logout added as a 4th "Profile" tab in the admin bottom nav.
-  - item_admin_order.xml created as a dedicated admin variant (not reusing item_order.xml)
-    because admin needs contact number + payment status visible in the list.
-  - PowerShell Set-Content -Encoding utf8 adds UTF-8 BOM which AAPT2 rejects.
-    Rule: always use the Write tool (not PowerShell Set-Content) for XML resource files.
+  - DoughlyApp Application class used to provide appContext to AuthInterceptor
+    without changing repository/ViewModel signatures (zero-impact approach).
+  - security-crypto 1.0.0 (stable) chosen over 1.1.0-alpha06.
 
 Last commit:
-  22e1202 feat(mobile): admin order card + admin logout
+  (this session — pending commit)

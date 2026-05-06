@@ -1,5 +1,6 @@
 package com.example.mobile.network
 
+import com.example.mobile.DoughlyApp
 import com.example.mobile.util.SessionManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,7 +18,7 @@ object RetrofitClient {
             level = HttpLoggingInterceptor.Level.BODY
         }
         val client = OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(sessionManager))
+            .addInterceptor(AuthInterceptor(sessionManager, DoughlyApp.appContext))
             .addInterceptor(logging)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

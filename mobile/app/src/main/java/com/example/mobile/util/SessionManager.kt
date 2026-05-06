@@ -2,11 +2,21 @@ package com.example.mobile.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 class SessionManager(context: Context) {
 
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("doughly_session", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = run {
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        EncryptedSharedPreferences.create(
+            "doughly_session",
+            masterKeyAlias,
+            context.applicationContext,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
 
     fun saveToken(token: String) = prefs.edit().putString(KEY_TOKEN, token).apply()
     fun getToken(): String? = prefs.getString(KEY_TOKEN, null)
