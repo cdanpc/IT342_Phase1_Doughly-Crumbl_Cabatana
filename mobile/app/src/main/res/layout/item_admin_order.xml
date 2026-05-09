@@ -40,6 +40,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:focusable="false"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/colorSurface"
                 android:textSize="11sp"
                 app:chipMinHeight="28dp" />
@@ -52,6 +54,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_4"
             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
+
+        <TextView
+            android:id="@+id/tvStatusFull"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_4"
+            android:textSize="11sp"
+            android:textColor="@color/colorTextMuted"
+            android:visibility="gone" />
 
         <!-- Row 3: Contact + payment status -->
         <LinearLayout

@@ -111,6 +111,12 @@ class OrderDetailActivity : AppCompatActivity() {
         val (label, desc, colorRes) = when (status) {
             "PENDING", "ORDER_PLACED" ->
                 Triple("Order Placed", "We've received your order!", R.color.statusOrderPlaced)
+            "AWAITING_DELIVERY_QUOTE" ->
+                Triple("Getting Quote", "Calculating your delivery fee", R.color.statusOrderPlaced)
+            "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED" ->
+                Triple("Payment Due", "Delivery fee quoted — payment needed", R.color.statusOutForDelivery)
+            "PAYMENT_SUBMITTED_AWAITING_CONFIRMATION" ->
+                Triple("Confirming", "Verifying your payment", R.color.statusPreparing)
             "CONFIRMED" ->
                 Triple("Confirmed", "Your order has been confirmed", R.color.statusPreparing)
             "PAYMENT_CONFIRMED" ->
@@ -119,8 +125,10 @@ class OrderDetailActivity : AppCompatActivity() {
                 Triple("Preparing", "Your order is being prepared", R.color.statusPreparing)
             "READY" ->
                 Triple("Ready for Pickup", "Your order is ready!", R.color.statusCompleted)
+            "OUT_FOR_DELIVERY" ->
+                Triple("On the Way", "Your order is on the way!", R.color.statusPreparing)
             "DELIVERED" ->
-                Triple("Out for Delivery", "Your order is on the way!", R.color.statusCompleted)
+                Triple("Delivered", "Your order has been delivered", R.color.statusCompleted)
             "COMPLETED" ->
                 Triple("Completed", "Enjoy your order!", R.color.statusCompleted)
             "CANCELLED" ->

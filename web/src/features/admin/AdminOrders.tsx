@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { getAdminOrders } from '../../shared/api/orderApi';
-import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../shared/utils/formatters';
+import { formatPrice, formatDate, getStatusColor, formatOrderStatus, getStatusFullText } from '../../shared/utils/formatters';
 import type { Order, OrderStatus } from '../../shared/types';
 import toast from 'react-hot-toast';
 import '../../shared/components/LoadingSpinner.css';
@@ -108,12 +108,16 @@ export default function AdminOrders() {
                 <td style={tdStyle}>{order.itemCount ?? order.items?.length ?? '—'}</td>
                 <td style={{ ...tdStyle, fontWeight: 600 }}>{formatPrice(order.totalAmount)}</td>
                 <td style={tdStyle}>
-                  <span style={{
-                    background: getStatusColor(order.status) + '20',
-                    color: getStatusColor(order.status),
-                    fontSize: 12, fontWeight: 600, padding: '4px 12px',
-                    borderRadius: 'var(--radius-full)',
-                  }}>
+                  <span
+                    title={getStatusFullText(order.status) || undefined}
+                    style={{
+                      background: getStatusColor(order.status) + '20',
+                      color: getStatusColor(order.status),
+                      fontSize: 12, fontWeight: 600, padding: '4px 12px',
+                      borderRadius: 'var(--radius-full)',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
                     {formatOrderStatus(order.status)}
                   </span>
                 </td>

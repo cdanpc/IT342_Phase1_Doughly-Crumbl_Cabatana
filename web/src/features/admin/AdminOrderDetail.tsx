@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard, ChevronDown } from 'lucide-react';
 import { getAdminOrderById, updateOrderStatus, quoteDeliveryFee } from '../../shared/api/orderApi';
-import { formatPrice, formatDate, getStatusColor, formatOrderStatus } from '../../shared/utils/formatters';
+import { formatPrice, formatDate, getStatusColor, formatOrderStatus, getStatusFullText } from '../../shared/utils/formatters';
 import { ROUTES } from '../../shared/utils/routes';
 import type { Order, OrderStatus } from '../../shared/types';
 import toast from 'react-hot-toast';
@@ -179,9 +179,11 @@ export default function AdminOrderDetail() {
         </div>
         <span
           className="od__status-chip"
+          title={getStatusFullText(order.status) || undefined}
           style={{
             background: getStatusColor(order.status) + '20',
             color: getStatusColor(order.status),
+            whiteSpace: 'nowrap',
           }}
         >
           {formatOrderStatus(order.status)}

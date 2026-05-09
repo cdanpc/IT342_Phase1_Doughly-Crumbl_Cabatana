@@ -65,7 +65,7 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         binding.tvCustomerName.text = "Order #${order.orderId}"
         binding.tvCustomerEmail.text = order.contactNumber ?: ""
         binding.tvDate.text = order.orderDate.take(10)
-        binding.chipStatus.text = order.status
+        binding.chipStatus.text = statusLabel(order.status)
         binding.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
 
         adapter.submitList(order.items)
@@ -82,6 +82,23 @@ class AdminOrderDetailActivity : AppCompatActivity() {
             }
             binding.layoutStatusButtons.addView(btn)
         }
+    }
+
+    private fun statusLabel(status: String): String = when (status) {
+        "PENDING", "ORDER_PLACED"                    -> "Order Placed"
+        "AWAITING_DELIVERY_QUOTE"                    -> "Getting Quote"
+        "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED"       -> "Payment Due"
+        "PAYMENT_SUBMITTED_AWAITING_CONFIRMATION"    -> "Confirming"
+        "PAYMENT_CONFIRMED"                          -> "Payment Confirmed"
+        "CONFIRMED"                                  -> "Confirmed"
+        "PREPARING"                                  -> "Preparing"
+        "OUT_FOR_DELIVERY"                           -> "On the Way"
+        "READY"                                      -> "Ready"
+        "DELIVERED"                                  -> "Delivered"
+        "COMPLETED"                                  -> "Completed"
+        "CANCELLED"                                  -> "Cancelled"
+        else -> status.lowercase().split("_")
+            .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
     }
 
     private fun statusColor(status: String) = when (status) {

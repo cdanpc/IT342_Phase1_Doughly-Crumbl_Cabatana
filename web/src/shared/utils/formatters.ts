@@ -56,28 +56,32 @@ export function getStatusColor(status: string): string {
 
 export function formatOrderStatus(status: string): string {
   switch (status) {
-    case 'ORDER_PLACED':
-      return 'Order Placed';
-    case 'AWAITING_DELIVERY_QUOTE':
-      return 'Awaiting Delivery Quote';
-    case 'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED':
-      return 'Delivery Fee Quoted — Payment Required';
-    case 'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION':
-      return 'Payment Submitted — Awaiting Confirmation';
-    case 'PAYMENT_CONFIRMED':
-      return 'Payment Confirmed';
-    case 'PREPARING':
-      return 'Preparing';
-    case 'OUT_FOR_DELIVERY':
-      return 'Out for Delivery';
-    case 'COMPLETED':
-      return 'Completed';
+    case 'ORDER_PLACED':      return 'Order Placed';
+    case 'AWAITING_DELIVERY_QUOTE': return 'Getting Quote';
+    case 'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED': return 'Payment Due';
+    case 'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION': return 'Confirming';
+    case 'PAYMENT_CONFIRMED': return 'Payment Confirmed';
+    case 'PREPARING':         return 'Preparing';
+    case 'OUT_FOR_DELIVERY':  return 'On the Way';
+    case 'COMPLETED':         return 'Completed';
     default:
       return status
         .toLowerCase()
         .split('_')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
+  }
+}
+
+/** Returns the original long-form text for the 4 shortened statuses.
+ *  Empty string for all others (tooltip omitted when no extra context). */
+export function getStatusFullText(status: string): string {
+  switch (status) {
+    case 'AWAITING_DELIVERY_QUOTE':          return 'Awaiting Delivery Quote';
+    case 'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED': return 'Delivery Fee Quoted — Payment Required';
+    case 'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION': return 'Payment Submitted — Awaiting Confirmation';
+    case 'OUT_FOR_DELIVERY':                 return 'Out for Delivery';
+    default: return '';
   }
 }
 
