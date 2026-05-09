@@ -278,66 +278,94 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-06
+Last updated: 2026-05-07
 
 Branch: mobile/core-features
 
 Current state:
-  All mobile backlog items complete. BUILD SUCCESS confirmed.
+  All mobile backlog complete. Physical device testing in progress.
+  All backend tests passing (42 total). BUILD SUCCESS confirmed.
 
-Layout files: 30 exist (added item_notification.xml, rebuilt activity_order_detail.xml)
-Drawable files: 64 exist (added 6 timeline/button/banner drawables)
+Layout files: 30 exist
+Drawable files: 70 exist
 
 Completed this session:
 
-  Missing drawables (6 new):
-    bg_timeline_dot_complete, bg_timeline_dot_active, bg_timeline_dot_pending
-    bg_button_success, bg_button_danger_outlined, bg_warning_banner
+  Bug fixes — mobile:
+    ProfileFragment.kt — added requireActivity().finish() after startActivity() on logout
+                         so user lands on LoginActivity, not the home tab
+    SessionManager.kt — full hardening against EncryptedSharedPreferences keystore corruption:
+                         init block catches decryption failure → deletes prefs file + rebuilds;
+                         clearSession() catches SecurityException → falls back to deleteSharedPreferences();
+                         all read methods (getToken, getRole, etc.) wrapped in try-catch
 
-  Order Detail screen — full rebuild:
-    activity_order_detail.xml — ConstraintLayout root, status banner, 5-step timeline,
-                                 items card, delivery card, cancellation card, cancel/reorder buttons
-    OrderDetailActivity.kt — binds all new views, timeline stepping logic, cancel dialog
-    OrderDetailViewModel.kt — added cancelOrder() + cancelSuccess LiveData
-    OrderRepository.kt — added cancelOrder()
-    ApiService.kt — added cancelOrder + getNotifications + markNotificationRead
-                    + markAllNotificationsRead endpoints
+  Notification detail navigation:
+    NotificationsFragment.kt — click handler now navigates:
+                                orderId != null → OrderDetailActivity (with orderId extra)
+                                orderId == null → NotificationDetailActivity
+    NotificationDetailActivity.kt — NEW: shows title, full message, date
+    activity_notification_detail.xml — NEW: toolbar + card layout
+    AndroidManifest.xml — registered NotificationDetailActivity
 
-  Notifications screen — full implementation:
-    item_notification.xml — notification card (icon circle, title, message, time, unread dot)
-    fragment_notifications.xml — added "Mark all read" header
-    NotificationsRepository.kt — new (GET /notifications, PUT mark read, PUT mark-all-read)
-    NotificationsViewModel.kt — new (load, markRead, markAllRead)
-    NotificationAdapter.kt — new ListAdapter with GradientDrawable icon coloring
-    NotificationsFragment.kt — full implementation with ViewModel + adapter
+  Payment instructions overhaul:
+    activity_payment_instructions.xml — REWRITTEN:
+      GCash: Briana Sophia Capuno, 0916 566 7589 + qr_gcash QR image
+      Maya:  Chris Daniel Cabataña, 0916 566 7589 + qr_maya QR image
+      BPI:   Briana Sophia Capuno (was BDO) + qr_bpi QR image
+    drawable/qr_gcash.jpg, qr_bpi.jpg, qr_maya.jpg — NEW (copied from images/)
 
-  Profile screen — crimson header + stats:
-    fragment_profile.xml — crimson header section with avatar initials,
-                           -20dp overlap stats card (Orders / Completed / Cancelled)
-    ProfileViewModel.kt — new (loads orders to compute stats)
-    ProfileFragment.kt — binds initials, stats observer, keeps menu row + logout wiring
+  Toolbar cleanup:
+    activity_main.xml — removed unused btnToolbarNotification + btnToolbarSearch;
+                        toolbar logo updated from ic_launcher_round → logo_doughly_red
 
-  Docs:
-    docs/tasks.md — mobile section fully updated (was "Not started", now accurate)
+  Logo assets added:
+    drawable/logo_doughly_red.png   — crimson logo on transparent (for light backgrounds)
+    drawable/logo_doughly_white.png — white logo on transparent (for dark/crimson backgrounds)
+    drawable/logo_in_ig.png         — full square icon (crimson bg + white logo) for app icon
+
+  Logo wiring:
+    activity_splash.xml   — logo changed to logo_doughly_white (crimson bg)
+    activity_login.xml    — logo changed to logo_doughly_white (crimson bg)
+    activity_register.xml — logo changed to logo_doughly_white (crimson bg)
+    activity_main.xml     — toolbar logo changed to logo_doughly_red (white bg)
+
+  App launcher icon:
+    mipmap-anydpi-v26/ic_launcher.xml + ic_launcher_round.xml — adaptive icon now uses
+      background=@color/colorPrimary + foreground=@drawable/logo_in_ig
+    mipmap-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/ — old .webp files replaced with logo_in_ig.png
+      as both ic_launcher.png and ic_launcher_round.png
+
+  Physical device networking:
+    RetrofitClient.kt — BASE_URL changed from 10.0.2.2:8080 to 192.168.1.52:8080
+                        (laptop WiFi IP on the 192.168.1.x subnet)
+                        NOTE: change back to 10.0.2.2:8080 for emulator use,
+                        or use ngrok/deploy for a permanent solution
 
 Nothing in progress:
   Clean slate.
 
 Next session — start here (in order):
-  1. End-to-end QA pass: run app on emulator, test all screens
-  2. Unread notification badge on nav tab (low priority)
-  3. Web admin panel backlog (delivery fee input, proof-of-payment view, payment confirm)
+  1. Verify physical device connection works (backend on 192.168.1.52:8080, same WiFi)
+  2. If WiFi IP changes, update RetrofitClient.kt BASE_URL to new IP (run ipconfig)
+  3. Consider deploying backend to Railway/Render for a permanent URL (no more IP juggling)
+  4. End-to-end QA pass on physical device: auth, menu, cart, checkout, orders, notifications
 
 Blockers:
-  None.
+  None. Windows Firewall may block port 8080 — if connection refused (not timeout),
+  run: netsh advfirewall firewall add rule name="Spring Boot 8080" dir=in action=allow protocol=TCP localport=8080
 
 Decisions made this session:
-  - bg_timeline_dot_active uses layer-list (outer crimsonLight ring + inner crimson dot)
-    to simulate a "pulsing active" indicator without animation.
-  - NotificationAdapter sets icon circle color programmatically via GradientDrawable
-    (no per-type XML drawables needed).
-  - Profile stats computed client-side from GET /orders/my-orders (no dedicated stats endpoint).
-  - Reorder button navigates to MainActivity (cannot re-add items — OrderItem has no productId).
+  - Sign out fix: requireActivity().finish() added — FLAG_ACTIVITY_CLEAR_TASK alone was
+    not reliably destroying the host activity before the new task appeared.
+  - SessionManager crash on clearSession(): EncryptedSharedPreferences internal decrypt
+    during .apply() fails when Keystore key is regenerated (reinstall without clearing data).
+    Fix: catch SecurityException → deleteSharedPreferences() which wipes without decrypting.
+  - Notification click: order-related notifications go directly to OrderDetailActivity;
+    general notifications open NotificationDetailActivity (new simple detail screen).
+  - Payment page rewritten: BDO replaced with BPI (correct bank), QR codes added for all 3
+    methods, GCash name corrected to Briana Sophia Capuno.
+  - Toolbar notification bell and search button removed (not wired up, redundant with bottom nav).
+  - App icon uses "LOGO IN IG.png" — already a perfect square icon format.
+  - Physical device BASE_URL set to 192.168.1.52:8080 (laptop WiFi). Must be same WiFi as phone.
 
-Last commit:
-  (pending)
+Last commit: 4082485 chore: session handoff [auto]

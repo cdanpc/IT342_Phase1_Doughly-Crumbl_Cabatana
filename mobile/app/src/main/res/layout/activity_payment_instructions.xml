@@ -55,7 +55,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_8"
-                        android:text="After placing your order, send your payment to any of the accounts below. Then upload your proof of payment in the Order Detail screen."
+                        android:text="After placing your order, send your payment to any of the accounts below. Scan the QR code or use the account details, then upload your proof of payment in the Order Detail screen."
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:textColor="@color/colorTextPrimary" />
                 </LinearLayout>
@@ -91,6 +91,15 @@
                         android:layout_marginVertical="@dimen/spacing_12"
                         android:background="@color/colorBorder" />
 
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/spacing_12"
+                        android:contentDescription="GCash QR code"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/qr_gcash" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -107,7 +116,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doughly Crumbl"
+                            android:text="Briana Sophia Capuno"
                             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                             android:textColor="@color/colorTextPrimary" />
                     </LinearLayout>
@@ -174,6 +183,15 @@
                         android:layout_marginVertical="@dimen/spacing_12"
                         android:background="@color/colorBorder" />
 
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/spacing_12"
+                        android:contentDescription="Maya QR code"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/qr_maya" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -190,7 +208,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doughly Crumbl"
+                            android:text="Chris Daniel Cabataña"
                             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                             android:textColor="@color/colorTextPrimary" />
                     </LinearLayout>
@@ -227,7 +245,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Bank Transfer -->
+            <!-- BPI -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -247,7 +265,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Bank Transfer (BDO)"
+                        android:text="Bank Transfer (BPI)"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
                         android:textColor="@color/colorTextPrimary" />
 
@@ -256,6 +274,15 @@
                         android:layout_height="1dp"
                         android:layout_marginVertical="@dimen/spacing_12"
                         android:background="@color/colorBorder" />
+
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/spacing_12"
+                        android:contentDescription="BPI QR code"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/qr_bpi" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -273,29 +300,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Doughly Crumbl"
-                            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
-                            android:textColor="@color/colorTextPrimary" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_8"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Account Number"
-                            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
-                            android:textColor="@color/colorTextSecondary" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1234 5678 9012"
+                            android:text="Briana Sophia Capuno"
                             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                             android:textColor="@color/colorTextPrimary" />
                     </LinearLayout>
@@ -317,7 +322,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Banco de Oro (BDO)"
+                            android:text="Bank of the Philippine Islands (BPI)"
                             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                             android:textColor="@color/colorTextPrimary" />
                     </LinearLayout>
@@ -389,7 +394,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_8"
-                        android:text="4. We will confirm your payment within 1-2 hours during business hours (8 AM - 8 PM)."
+                        android:text="4. We will confirm your payment within 1–2 hours during business hours (8 AM – 8 PM)."
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:textColor="@color/colorTextPrimary" />
                 </LinearLayout>

@@ -2,9 +2,12 @@ package edu.cit.cabatana.doughlycrumbl.features.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.cit.cabatana.doughlycrumbl.features.auth.CustomUserDetails;
+import edu.cit.cabatana.doughlycrumbl.features.auth.JwtTokenProvider;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,8 +26,9 @@ class CartControllerIntegrationTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
-
-        private CartService cartService;
+    @MockBean  private CartService cartService;
+    @MockBean  private JwtTokenProvider jwtTokenProvider;
+    @MockBean  private UserDetailsService userDetailsService;
   
     private CustomUserDetails customerPrincipal() {
         return new CustomUserDetails(1L, "Test User", "test@doughlycrumbl.com", "pass", "CUSTOMER");

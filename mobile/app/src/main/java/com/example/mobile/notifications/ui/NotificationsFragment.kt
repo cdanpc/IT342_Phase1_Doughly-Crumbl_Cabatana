@@ -1,5 +1,6 @@
 package com.example.mobile.notifications.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobile.databinding.FragmentNotificationsBinding
+import com.example.mobile.orders.ui.OrderDetailActivity
 import com.example.mobile.util.SessionManager
 
 class NotificationsFragment : Fragment() {
@@ -33,6 +35,17 @@ class NotificationsFragment : Fragment() {
 
         val adapter = NotificationAdapter { notification ->
             if (!notification.isRead) viewModel.markRead(notification.id)
+            if (notification.orderId != null) {
+                startActivity(Intent(requireContext(), OrderDetailActivity::class.java).apply {
+                    putExtra("orderId", notification.orderId)
+                })
+            } else {
+                startActivity(Intent(requireContext(), NotificationDetailActivity::class.java).apply {
+                    putExtra("title", notification.title)
+                    putExtra("message", notification.message)
+                    putExtra("createdAt", notification.createdAt)
+                })
+            }
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

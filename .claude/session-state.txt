@@ -1,8 +1,12 @@
-Last saved: 2026-05-05 21:41
-Branch: main
-Last commit: 22e1202 feat(mobile): admin order card + admin logout
+Last saved: 2026-05-07
+Branch: mobile/core-features
+Last commit: (see git log after handoff commit)
 
-Modified files:
- M .claude/session-state.txt
-?? "images/Doughly Crumbl Red Logo.png"
-?? "images/Doughly Crumbl White logo.png"
+Key changes this session:
+  - Sign out crash fixed (SessionManager keystore corruption + finish() on logout)
+  - Notification click now navigates to detail (OrderDetailActivity or NotificationDetailActivity)
+  - Payment instructions rewritten: correct GCash/Maya/BPI details + QR codes
+  - Toolbar buttons removed (notification bell + search — not wired up)
+  - Logos added: logo_doughly_red, logo_doughly_white, logo_in_ig
+  - App launcher icon updated to logo_in_ig across all mipmap densities
+  - BASE_URL set to 192.168.1.52:8080 for physical device testing (same WiFi)
