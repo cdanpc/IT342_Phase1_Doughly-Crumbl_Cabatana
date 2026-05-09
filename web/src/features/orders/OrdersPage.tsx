@@ -7,6 +7,7 @@ import {
   formatDate,
   getStatusColor,
   formatOrderStatus,
+  getStatusFullText,
   getOrderStatusHelperText,
 } from '../../shared/utils/formatters';
 import type { Order } from '../../shared/types';
@@ -115,12 +116,16 @@ export default function OrdersPage() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   <span style={{ fontWeight: 600, fontSize: 15 }}>{formatPrice(order.totalAmount)}</span>
-                  <span style={{
-                    background: getStatusColor(order.status) + '20',
-                    color: getStatusColor(order.status),
-                    fontSize: 12, fontWeight: 600, padding: '4px 12px',
-                    borderRadius: 'var(--radius-full)',
-                  }}>
+                  <span
+                    title={getStatusFullText(order.status) || undefined}
+                    style={{
+                      background: getStatusColor(order.status) + '20',
+                      color: getStatusColor(order.status),
+                      fontSize: 12, fontWeight: 600, padding: '4px 12px',
+                      borderRadius: 'var(--radius-full)',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
                     {formatOrderStatus(order.status)}
                   </span>
                 </div>

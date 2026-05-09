@@ -7,6 +7,7 @@ import {
   formatDate,
   getStatusColor,
   formatOrderStatus,
+  getStatusFullText,
   getOrderStatusHelperText,
 } from '../../shared/utils/formatters';
 import { ROUTES } from '../../shared/utils/routes';
@@ -241,9 +242,11 @@ export default function OrderDetailPage() {
         </div>
         <span
           className="cod__status-chip"
+          title={getStatusFullText(order.status) || undefined}
           style={{
             background: getStatusColor(order.status) + '20',
             color: getStatusColor(order.status),
+            whiteSpace: 'nowrap',
           }}
         >
           {formatOrderStatus(order.status)}
