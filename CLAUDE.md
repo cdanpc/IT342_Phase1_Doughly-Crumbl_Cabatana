@@ -278,68 +278,43 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-07
+Last updated: 2026-05-10
 
 Branch: mobile/core-features
 
 Current state:
   All mobile backlog complete. Physical device testing in progress.
   All backend tests passing (42 total). BUILD SUCCESS confirmed.
+  Web frontend complete. SDD status update document written this session.
 
 Layout files: 30 exist
 Drawable files: 70 exist
 
 Completed this session:
 
-  Bug fixes — mobile:
-    ProfileFragment.kt — added requireActivity().finish() after startActivity() on logout
-                         so user lands on LoginActivity, not the home tab
-    SessionManager.kt — full hardening against EncryptedSharedPreferences keystore corruption:
-                         init block catches decryption failure → deletes prefs file + rebuilds;
-                         clearSession() catches SecurityException → falls back to deleteSharedPreferences();
-                         all read methods (getToken, getRole, etc.) wrapped in try-catch
+  Documentation:
+    docs/SDD_STATUS_UPDATE_2026-05-10.md — NEW: full SDD status update document
+      covers overall progress percentages, completed items, in-progress, not yet started,
+      deviations from spec table, revision history entry, and SDD sections needing update
 
-  Notification detail navigation:
-    NotificationsFragment.kt — click handler now navigates:
-                                orderId != null → OrderDetailActivity (with orderId extra)
-                                orderId == null → NotificationDetailActivity
-    NotificationDetailActivity.kt — NEW: shows title, full message, date
-    activity_notification_detail.xml — NEW: toolbar + card layout
-    AndroidManifest.xml — registered NotificationDetailActivity
-
-  Payment instructions overhaul:
-    activity_payment_instructions.xml — REWRITTEN:
-      GCash: Briana Sophia Capuno, 0916 566 7589 + qr_gcash QR image
-      Maya:  Chris Daniel Cabataña, 0916 566 7589 + qr_maya QR image
-      BPI:   Briana Sophia Capuno (was BDO) + qr_bpi QR image
-    drawable/qr_gcash.jpg, qr_bpi.jpg, qr_maya.jpg — NEW (copied from images/)
-
-  Toolbar cleanup:
-    activity_main.xml — removed unused btnToolbarNotification + btnToolbarSearch;
-                        toolbar logo updated from ic_launcher_round → logo_doughly_red
-
-  Logo assets added:
-    drawable/logo_doughly_red.png   — crimson logo on transparent (for light backgrounds)
-    drawable/logo_doughly_white.png — white logo on transparent (for dark/crimson backgrounds)
-    drawable/logo_in_ig.png         — full square icon (crimson bg + white logo) for app icon
-
-  Logo wiring:
-    activity_splash.xml   — logo changed to logo_doughly_white (crimson bg)
-    activity_login.xml    — logo changed to logo_doughly_white (crimson bg)
-    activity_register.xml — logo changed to logo_doughly_white (crimson bg)
-    activity_main.xml     — toolbar logo changed to logo_doughly_red (white bg)
-
-  App launcher icon:
-    mipmap-anydpi-v26/ic_launcher.xml + ic_launcher_round.xml — adaptive icon now uses
-      background=@color/colorPrimary + foreground=@drawable/logo_in_ig
-    mipmap-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/ — old .webp files replaced with logo_in_ig.png
-      as both ic_launcher.png and ic_launcher_round.png
-
-  Physical device networking:
-    RetrofitClient.kt — BASE_URL changed from 10.0.2.2:8080 to 192.168.1.52:8080
-                        (laptop WiFi IP on the 192.168.1.x subnet)
-                        NOTE: change back to 10.0.2.2:8080 for emulator use,
-                        or use ngrok/deploy for a permanent solution
+  (Prior sessions — already committed):
+    web/src/shared/utils/formatters.ts — formatOrderStatus() shortened 4 labels:
+      AWAITING_DELIVERY_QUOTE → "Getting Quote"
+      DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED → "Payment Due"
+      PAYMENT_SUBMITTED_AWAITING_CONFIRMATION → "Confirming"
+      OUT_FOR_DELIVERY → "On the Way"
+      Added getStatusFullText() for tooltip / sub-text display
+    web/src/features/orders/OrdersPage.tsx — badge title attr + whiteSpace nowrap
+    web/src/features/orders/OrderDetailPage.tsx — same
+    web/src/features/admin/AdminOrders.tsx — same
+    web/src/features/admin/AdminOrderDetail.tsx — same
+    mobile/.../orders/ui/OrderAdapter.kt — statusLabel() + statusFullText() + tvStatusFull
+    mobile/.../admin/ui/AdminOrderAdapter.kt — same
+    mobile/.../orders/ui/OrderDetailActivity.kt — bindStatusBanner() all status cases filled
+    mobile/.../admin/ui/AdminOrderDetailActivity.kt — statusLabel() wired to chip
+    mobile/.../res/layout/item_order.xml — chipStatus maxLines=1, tvStatusFull added
+    mobile/.../res/layout/item_admin_order.xml — same
+    README.md — fully rewritten to reflect actual Phase 1 state
 
 Nothing in progress:
   Clean slate.
@@ -349,23 +324,18 @@ Next session — start here (in order):
   2. If WiFi IP changes, update RetrofitClient.kt BASE_URL to new IP (run ipconfig)
   3. Consider deploying backend to Railway/Render for a permanent URL (no more IP juggling)
   4. End-to-end QA pass on physical device: auth, menu, cart, checkout, orders, notifications
+  5. Mobile GROUP 9 (if needed): activity_care_guide.xml + CareGuideActivity.kt,
+     activity_about_faq.xml + AboutFaqActivity.kt
 
 Blockers:
   None. Windows Firewall may block port 8080 — if connection refused (not timeout),
   run: netsh advfirewall firewall add rule name="Spring Boot 8080" dir=in action=allow protocol=TCP localport=8080
 
 Decisions made this session:
-  - Sign out fix: requireActivity().finish() added — FLAG_ACTIVITY_CLEAR_TASK alone was
-    not reliably destroying the host activity before the new task appeared.
-  - SessionManager crash on clearSession(): EncryptedSharedPreferences internal decrypt
-    during .apply() fails when Keystore key is regenerated (reinstall without clearing data).
-    Fix: catch SecurityException → deleteSharedPreferences() which wipes without decrypting.
-  - Notification click: order-related notifications go directly to OrderDetailActivity;
-    general notifications open NotificationDetailActivity (new simple detail screen).
-  - Payment page rewritten: BDO replaced with BPI (correct bank), QR codes added for all 3
-    methods, GCash name corrected to Briana Sophia Capuno.
-  - Toolbar notification bell and search button removed (not wired up, redundant with bottom nav).
-  - App icon uses "LOGO IN IG.png" — already a perfect square icon format.
-  - Physical device BASE_URL set to 192.168.1.52:8080 (laptop WiFi). Must be same WiFi as phone.
+  - SDD status update: deviations documented — View-based XML (not Compose), manual
+    proof-of-payment (not PayMongo), admin-quoted delivery fee (not fixed ₱80),
+    status labels shortened, ticker strip built then removed, no cloud deployment yet.
+  - Mobile GROUP 9 informational screens (care guide, about/FAQ) still not started;
+    payment instructions screen IS complete. Flag as remaining work.
 
-Last commit: 4082485 chore: session handoff [auto]
+Last commit: 1cdc45a docs: update README to reflect current project state
