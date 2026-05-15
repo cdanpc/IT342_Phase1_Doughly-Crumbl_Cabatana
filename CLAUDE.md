@@ -126,10 +126,13 @@ GROUP 8 — Admin Products + Add/Edit: COMPLETE (files exist — verify logic)
   activity_admin_add_edit_product.xml
   AdminAddEditProductActivity.kt + AdminAddEditProductViewModel.kt
 
-GROUP 9 — Informational screens: NOT STARTED
-  activity_care_guide.xml    — not created
-  activity_about_faq.xml     — not created
-  activity_payment_instructions.xml — not created
+GROUP 9 — Informational screens: COMPLETE
+  activity_care_guide.xml + CareGuideActivity.kt
+  activity_about_faq.xml + AboutFaqActivity.kt
+  activity_payment_instructions.xml + PaymentInstructionsActivity.kt
+  All 3 registered in AndroidManifest. ProfileFragment links all 3.
+  QR drawables: qr_gcash.jpg, qr_maya.jpg, qr_bpi.jpg exist in drawable/.
+  Roots converted to ConstraintLayout (2026-05-16).
 
 ---
 
@@ -278,64 +281,76 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-10
+Last updated: 2026-05-16
 
 Branch: mobile/core-features
 
 Current state:
-  All mobile backlog complete. Physical device testing in progress.
-  All backend tests passing (42 total). BUILD SUCCESS confirmed.
-  Web frontend complete. SDD status update document written this session.
+  ALL mobile groups complete (GROUP 1–9). BUILD SUCCESS confirmed.
+  All backend tests passing (42 total). Web frontend complete.
+  Many files modified but not yet committed (see list below).
+  Physical device testing is the remaining open item.
 
 Layout files: 30 exist
 Drawable files: 70 exist
 
-Completed this session:
+Completed this session (2026-05-16):
+  GROUP 9 root layout conversion (LinearLayout → ConstraintLayout):
+    activity_care_guide.xml
+    activity_about_faq.xml
+    activity_payment_instructions.xml
 
-  Documentation:
-    docs/SDD_STATUS_UPDATE_2026-05-10.md — NEW: full SDD status update document
-      covers overall progress percentages, completed items, in-progress, not yet started,
-      deviations from spec table, revision history entry, and SDD sections needing update
+  RegisterActivity lint fixes:
+    mobile/app/src/main/res/values/strings.xml — 11 new register screen strings added
+    mobile/app/src/main/res/layout/activity_register.xml — all 12 hardcoded strings
+      replaced with @string/ references; removed redundant android:textSize="10dp"
+    mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterActivity.kt
+      — removed unused import android.graphics.Color
+      — error now shows via Toast instead of tilPassword.error
+      — phone validation tightened (PH number regex)
 
-  (Prior sessions — already committed):
-    web/src/shared/utils/formatters.ts — formatOrderStatus() shortened 4 labels:
-      AWAITING_DELIVERY_QUOTE → "Getting Quote"
-      DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED → "Payment Due"
-      PAYMENT_SUBMITTED_AWAITING_CONFIRMATION → "Confirming"
-      OUT_FOR_DELIVERY → "On the Way"
-      Added getStatusFullText() for tooltip / sub-text display
-    web/src/features/orders/OrdersPage.tsx — badge title attr + whiteSpace nowrap
-    web/src/features/orders/OrderDetailPage.tsx — same
-    web/src/features/admin/AdminOrders.tsx — same
-    web/src/features/admin/AdminOrderDetail.tsx — same
-    mobile/.../orders/ui/OrderAdapter.kt — statusLabel() + statusFullText() + tvStatusFull
-    mobile/.../admin/ui/AdminOrderAdapter.kt — same
-    mobile/.../orders/ui/OrderDetailActivity.kt — bindStatusBanner() all status cases filled
-    mobile/.../admin/ui/AdminOrderDetailActivity.kt — statusLabel() wired to chip
-    mobile/.../res/layout/item_order.xml — chipStatus maxLines=1, tvStatusFull added
-    mobile/.../res/layout/item_admin_order.xml — same
-    README.md — fully rewritten to reflect actual Phase 1 state
+  CLAUDE.md — GROUP 9 marked COMPLETE, session state updated
+
+Large set of uncommitted modifications from prior work (not from this session):
+  mobile/app/src/main/AndroidManifest.xml
+  mobile/app/src/main/java/com/example/mobile/admin/ui/* (multiple files)
+  mobile/app/src/main/java/com/example/mobile/auth/data/AuthRepository.kt
+  mobile/app/src/main/java/com/example/mobile/auth/ui/LoginActivity.kt
+  mobile/app/src/main/java/com/example/mobile/auth/ui/LoginViewModel.kt
+  mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterViewModel.kt
+  mobile/app/src/main/java/com/example/mobile/cart/ui/* (multiple files)
+  mobile/app/src/main/java/com/example/mobile/model/RegisterRequest.kt
+  mobile/app/src/main/java/com/example/mobile/network/ApiService.kt
+  mobile/app/src/main/java/com/example/mobile/network/RetrofitClient.kt
+  mobile/app/src/main/java/com/example/mobile/orders/* (multiple files)
+  mobile/app/src/main/res/layout/activity_order_detail.xml
+  mobile/app/src/main/res/values/colors.xml
+  mobile/app/src/main/res/xml/network_security_config.xml
+  New untracked files:
+    mobile/app/src/main/java/com/example/mobile/network/ApiErrorParser.kt
+    mobile/app/src/main/java/com/example/mobile/network/ApiHostInterceptor.kt
+    mobile/app/src/main/java/com/example/mobile/network/ApiServerDiscovery.kt
+    mobile/app/src/main/java/com/example/mobile/util/OrderStatusUi.kt
 
 Nothing in progress:
-  Clean slate.
+  Clean slate. All groups complete.
 
 Next session — start here (in order):
-  1. Verify physical device connection works (backend on 192.168.1.52:8080, same WiFi)
-  2. If WiFi IP changes, update RetrofitClient.kt BASE_URL to new IP (run ipconfig)
-  3. Consider deploying backend to Railway/Render for a permanent URL (no more IP juggling)
-  4. End-to-end QA pass on physical device: auth, menu, cart, checkout, orders, notifications
-  5. Mobile GROUP 9 (if needed): activity_care_guide.xml + CareGuideActivity.kt,
-     activity_about_faq.xml + AboutFaqActivity.kt
+  1. Verify physical device connection (backend on 192.168.1.52:8080, same WiFi)
+  2. If WiFi IP changed, update RetrofitClient.kt BASE_URL (run ipconfig)
+  3. Consider Railway/Render deployment for a permanent URL (no more IP juggling)
+  4. End-to-end QA pass on physical device: auth, menu, cart, checkout, orders,
+     notifications, profile (care guide, about/FAQ, payment instructions)
 
 Blockers:
-  None. Windows Firewall may block port 8080 — if connection refused (not timeout),
-  run: netsh advfirewall firewall add rule name="Spring Boot 8080" dir=in action=allow protocol=TCP localport=8080
+  None. Windows Firewall may block port 8080 — if connection refused (not timeout):
+  netsh advfirewall firewall add rule name="Spring Boot 8080" dir=in action=allow protocol=TCP localport=8080
 
 Decisions made this session:
-  - SDD status update: deviations documented — View-based XML (not Compose), manual
-    proof-of-payment (not PayMongo), admin-quoted delivery fee (not fixed ₱80),
-    status labels shortened, ticker strip built then removed, no cloud deployment yet.
-  - Mobile GROUP 9 informational screens (care guide, about/FAQ) still not started;
-    payment instructions screen IS complete. Flag as remaining work.
+  - GROUP 9 was already fully implemented — CLAUDE.md had stale "NOT STARTED" status.
+  - RegisterActivity lint: 12 HardcodedText + 1 SpUsage fixed. Remaining ~80 Android
+    Studio "issues" are IDE spell-check / style inspections — not real bugs, left as-is.
+  - "Unresolved reference" errors in Android Studio = stale IDE cache, not real errors.
+    Fix: File → Sync Project with Gradle Files, or Invalidate Caches & Restart.
 
-Last commit: 1cdc45a docs: update README to reflect current project state
+Last commit: c92ba48 chore: session handoff [auto]

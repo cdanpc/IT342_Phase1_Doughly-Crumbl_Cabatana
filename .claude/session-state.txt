@@ -1,11 +1,25 @@
-Last saved: 2026-05-10 03:12
+Last saved: 2026-05-16 end-of-session
 Branch: mobile/core-features
-Last commit: 1cdc45a docs: update README to reflect current project state
+Last commit: c92ba48 chore: session handoff [auto]
 
 Modified files:
  M .claude/memory/mistakes.md
  M .claude/session-state.txt
-?? docs/SDD_STATUS_UPDATE_2026-05-10.md
-?? "images/Doughly Crumbl Red Logo.png"
-?? "images/Doughly Crumbl White logo.png"
-?? "images/LOGO IN IG.png"
+ M .claude/settings.local.json
+ M CLAUDE.md
+ M mobile/app/src/main/AndroidManifest.xml
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductActivity.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductViewModel.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminDashboardViewModel.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderAdapter.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailActivity.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailViewModel.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrdersFragment.kt
+ M mobile/app/src/main/java/com/example/mobile/auth/data/AuthRepository.kt
+ M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginActivity.kt
+ M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginViewModel.kt
+ M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterActivity.kt
+ M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterViewModel.kt
+ M mobile/app/src/main/java/com/example/mobile/cart/ui/CartFragment.kt
+ M mobile/app/src/main/java/com/example/mobile/cart/ui/CartItemAdapter.kt
+ M mobile/app/src/main/java/com/example/mobile/cart/ui/CartViewModel.kt
