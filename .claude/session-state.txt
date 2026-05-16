@@ -1,12 +1,11 @@
-Last saved: 2026-05-16 end-of-session
+Last saved: 2026-05-16 04:03
 Branch: mobile/core-features
-Last commit: c92ba48 chore: session handoff [auto]
+Last commit: 6e36049 chore: session handoff [auto]
 
 Modified files:
  M .claude/memory/mistakes.md
  M .claude/session-state.txt
  M .claude/settings.local.json
- M CLAUDE.md
  M mobile/app/src/main/AndroidManifest.xml
  M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductActivity.kt
  M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductViewModel.kt
@@ -15,11 +14,12 @@ Modified files:
  M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailActivity.kt
  M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailViewModel.kt
  M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrdersFragment.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductAdapter.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductsFragment.kt
+ M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductsViewModel.kt
  M mobile/app/src/main/java/com/example/mobile/auth/data/AuthRepository.kt
  M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginActivity.kt
  M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginViewModel.kt
  M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterActivity.kt
  M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterViewModel.kt
  M mobile/app/src/main/java/com/example/mobile/cart/ui/CartFragment.kt
- M mobile/app/src/main/java/com/example/mobile/cart/ui/CartItemAdapter.kt
- M mobile/app/src/main/java/com/example/mobile/cart/ui/CartViewModel.kt

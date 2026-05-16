@@ -199,18 +199,46 @@ If the two conflict — design file wins as visual truth.
 
 ## Order Status State Machine
 
-Valid transitions only — never skip states.
-Status strings are plain strings in the database (not a Java enum).
+Backend is authoritative. Status strings are plain strings in the database, not a Java enum.
 
-  PENDING → CONFIRMED
-  CONFIRMED | PAYMENT_CONFIRMED | ORDER_PLACED → PREPARING
-  PREPARING → READY
-  READY → DELIVERED
-  Any state except DELIVERED / COMPLETED / CANCELLED → CANCELLED (with reason)
+Current customer/admin flow:
+  Delivery:
+    AWAITING_DELIVERY_QUOTE
+      -> DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED
+      -> PAYMENT_SUBMITTED_AWAITING_CONFIRMATION
+      -> PAYMENT_CONFIRMED
+      -> PREPARING
+      -> OUT_FOR_DELIVERY
+      -> COMPLETED
 
-Valid status strings: PENDING, CONFIRMED, PAYMENT_CONFIRMED,
-                      ORDER_PLACED, PREPARING, READY, DELIVERED,
-                      COMPLETED, CANCELLED
+  Pickup, cash on pickup:
+    ORDER_PLACED -> PREPARING -> READY -> COMPLETED
+
+  Pickup, prepaid:
+    ORDER_PLACED
+      -> PAYMENT_SUBMITTED_AWAITING_CONFIRMATION
+      -> PAYMENT_CONFIRMED
+      -> PREPARING
+      -> READY
+      -> COMPLETED
+
+Legacy/compatibility statuses still exist in code:
+  PENDING, CONFIRMED, DELIVERED
+
+Important backend transition rules:
+  - submit-payment moves DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED or ORDER_PLACED
+    to PAYMENT_SUBMITTED_AWAITING_CONFIRMATION and sets paymentStatus=SUBMITTED.
+  - Admin confirms payment by moving PAYMENT_SUBMITTED_AWAITING_CONFIRMATION
+    to PAYMENT_CONFIRMED.
+  - PAYMENT_CONFIRMED, CONFIRMED, or ORDER_PLACED may move to PREPARING.
+  - PREPARING may move to READY or OUT_FOR_DELIVERY.
+  - READY or OUT_FOR_DELIVERY may move to COMPLETED.
+  - CANCELLED is allowed through backend strategy except terminal states.
+
+Mobile status presentation is centralized in:
+  mobile/app/src/main/java/com/example/mobile/util/OrderStatusUi.kt
+
+Do not reintroduce duplicate status label/color/timeline maps in Activities or Adapters.
 
 ---
 
@@ -286,71 +314,90 @@ Last updated: 2026-05-16
 Branch: mobile/core-features
 
 Current state:
-  ALL mobile groups complete (GROUP 1–9). BUILD SUCCESS confirmed.
-  All backend tests passing (42 total). Web frontend complete.
-  Many files modified but not yet committed (see list below).
-  Physical device testing is the remaining open item.
+  Mobile app is in active hardening/polish state. All core screens exist.
+  Latest Android debug build: BUILD SUCCESSFUL.
+  Last verified command:
+    cd mobile
+    .\gradlew.bat :app:assembleDebug
+    Result: BUILD SUCCESSFUL (2026-05-16, this session)
 
-Layout files: 30 exist
-Drawable files: 70 exist
+  No backend or web code was changed this session.
 
-Completed this session (2026-05-16):
-  GROUP 9 root layout conversion (LinearLayout → ConstraintLayout):
-    activity_care_guide.xml
-    activity_about_faq.xml
-    activity_payment_instructions.xml
+Major mobile work completed this session (UI feedback & error display hardening):
 
-  RegisterActivity lint fixes:
-    mobile/app/src/main/res/values/strings.xml — 11 new register screen strings added
-    mobile/app/src/main/res/layout/activity_register.xml — all 12 hardcoded strings
-      replaced with @string/ references; removed redundant android:textSize="10dp"
-    mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterActivity.kt
-      — removed unused import android.graphics.Color
-      — error now shows via Toast instead of tilPassword.error
-      — phone validation tightened (PH number regex)
+  Press/tap feedback (ripple) — applied across entire app:
+    - bg_button_primary_ripple.xml (NEW) — RippleDrawable for filled primary buttons
+    - bg_button_primary_selector.xml — updated: removed state_pressed swap, uses ripple
+    - bg_button_outlined.xml — converted from plain shape to RippleDrawable
+    - bg_card_login.xml — converted from plain shape to RippleDrawable
+    - include_payment_gcash.xml — added android:foreground="@drawable/ripple_card"
+    - include_payment_maya.xml — added android:foreground="@drawable/ripple_card"
+    - include_payment_bank.xml — added android:foreground="@drawable/ripple_card"
+    - include_payment_cash.xml — added android:foreground="@drawable/ripple_card"
+    - activity_checkout.xml (cardDelivery, cardPickup) — added foreground ripple_card
+    - activity_login.xml (tvForgotPassword, tvRegister) — selectableItemBackgroundBorderless
+    - activity_register.xml (tvLogin) — selectableItemBackgroundBorderless
 
-  CLAUDE.md — GROUP 9 marked COMPLETE, session state updated
+  Error display fix (TextInputLayout border expansion bug):
+    - bg_input.xml — added state_activated="true" entry pointing to bg_input_error
+    - activity_login.xml — added external tvEmailError, tvPasswordError TextViews;
+      TILs use errorEnabled="false" + til.isActivated for border state only
+    - activity_register.xml — same pattern for all 6 fields; added errorBanner card
+    - LoginActivity.kt — showFieldError() + clearErrorOnType() helpers
+    - RegisterActivity.kt — same helpers; all 6 field validations use showFieldError()
 
-Large set of uncommitted modifications from prior work (not from this session):
-  mobile/app/src/main/AndroidManifest.xml
-  mobile/app/src/main/java/com/example/mobile/admin/ui/* (multiple files)
-  mobile/app/src/main/java/com/example/mobile/auth/data/AuthRepository.kt
-  mobile/app/src/main/java/com/example/mobile/auth/ui/LoginActivity.kt
-  mobile/app/src/main/java/com/example/mobile/auth/ui/LoginViewModel.kt
-  mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterViewModel.kt
-  mobile/app/src/main/java/com/example/mobile/cart/ui/* (multiple files)
-  mobile/app/src/main/java/com/example/mobile/model/RegisterRequest.kt
-  mobile/app/src/main/java/com/example/mobile/network/ApiService.kt
-  mobile/app/src/main/java/com/example/mobile/network/RetrofitClient.kt
-  mobile/app/src/main/java/com/example/mobile/orders/* (multiple files)
-  mobile/app/src/main/res/layout/activity_order_detail.xml
-  mobile/app/src/main/res/values/colors.xml
-  mobile/app/src/main/res/xml/network_security_config.xml
-  New untracked files:
-    mobile/app/src/main/java/com/example/mobile/network/ApiErrorParser.kt
-    mobile/app/src/main/java/com/example/mobile/network/ApiHostInterceptor.kt
-    mobile/app/src/main/java/com/example/mobile/network/ApiServerDiscovery.kt
-    mobile/app/src/main/java/com/example/mobile/util/OrderStatusUi.kt
+  Cart/checkout UX:
+    - CartFragment.kt — order confirmation now uses Snackbar with "View Orders" action
+      instead of auto-navigating (user controls the tab switch); errors use Snackbar
+      with "Retry" action
+    - CheckoutActivity.kt — removed Toast from orderPlaced observer; fixed
+      hardcoded dp/sp replaced with getDimension()/getDimensionPixelSize()
 
-Nothing in progress:
-  Clean slate. All groups complete.
+  strings.xml additions:
+    - error, order_placed_success, view_orders, retry
 
-Next session — start here (in order):
-  1. Verify physical device connection (backend on 192.168.1.52:8080, same WiFi)
-  2. If WiFi IP changed, update RetrofitClient.kt BASE_URL (run ipconfig)
-  3. Consider Railway/Render deployment for a permanent URL (no more IP juggling)
-  4. End-to-end QA pass on physical device: auth, menu, cart, checkout, orders,
-     notifications, profile (care guide, about/FAQ, payment instructions)
+New drawables added (all in drawable/):
+  bg_button_primary_ripple.xml (NEW this session)
+  bg_button_danger_outlined.xml, bg_button_success.xml (previous session)
+  bg_timeline_dot_complete.xml, bg_timeline_dot_active.xml, bg_timeline_dot_pending.xml
+  bg_warning_banner.xml (previous session)
 
-Blockers:
-  None. Windows Firewall may block port 8080 — if connection refused (not timeout):
-  netsh advfirewall firewall add rule name="Spring Boot 8080" dir=in action=allow protocol=TCP localport=8080
+New layouts added this session:
+  include_payment_bank.xml, include_payment_cash.xml,
+  include_payment_gcash.xml, include_payment_maya.xml
+  bottom_sheet_product_detail.xml
 
-Decisions made this session:
-  - GROUP 9 was already fully implemented — CLAUDE.md had stale "NOT STARTED" status.
-  - RegisterActivity lint: 12 HardcodedText + 1 SpUsage fixed. Remaining ~80 Android
-    Studio "issues" are IDE spell-check / style inspections — not real bugs, left as-is.
-  - "Unresolved reference" errors in Android Studio = stale IDE cache, not real errors.
-    Fix: File → Sync Project with Gradle Files, or Invalidate Caches & Restart.
+New Kotlin files added this session:
+  ProductDetailBottomSheet.kt
+  ApiErrorParser.kt, ApiHostInterceptor.kt, ApiServerDiscovery.kt
+  OrderStatusUi.kt
 
-Last commit: c92ba48 chore: session handoff [auto]
+Known remaining risks / next best tasks:
+  1. Physical device QA needed — same Wi-Fi as backend on port 8080.
+  2. Dynamic LAN scan can take a few seconds on first cold launch; consider a
+     visible loading/connection indicator if this is confusing to testers.
+  3. Checkout still passes fulfillment/payment method through deliveryNotes string.
+     Long-term: add explicit backend fields and align web/mobile DTOs.
+  4. UI text still needs on-device check for any lingering mojibake from old encoding.
+  5. Web StatusTimeline pickup order differs from backend; align if doing web work.
+  6. tvForgotPassword and Google sign-in in login are UI-only placeholders (dialogs);
+     actual password reset and OAuth are not wired to backend yet.
+
+How to continue:
+  1. Run mobile build:
+       cd mobile
+       .\gradlew.bat :app:assembleDebug
+  2. Start backend:
+       cd backend
+       .\mvnw spring-boot:run
+  3. Test golden path on device/emulator:
+       auth -> menu -> add to cart -> cart -> checkout delivery/pickup ->
+       order detail -> payment proof -> admin quote/confirm/status ->
+       notifications -> profile info screens.
+  4. If connection fails on physical device, check Windows Firewall for port 8080
+     and verify phone/laptop are on the same LAN subnet.
+
+Last known build:
+  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-16)
+
+Last commit: 6e36049 chore: session handoff [auto]
