@@ -309,95 +309,145 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-16
+Last updated: 2026-05-19
 
 Branch: mobile/core-features
 
 Current state:
-  Mobile app is in active hardening/polish state. All core screens exist.
-  Latest Android debug build: BUILD SUCCESSFUL.
-  Last verified command:
+  This session was a backend environment/credential setup session only.
+  No mobile or web code was changed. The worktree remains dirty with the
+  same accumulated changes from prior sessions.
+
+  Backend .env fix (COMPLETED this session):
+    - Root cause identified: backend/.env was missing entirely. Spring was
+      falling back to localhost:5432 defaults (not Supabase).
+    - backend/.env created with real Supabase pooler credentials:
+        DB_URL=jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require
+        DB_USERNAME=postgres.vklluqgqjkspqgpqasfi
+        DB_PASSWORD=[set by user — do not log]
+        JWT_SECRET=[set by user — do not log]
+    - backend/.env is gitignored and was NOT committed. It must be recreated
+      on any new machine using .env.example as the template.
+    - backend/mvnw.cmd startup was attempted but cancelled before confirming
+      connection. Backend startup NOT yet verified this session.
+
+  Latest Android debug build:
     cd mobile
     .\gradlew.bat :app:assembleDebug
-    Result: BUILD SUCCESSFUL (2026-05-16, this session)
+    Result: BUILD SUCCESSFUL (2026-05-17) — not re-run this session
 
-  No backend or web code was changed this session.
+  Backend verification status:
+    backend/.env now has real Supabase credentials. Startup not yet confirmed.
+    To verify: cd backend && .\mvnw.cmd spring-boot:run
+    Watch for "Started DoughlycrumblApplication" in output.
+    If it hangs on "Cannot index into a null array" that is a PowerShell
+    wrapper quirk — run from a plain cmd.exe terminal instead.
 
-Major mobile work completed this session (UI feedback & error display hardening):
+  Web verification status:
+    npm.cmd exec -- tsc -b passed previously.
+    npm.cmd run build failed in Vite/esbuild with access denied resolving
+    vite.config.ts. Treat as environment/permission blocker until reproduced.
 
-  Press/tap feedback (ripple) — applied across entire app:
-    - bg_button_primary_ripple.xml (NEW) — RippleDrawable for filled primary buttons
-    - bg_button_primary_selector.xml — updated: removed state_pressed swap, uses ripple
-    - bg_button_outlined.xml — converted from plain shape to RippleDrawable
-    - bg_card_login.xml — converted from plain shape to RippleDrawable
-    - include_payment_gcash.xml — added android:foreground="@drawable/ripple_card"
-    - include_payment_maya.xml — added android:foreground="@drawable/ripple_card"
-    - include_payment_bank.xml — added android:foreground="@drawable/ripple_card"
-    - include_payment_cash.xml — added android:foreground="@drawable/ripple_card"
-    - activity_checkout.xml (cardDelivery, cardPickup) — added foreground ripple_card
-    - activity_login.xml (tvForgotPassword, tvRegister) — selectableItemBackgroundBorderless
-    - activity_register.xml (tvLogin) — selectableItemBackgroundBorderless
+Major work completed since last handoff:
 
-  Error display fix (TextInputLayout border expansion bug):
-    - bg_input.xml — added state_activated="true" entry pointing to bg_input_error
-    - activity_login.xml — added external tvEmailError, tvPasswordError TextViews;
-      TILs use errorEnabled="false" + til.isActivated for border state only
-    - activity_register.xml — same pattern for all 6 fields; added errorBanner card
-    - LoginActivity.kt — showFieldError() + clearErrorOnType() helpers
-    - RegisterActivity.kt — same helpers; all 6 field validations use showFieldError()
+  This session (2026-05-19):
+    - Diagnosed backend startup failure: missing backend/.env file.
+    - Created backend/.env with real Supabase pooler credentials.
+    - No mobile, web, or backend source code changes.
 
-  Cart/checkout UX:
-    - CartFragment.kt — order confirmation now uses Snackbar with "View Orders" action
-      instead of auto-navigating (user controls the tab switch); errors use Snackbar
-      with "Retry" action
-    - CheckoutActivity.kt — removed Toast from orderPlaced observer; fixed
-      hardcoded dp/sp replaced with getDimension()/getDimensionPixelSize()
+  Previous sessions (carried forward from 2026-05-17):
 
-  strings.xml additions:
-    - error, order_placed_success, view_orders, retry
+  Backend/profile support:
+    - Added backend profile feature package for customer profile, favorites,
+      and delivery address support.
+    - Product lookup behavior was adjusted in product repository/service and
+      ProductServiceTest was updated.
 
-New drawables added (all in drawable/):
-  bg_button_primary_ripple.xml (NEW this session)
-  bg_button_danger_outlined.xml, bg_button_success.xml (previous session)
-  bg_timeline_dot_complete.xml, bg_timeline_dot_active.xml, bg_timeline_dot_pending.xml
-  bg_warning_banner.xml (previous session)
+  Mobile network/session:
+    - Added ApiErrorParser.kt for actionable API error messages.
+    - Added ApiHostInterceptor.kt and ApiServerDiscovery.kt for automatic LAN
+      backend host discovery instead of hardcoded manual LAN IP changes.
+    - RetrofitClient.kt and network_security_config.xml were updated for this.
 
-New layouts added this session:
-  include_payment_bank.xml, include_payment_cash.xml,
-  include_payment_gcash.xml, include_payment_maya.xml
-  bottom_sheet_product_detail.xml
+  Mobile home/customer product flow:
+    - HomeFragment/HomeViewModel/ProductAdapter now use ViewModel-backed
+      add-to-cart, favorite toggle, pending states, search, category filters,
+      skeleton loading, and product detail bottom sheet.
+    - Product cards are now horizontal list cards with product image on the left
+      and right-side actions.
+    - Favorite button has no visible button background; outline heart when
+      inactive, filled heart when favorited.
+    - Add-to-cart on home card is now a cart icon button with no visible round
+      background. It shows outline cart when idle, filled cart icon in primary
+      color while the add request is pending, then returns to outline so users
+      understand they can tap again to add more quantity.
+    - Bottom nav cart icon now uses selector drawable: outline when inactive,
+      filled when selected.
 
-New Kotlin files added this session:
-  ProductDetailBottomSheet.kt
-  ApiErrorParser.kt, ApiHostInterceptor.kt, ApiServerDiscovery.kt
-  OrderStatusUi.kt
+  Mobile product detail:
+    - Added ProductDetailBottomSheet.kt and bottom_sheet_product_detail.xml.
+    - Product detail shows image, name, price, category, rating, description,
+      quantity stepper, and add-to-cart price.
+    - Latest layout change: quantity stepper moved to the left and Add button
+      sits in the same row to the right for a cleaner bottom action area.
+    - Product detail quantity is capped at 1..10 and updates CTA price.
+
+  Mobile cart/checkout/orders/profile:
+    - Cart, checkout, orders, order detail, notifications, profile, and admin
+      screens have received broader UI and wiring updates in the dirty worktree.
+    - Checkout supports fulfillment/payment UI and uses CheckoutRequest mobile
+      model changes.
+    - Order status presentation is centralized in OrderStatusUi.kt; keep it
+      centralized and do not duplicate status maps in Activities/Adapters.
+    - Profile now has customer profile/favorites/address data model/repository
+      additions in progress.
+
+  Mobile design/assets:
+    - Layout files: 35 | Drawable files: 89
+    - Added/updated many drawables for icons, timeline dots, payment options,
+      quantity stepper, cart selector, heart states, and product detail.
+
+Files most recently touched (prior session, 2026-05-17):
+  - mobile/app/src/main/res/layout/item_product.xml
+  - mobile/app/src/main/java/com/example/mobile/home/ui/ProductAdapter.kt
+  - mobile/app/src/main/java/com/example/mobile/home/ui/HomeViewModel.kt
+  - mobile/app/src/main/java/com/example/mobile/home/ui/HomeFragment.kt
+  - mobile/app/src/main/res/layout/bottom_sheet_product_detail.xml
+  - mobile/app/src/main/java/com/example/mobile/home/ui/ProductDetailBottomSheet.kt
+  - mobile/app/src/main/res/menu/customer_nav_menu.xml
+  - mobile/app/src/main/res/drawable/ic_nav_cart_filled.xml
+  - mobile/app/src/main/res/drawable/ic_nav_cart_selector.xml
 
 Known remaining risks / next best tasks:
-  1. Physical device QA needed — same Wi-Fi as backend on port 8080.
-  2. Dynamic LAN scan can take a few seconds on first cold launch; consider a
-     visible loading/connection indicator if this is confusing to testers.
-  3. Checkout still passes fulfillment/payment method through deliveryNotes string.
-     Long-term: add explicit backend fields and align web/mobile DTOs.
-  4. UI text still needs on-device check for any lingering mojibake from old encoding.
-  5. Web StatusTimeline pickup order differs from backend; align if doing web work.
-  6. tvForgotPassword and Google sign-in in login are UI-only placeholders (dialogs);
-     actual password reset and OAuth are not wired to backend yet.
+  1. Verify backend actually starts: cd backend && .\mvnw.cmd spring-boot:run
+     from a plain cmd.exe terminal (not PowerShell). Watch for DB connection
+     errors — Supabase pool is on port 5432 (session pooler, not 6543).
+  2. Physical device/emulator QA is still needed for the full customer golden
+     path: login/register -> home -> product detail -> add to cart -> cart ->
+     checkout -> orders -> payment proof -> notifications/profile.
+  3. Automatic LAN scan can take a few seconds on first cold launch; consider a
+     visible connection/loading state if testers think the app is frozen.
+  4. Checkout still has legacy coupling around fulfillment/payment details in
+     notes in some paths. Long-term fix: explicit backend DTO fields.
+  5. Web Vite build is blocked by local access denied error. Re-run in a clean
+     shell or fix file permission issue before web release.
+  6. Login forgot-password and Google sign-in remain UI placeholders.
+  7. Home add-to-cart prevents duplicate tap while a request is pending.
 
 How to continue:
-  1. Run mobile build:
+  1. Verify backend starts (first priority):
+       Open cmd.exe (not PowerShell)
+       cd "...IT342_Phase1_Doughly-Crumbl_Cabatana\backend"
+       mvnw.cmd spring-boot:run
+  2. Run mobile build:
        cd mobile
        .\gradlew.bat :app:assembleDebug
-  2. Start backend:
-       cd backend
-       .\mvnw spring-boot:run
-  3. Test golden path on device/emulator:
-       auth -> menu -> add to cart -> cart -> checkout delivery/pickup ->
-       order detail -> payment proof -> admin quote/confirm/status ->
-       notifications -> profile info screens.
-  4. If connection fails on physical device, check Windows Firewall for port 8080
-     and verify phone/laptop are on the same LAN subnet.
+  3. Test golden path on device/emulator with backend running.
+  4. If Supabase connection fails check that port 5432 (not 6543) is used and
+     sslmode=require is present in the DB_URL.
 
 Last known build:
-  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-16)
+  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-17)
+  Backend: startup not confirmed — .env was missing until 2026-05-19
 
-Last commit: 6e36049 chore: session handoff [auto]
+Last commit: 76a6298 chore: session handoff [auto]

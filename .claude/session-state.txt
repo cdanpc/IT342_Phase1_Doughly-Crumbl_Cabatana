@@ -1,25 +1,30 @@
-Last saved: 2026-05-16 04:03
+Last saved: 2026-05-19
 Branch: mobile/core-features
-Last commit: 6e36049 chore: session handoff [auto]
+Last commit: 76a6298 chore: session handoff [auto]
+
+Session summary: backend credential setup only. No code changes.
+- Created backend/.env with real Supabase credentials (gitignored, not committed).
+- Backend startup not yet verified — run from cmd.exe, not PowerShell.
+- Next task: verify backend starts, then QA golden path on device/emulator.
 
 Modified files:
  M .claude/memory/mistakes.md
  M .claude/session-state.txt
  M .claude/settings.local.json
- M mobile/app/src/main/AndroidManifest.xml
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductActivity.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminAddEditProductViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminDashboardViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderAdapter.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailActivity.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrderDetailViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminOrdersFragment.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductAdapter.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductsFragment.kt
- M mobile/app/src/main/java/com/example/mobile/admin/ui/AdminProductsViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/auth/data/AuthRepository.kt
- M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginActivity.kt
- M mobile/app/src/main/java/com/example/mobile/auth/ui/LoginViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterActivity.kt
- M mobile/app/src/main/java/com/example/mobile/auth/ui/RegisterViewModel.kt
- M mobile/app/src/main/java/com/example/mobile/cart/ui/CartFragment.kt
+ M CLAUDE.md
+ M README.md
+ M backend/.gitignore
+ M backend/mvnw.cmd
+ M backend/pom.xml
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/CheckoutRequest.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/Order.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderAdapter.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderFactory.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderResponse.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderService.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductRepository.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductService.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/auth/AuthControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/cart/CartControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductServiceTest.java
