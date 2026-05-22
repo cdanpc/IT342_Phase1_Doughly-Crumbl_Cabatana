@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingBottom="@dimen/spacing_32">
+
+    <!-- Drag handle -->
+    <View
+        android:id="@+id/dragHandle"
+        android:layout_width="@dimen/dragHandleWidth"
+        android:layout_height="@dimen/dragHandleHeight"
+        android:layout_marginTop="@dimen/spacing_12"
+        android:background="@color/colorBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Product image -->
+    <ImageView
+        android:id="@+id/ivProduct"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/heightProductDetailImage"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_image_rounded"
+        android:clipToOutline="true"
+        android:contentDescription="@string/product_image_desc"
+        app:layout_constraintTop_toBottomOf="@id/dragHandle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Product name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/spacing_8"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
+        app:layout_constraintTop_toBottomOf="@id/ivProduct"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvPrice" />
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Category chip -->
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipCategory"
+        style="@style/Style.DoughlyCrumbl.Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/heightChip"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginStart="@dimen/marginPage"
+        android:checkable="false"
+        android:clickable="false"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Rating row -->
+    <LinearLayout
+        android:id="@+id/ratingRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_4"
+        android:layout_marginStart="@dimen/marginPage"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/chipCategory"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/iconSizeSmall"
+            android:layout_height="@dimen/iconSizeSmall"
+            android:src="@drawable/ic_star"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_4"
+            android:text="@string/review_summary"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+            android:textColor="@color/colorTextSecondary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAboutLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:text="@string/about_this_bake"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
+        app:layout_constraintTop_toBottomOf="@id/ratingRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+        android:textColor="@color/colorTextSecondary"
+        app:layout_constraintTop_toBottomOf="@id/tvAboutLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:background="@color/colorBorder"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Quantity row: stepper + add CTA -->
+    <LinearLayout
+        android:id="@+id/quantityRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_quantity_stepper"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_4">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDecrement"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="@dimen/productActionSize"
+                android:layout_height="@dimen/productActionSize"
+                android:minWidth="0dp"
+                android:minHeight="@dimen/minTouchTarget"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:contentDescription="@string/decrease_quantity"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/colorPrimaryLight"
+                app:cornerRadius="@dimen/radiusPill"
+                app:icon="@drawable/ic_minus"
+                app:iconPadding="0dp"
+                app:iconTint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="@dimen/minTouchTarget"
+                android:layout_height="@dimen/productActionSize"
+                android:gravity="center"
+                android:text="1"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+                android:textColor="@color/colorTextPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIncrement"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="@dimen/productActionSize"
+                android:layout_height="@dimen/productActionSize"
+                android:minWidth="0dp"
+                android:minHeight="@dimen/minTouchTarget"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:contentDescription="@string/increase_quantity"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="@dimen/radiusPill"
+                app:icon="@drawable/ic_plus"
+                app:iconPadding="0dp"
+                app:iconTint="@color/colorSurface" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddToCart"
+            style="@style/Style.DoughlyCrumbl.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/heightButtonPrimary"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/add_to_cart"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

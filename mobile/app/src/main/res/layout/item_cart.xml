@@ -4,8 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="6dp"
+    android:layout_marginStart="@dimen/marginPage"
+    android:layout_marginEnd="@dimen/marginPage"
+    android:layout_marginBottom="@dimen/spacing_12"
     android:foreground="@drawable/ripple_card"
     app:cardBackgroundColor="@color/colorSurface"
     app:cardCornerRadius="@dimen/radiusCard"
@@ -16,129 +17,125 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:minHeight="@dimen/heightCartItemMin"
+        android:padding="@dimen/spacing_12">
 
-        <!-- Thumbnail with 8dp rounded corners -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/thumbnailCard"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:cardCornerRadius="@dimen/radiusSmall"
-            app:cardElevation="0dp"
+        <ImageView
+            android:id="@+id/ivProduct"
+            android:layout_width="@dimen/cartThumbSize"
+            android:layout_height="@dimen/cartThumbSize"
+            android:background="@drawable/bg_image_rounded"
+            android:clipToOutline="true"
+            android:contentDescription="@string/product_image_desc"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/ivProduct"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="Product image"
-                android:scaleType="centerCrop" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Product name -->
         <TextView
             android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/spacing_12"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-            app:layout_constraintEnd_toStartOf="@id/tvPrice"
-            app:layout_constraintStart_toEndOf="@id/thumbnailCard"
-            app:layout_constraintTop_toTopOf="@id/thumbnailCard" />
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
+            app:layout_constraintEnd_toStartOf="@id/btnRemove"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
+            app:layout_constraintTop_toTopOf="@id/ivProduct" />
 
-        <!-- Category / variant -->
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-            app:layout_constraintEnd_toStartOf="@id/tvPrice"
-            app:layout_constraintStart_toEndOf="@id/thumbnailCard"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:layout_marginTop="@dimen/spacing_4"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
             app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-        <!-- Price — right-aligned, top-aligned with thumbnail -->
         <TextView
             android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:layout_marginTop="@dimen/spacing_8"
             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/thumbnailCard" />
+            app:layout_constraintEnd_toStartOf="@id/stepperGroup"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
+            app:layout_constraintTop_toBottomOf="@id/tvCategory" />
 
-        <!-- Minus button: 48dp touch target, 28dp visual circle via insets -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMinus"
-            android:layout_width="@dimen/minTouchTarget"
-            android:layout_height="@dimen/minTouchTarget"
-            android:layout_marginTop="2dp"
-            android:insetTop="10dp"
-            android:insetBottom="10dp"
-            android:insetLeft="10dp"
-            android:insetRight="10dp"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:padding="0dp"
-            android:text="−"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            app:backgroundTint="#F5F5F5"
-            app:cornerRadius="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/thumbnailCard" />
-
-        <!-- Quantity -->
-        <TextView
-            android:id="@+id/tvQty"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="1"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-            app:layout_constraintBottom_toBottomOf="@id/btnMinus"
-            app:layout_constraintStart_toEndOf="@id/btnMinus"
-            app:layout_constraintTop_toTopOf="@id/btnMinus" />
-
-        <!-- Plus button: 48dp touch target, 28dp visual circle via insets -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPlus"
-            android:layout_width="@dimen/minTouchTarget"
-            android:layout_height="@dimen/minTouchTarget"
-            android:insetTop="10dp"
-            android:insetBottom="10dp"
-            android:insetLeft="10dp"
-            android:insetRight="10dp"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:padding="0dp"
-            android:text="+"
-            android:textColor="@color/colorSurface"
-            android:textSize="16sp"
-            app:backgroundTint="@color/colorPrimary"
-            app:cornerRadius="14dp"
-            app:layout_constraintBottom_toBottomOf="@id/btnMinus"
-            app:layout_constraintStart_toEndOf="@id/tvQty"
-            app:layout_constraintTop_toTopOf="@id/btnMinus" />
-
-        <!-- Trash button — right side, vertically centred with stepper -->
         <ImageButton
             android:id="@+id/btnRemove"
             android:layout_width="@dimen/minTouchTarget"
             android:layout_height="@dimen/minTouchTarget"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Remove item"
-            android:src="@android:drawable/ic_menu_delete"
+            android:contentDescription="@string/remove_cart_item"
+            android:src="@drawable/ic_trash"
             android:tint="@color/colorTextMuted"
-            app:layout_constraintBottom_toBottomOf="@id/btnMinus"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnMinus" />
+            app:layout_constraintTop_toTopOf="@id/ivProduct" />
+
+        <LinearLayout
+            android:id="@+id/stepperGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/minTouchTarget"
+            android:background="@drawable/bg_card"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/spacing_4"
+            android:paddingEnd="@dimen/spacing_4"
+            app:layout_constraintBottom_toBottomOf="@id/ivProduct"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMinus"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="@dimen/minTouchTarget"
+                android:layout_height="@dimen/minTouchTarget"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="@dimen/minTouchTarget"
+                android:padding="0dp"
+                android:text="@string/stepper_decrement"
+                android:contentDescription="@string/decrease_quantity"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textHeadlineMedium"
+                app:cornerRadius="@dimen/radiusPill" />
+
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="@dimen/minTouchTarget"
+                android:layout_height="@dimen/minTouchTarget"
+                android:gravity="center"
+                android:text="1"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlus"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="@dimen/minTouchTarget"
+                android:layout_height="@dimen/minTouchTarget"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="@dimen/minTouchTarget"
+                android:padding="0dp"
+                android:text="@string/stepper_increment"
+                android:contentDescription="@string/increase_quantity"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textHeadlineMedium"
+                app:cornerRadius="@dimen/radiusPill" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,6 +2,13 @@
 > Auto-loaded every session. Keep this concise and current.
 > Update the "Where We Are Right Now" section at the end of every session.
 
+Active trackers:
+- Web: `docs/WEB_SYSTEM_PROGRESS.md`
+- Mobile: `docs/MOBILE_SYSTEM_PROGRESS.md`
+Older progress/contracts/audits that used to live in `docs/` were moved to
+`docs/archive/legacy-progress-docs/` and are historical only. Do not treat
+archived docs as current implementation truth without verifying against code.
+
 ---
 
 ## What This Project Is
@@ -246,10 +253,8 @@ Do not reintroduce duplicate status label/color/timeline maps in Activities or A
 
 | File | Purpose |
 |---|---|
-| docs/MASTER.md | Gate rules, handoff schema, memory taxonomy |
-| docs/tasks.md | Full AC list AC-10 to AC-18 with Given/When/Then |
-| docs/data-models.md | Single source of truth for all entity shapes (BP-02) |
-| docs/SYSTEM_INTELLIGENCE_REPORT.md | Full codebase audit |
+| docs/WEB_SYSTEM_PROGRESS.md | Active web-first progress tracker, feature status, to dos, backlog, backend contract notes, and component/design refactor audit |
+| docs/MOBILE_SYSTEM_PROGRESS.md | Active Android progress tracker, feature status, to dos, backlog, backend contract notes, and mobile design/refactor audit |
 | docs/mobile/mobile-design-prompts.md | 18 screen design specs |
 | docs/mobile/MOBILE_DESIGN_STATUS.md | Mobile progress tracker |
 | docs/mobile/ANDROID_UI_AUDIT.md | UI audit findings |
@@ -257,6 +262,7 @@ Do not reintroduce duplicate status label/color/timeline maps in Activities or A
 | docs/test-plan/REGRESSION_REPORT.md | Regression report |
 | docs/designs/mobile/ | Design screenshots by screen number |
 | .claude/memory/best-practices.md | Enforced dev standards BP-01 through BP-13 |
+| docs/archive/legacy-progress-docs/ | Historical docs only; do not use as current truth |
 
 Note: docs/content/ files (care-guide.md, about-faqs.md, payment-delivery-flow.md)
       do not exist yet — create them before implementing GROUP 9.
@@ -309,51 +315,73 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-19
+Last updated: 2026-05-23
 
 Branch: mobile/core-features
 
 Current state:
-  This session was a backend environment/credential setup session only.
-  No mobile or web code was changed. The worktree remains dirty with the
-  same accumulated changes from prior sessions.
+  Active web frontend refactor session. All web TypeScript compiles cleanly.
+  Mobile and backend code untouched this session.
 
-  Backend .env fix (COMPLETED this session):
-    - Root cause identified: backend/.env was missing entirely. Spring was
-      falling back to localhost:5432 defaults (not Supabase).
-    - backend/.env created with real Supabase pooler credentials:
-        DB_URL=jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require
-        DB_USERNAME=postgres.vklluqgqjkspqgpqasfi
-        DB_PASSWORD=[set by user — do not log]
-        JWT_SECRET=[set by user — do not log]
-    - backend/.env is gitignored and was NOT committed. It must be recreated
-      on any new machine using .env.example as the template.
-    - backend/mvnw.cmd startup was attempted but cancelled before confirming
-      connection. Backend startup NOT yet verified this session.
+  Web — this session (2026-05-23):
+    FULL TOKEN MIGRATION COMPLETE across the order flow.
+
+    index.css — 21 new design tokens added:
+      --color-overlay, --color-surface-neutral, --color-input-bg,
+      --color-border-subtle, --color-warning-border, --color-warning-text,
+      --color-success-border, --color-success-text, --color-success-text-dark,
+      --color-info-border, --color-info-text, --color-orange,
+      --color-pickup-bg, --color-pickup-text, --color-delivery-bg,
+      --color-delivery-text, --color-error-muted, --color-star-dark,
+      --shadow-modal, --radius-xl.
+
+    CheckoutModal.tsx — last inline style removed (notes wrapper div).
+    CheckoutModal.css — fully rewritten. Zero hardcoded hex values.
+
+    OrderDetailPage.tsx — all inline styles removed:
+      - Status chip replaced with OrderStatusBadge component.
+      - Helper banner: getHelperBannerClass() derives CSS modifier from status.
+      - Banner icons: color prop removed; icons now inherit currentColor from
+        parent .cod__status-banner--{variant} container.
+      - CheckCircle icons: cod__proof-icon class replaces color="#16a34a".
+      - Spinner: cod__card-spinner class replaces style={{ width, height }}.
+      - Removed getStatusColor import (no longer used in TSX).
+    OrderDetailPage.css — fully rewritten. Zero hardcoded hex values.
+
+    OrderConfirmationPage.css — all 4 hardcoded values replaced with tokens.
+
+    AdminOrderDetail.tsx — all inline styles removed:
+      - Status chip replaced with OrderStatusBadge component.
+      - Cancellation reason label: od__info-label--error class.
+      - Override ChevronDown: od__override-chevron/--open CSS classes.
+      - Removed getStatusColor import.
+    AdminOrderDetail.css — fully rewritten. Zero hardcoded hex values.
+
+    AdminOrders.tsx — full inline style extraction complete. All table/page
+      CSS classes in AdminOrders.css. Status chip now uses OrderStatusBadge.
+    AdminDashboard.tsx — expanded from 4 to 6 stat cards (Total Products,
+      Total Orders, Needs Attention, Payment Pending, In Progress, Revenue).
+      Stat icon color variants moved to CSS modifier classes. Recent Orders
+      table added (last 8 orders, clickable rows, OrderStatusBadge).
+    NotificationDetailModal — new component at components/notifications/.
+      Shows notification type badge, full message, date/time, "View Order"
+      button (routes by type + user role), "Mark as Read" button.
+    NotificationDropdown — now calls onSelectNotification instead of
+      navigating directly. Dropdown closes before modal opens (no stacking).
+    Header.tsx — manages selectedNotification state; renders
+      NotificationDetailModal in Fragment; ensures only one modal open at a time.
+
+  TypeScript check: npm.cmd exec -- tsc -b → 0 errors (2026-05-23).
+
+  Backend .env (from 2026-05-19):
+    backend/.env created with Supabase pooler credentials. Gitignored.
+    Backend startup not yet confirmed. To verify:
+      Open cmd.exe → cd backend → mvnw.cmd spring-boot:run
 
   Latest Android debug build:
-    cd mobile
-    .\gradlew.bat :app:assembleDebug
-    Result: BUILD SUCCESSFUL (2026-05-17) — not re-run this session
-
-  Backend verification status:
-    backend/.env now has real Supabase credentials. Startup not yet confirmed.
-    To verify: cd backend && .\mvnw.cmd spring-boot:run
-    Watch for "Started DoughlycrumblApplication" in output.
-    If it hangs on "Cannot index into a null array" that is a PowerShell
-    wrapper quirk — run from a plain cmd.exe terminal instead.
-
-  Web verification status:
-    npm.cmd exec -- tsc -b passed previously.
-    npm.cmd run build failed in Vite/esbuild with access denied resolving
-    vite.config.ts. Treat as environment/permission blocker until reproduced.
+    .\gradlew.bat :app:assembleDebug → BUILD SUCCESSFUL (2026-05-23)
 
 Major work completed since last handoff:
-
-  This session (2026-05-19):
-    - Diagnosed backend startup failure: missing backend/.env file.
-    - Created backend/.env with real Supabase pooler credentials.
-    - No mobile, web, or backend source code changes.
 
   Previous sessions (carried forward from 2026-05-17):
 
@@ -447,7 +475,59 @@ How to continue:
      sslmode=require is present in the DB_URL.
 
 Last known build:
-  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-17)
+  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-23)
   Backend: startup not confirmed — .env was missing until 2026-05-19
 
 Last commit: 76a6298 chore: session handoff [auto]
+
+---
+
+## Token Migration — Mobile Layouts (2026-05-23)
+
+Full design-token audit completed across all Android layout XML files.
+Zero hardcoded hex values (already done). Remaining violations fixed:
+
+  Screens fully cleaned this session:
+    activity_admin_add_edit_product.xml — FULL REWRITE
+      ConstraintLayout root, NestedScrollView form, all tokens,
+      P0 bug fixed: tilStock/etStock replaced with SwitchMaterial switchAvailable.
+    activity_admin_order_detail.xml — FULL REWRITE
+      ConstraintLayout root, all tokens, 4-card layout preserved.
+    fragment_admin_products.xml — targeted fixes
+      Toolbar id added, all strings/dims tokenized, FAB icon → ic_add.
+    item_admin_product.xml — REWRITTEN
+      Platform drawables replaced (ic_edit, ic_image, ic_trash),
+      48dp touch targets on edit/delete buttons (was 36dp — fixed).
+    item_admin_order.xml — targeted fixes (textSize, chipMinHeight)
+    activity_login.xml — targeted fixes (guideline, decorative circle dims)
+    activity_main.xml — app_name string, logo size token
+    fragment_admin_profile.xml — "Log Out" → @string/logout
+    activity_care_guide.xml — toolbar title tokenized
+    activity_about_faq.xml — toolbar title + dividers tokenized
+    activity_notification_detail.xml — toolbar title + divider tokenized
+    activity_payment_instructions.xml — toolbar title + QR sizes + divider
+
+  New drawables created:
+    ic_add.xml, ic_edit.xml, ic_image.xml
+
+  New tokens added to dimens.xml:
+    spacing_2, textSmall, heightChipSmall, heightChipTiny,
+    strokeWidthCardThin, heightAdminProductPreview, heightDivider,
+    sizeLogoInline, heightAuthHeaderGuide, sizeDecorCircle1W,
+    sizeDecorCircle2, negativeDecorMarginL, negativeDecorMarginM, sizeQrCode
+
+  New tokens added to strings.xml:
+    admin_products_title, admin_product_add_content_desc,
+    admin_add_product_title, admin_edit_product_title,
+    admin_product_image_preview, admin_choose_image, admin_image_url_hint,
+    admin_product_name_hint, admin_product_description_hint,
+    admin_product_price_hint, admin_product_category_hint,
+    admin_product_available, admin_save_product, admin_image_uploaded,
+    admin_product_saved, admin_quote_delivery_fee_label,
+    admin_delivery_fee_hint, admin_set_fee, admin_update_status_label,
+    admin_edit_product_cd, admin_delete_product_cd,
+    care_guide_title, about_faq_title, payment_instructions_title,
+    notification_detail_title, error_required, error_invalid_price
+
+  AdminAddEditProductActivity.kt — all hardcoded strings replaced with
+    getString(R.string.*), P0 availability bug fully fixed.

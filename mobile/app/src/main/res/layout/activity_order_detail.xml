@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        style="@style/Theme.DoughlyCrumbl.AppBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/heightTopAppBar"
+        android:background="@color/colorSurface"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorTextPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/colorSurface" />
+        app:titleTextColor="@color/colorTextPrimary" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -62,8 +65,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorSurface"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium" />
 
                     <TextView
                         android:id="@+id/tvStatusDesc"
@@ -71,8 +73,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_4"
                         android:gravity="center"
-                        android:textColor="@color/colorSurface"
-                        android:textSize="12sp" />
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                        android:textColor="@color/colorSurface" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -98,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_12"
-                        android:text="Order Status"
+                        android:text="@string/order_status"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                         android:textColor="@color/colorTextPrimary" />
 
@@ -109,22 +111,22 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="24dp"
+                            android:layout_width="@dimen/timelineRailWidth"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <View
                                 android:id="@+id/dot1"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/bg_timeline_dot_pending" />
 
                             <View
                                 android:id="@+id/line1"
-                                android:layout_width="2dp"
-                                android:layout_height="36dp"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@color/colorBorder" />
 
@@ -139,9 +141,10 @@
                             android:paddingBottom="@dimen/spacing_8">
 
                             <TextView
+                                android:id="@+id/tvStep1Label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Order Placed"
+                                android:text="@string/order_placed"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                                 android:textColor="@color/colorTextPrimary" />
 
@@ -149,9 +152,9 @@
                                 android:id="@+id/tvTime1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorTextMuted"
-                                android:textSize="11sp" />
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -163,22 +166,22 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="24dp"
+                            android:layout_width="@dimen/timelineRailWidth"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <View
                                 android:id="@+id/dot2"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/bg_timeline_dot_pending" />
 
                             <View
                                 android:id="@+id/line2"
-                                android:layout_width="2dp"
-                                android:layout_height="36dp"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@color/colorBorder" />
 
@@ -193,9 +196,10 @@
                             android:paddingBottom="@dimen/spacing_8">
 
                             <TextView
+                                android:id="@+id/tvStep2Label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Payment Confirmed"
+                                android:text="@string/payment_confirmed"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                                 android:textColor="@color/colorTextPrimary" />
 
@@ -203,9 +207,9 @@
                                 android:id="@+id/tvTime2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorTextMuted"
-                                android:textSize="11sp" />
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -217,22 +221,22 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="24dp"
+                            android:layout_width="@dimen/timelineRailWidth"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <View
                                 android:id="@+id/dot3"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/bg_timeline_dot_pending" />
 
                             <View
                                 android:id="@+id/line3"
-                                android:layout_width="2dp"
-                                android:layout_height="36dp"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@color/colorBorder" />
 
@@ -247,9 +251,10 @@
                             android:paddingBottom="@dimen/spacing_8">
 
                             <TextView
+                                android:id="@+id/tvStep3Label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Preparing"
+                                android:text="@string/preparing"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                                 android:textColor="@color/colorTextPrimary" />
 
@@ -257,9 +262,9 @@
                                 android:id="@+id/tvTime3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorTextMuted"
-                                android:textSize="11sp" />
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -271,22 +276,22 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="24dp"
+                            android:layout_width="@dimen/timelineRailWidth"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <View
                                 android:id="@+id/dot4"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/bg_timeline_dot_pending" />
 
                             <View
                                 android:id="@+id/line4"
-                                android:layout_width="2dp"
-                                android:layout_height="36dp"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@color/colorBorder" />
 
@@ -304,7 +309,7 @@
                                 android:id="@+id/tvStep4Label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Out for Delivery"
+                                android:text="@string/out_for_delivery"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                                 android:textColor="@color/colorTextPrimary" />
 
@@ -312,29 +317,142 @@
                                 android:id="@+id/tvTime4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorTextMuted"
-                                android:textSize="11sp" />
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Step 5: Completed (no connector line) -->
+                    <!-- Step 5 -->
                     <LinearLayout
+                        android:id="@+id/rowStep5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="24dp"
+                            android:layout_width="@dimen/timelineRailWidth"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <View
                                 android:id="@+id/dot5"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@drawable/bg_timeline_dot_pending" />
+
+                            <View
+                                android:id="@+id/line5"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@color/colorBorder" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_12"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStep5Label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/completed"
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                                android:textColor="@color/colorTextPrimary" />
+
+                            <TextView
+                                android:id="@+id/tvTime5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/pending"
+                                android:textColor="@color/colorTextMuted"
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Step 6 -->
+                    <LinearLayout
+                        android:id="@+id/rowStep6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/timelineRailWidth"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <View
+                                android:id="@+id/dot6"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@drawable/bg_timeline_dot_pending" />
+
+                            <View
+                                android:id="@+id/line6"
+                                android:layout_width="@dimen/timelineLineWidth"
+                                android:layout_height="@dimen/timelineLineHeight"
+                                android:layout_gravity="center_horizontal"
+                                android:background="@color/colorBorder" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_12"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/spacing_8">
+
+                            <TextView
+                                android:id="@+id/tvStep6Label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                                android:textColor="@color/colorTextPrimary" />
+
+                            <TextView
+                                android:id="@+id/tvTime6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/pending"
+                                android:textColor="@color/colorTextMuted"
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Step 7 -->
+                    <LinearLayout
+                        android:id="@+id/rowStep7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/timelineRailWidth"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <View
+                                android:id="@+id/dot7"
+                                android:layout_width="@dimen/timelineDotSize"
+                                android:layout_height="@dimen/timelineDotSize"
                                 android:layout_gravity="center_horizontal"
                                 android:background="@drawable/bg_timeline_dot_pending" />
 
@@ -348,19 +466,19 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvStep7Label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Completed"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                                 android:textColor="@color/colorTextPrimary" />
 
                             <TextView
-                                android:id="@+id/tvTime5"
+                                android:id="@+id/tvTime7"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorTextMuted"
-                                android:textSize="11sp" />
+                                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -389,7 +507,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_8"
-                        android:text="Order Items"
+                        android:text="@string/order_items"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                         android:textColor="@color/colorTextPrimary" />
 
@@ -433,11 +551,10 @@
                         android:id="@+id/tvGrandTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_4"
+                        android:layout_marginTop="@dimen/spacing_8"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -466,7 +583,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_8"
-                        android:text="Delivery Details"
+                        android:text="@string/delivery_details"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                         android:textColor="@color/colorTextPrimary" />
 
@@ -525,7 +642,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Order Cancelled"
+                        android:text="@string/order_cancelled"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                         android:textColor="@color/colorError" />
 
@@ -540,6 +657,52 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Payment Proof Action Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardPaymentAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/gapCard"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="0.5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_proof"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvProofStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_4"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextSecondary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUploadProof"
+                        style="@style/Style.DoughlyCrumbl.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_12"
+                        android:text="@string/upload_payment_proof"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Cancel Order Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancel"
@@ -547,7 +710,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_8"
-                android:text="Cancel Order"
+                android:text="@string/cancel_order"
                 android:textAllCaps="false"
                 android:visibility="gone" />
 
@@ -558,7 +721,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_8"
-                android:text="Order Again"
+                android:text="@string/order_again"
                 android:textAllCaps="false"
                 android:visibility="gone" />
 

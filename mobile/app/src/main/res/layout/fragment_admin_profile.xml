@@ -68,7 +68,7 @@
             style="@style/Style.DoughlyCrumbl.Button.Destructive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log Out"
+            android:text="@string/logout"
             android:textAllCaps="false" />
 
     </LinearLayout>

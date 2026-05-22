@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
+    android:background="@color/colorBackground">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:titleTextColor="@color/colorSurface" />
+        app:titleTextColor="@color/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/marginPage">
 
             <ImageView
                 android:id="@+id/ivPreview"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginBottom="8dp"
+                android:layout_height="@dimen/heightAdminProductPreview"
+                android:layout_marginBottom="@dimen/spacing_8"
                 android:background="@color/colorBorder"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_gallery"
-                android:contentDescription="Product preview image" />
+                android:contentDescription="@string/admin_product_image_preview"
+                android:scaleType="centerCrop" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChooseImage"
                 style="@style/Style.DoughlyCrumbl.Button.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Choose Image from Gallery"
+                android:layout_marginBottom="@dimen/spacing_16"
+                android:text="@string/admin_choose_image"
                 android:textAllCaps="false" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -55,8 +62,9 @@
                 style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Or paste image URL">
+                android:layout_marginBottom="@dimen/spacing_12"
+                android:hint="@string/admin_image_url_hint">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etImageUrl"
                     android:layout_width="match_parent"
@@ -69,9 +77,10 @@
                 style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Product Name"
+                android:layout_marginBottom="@dimen/spacing_12"
+                android:hint="@string/admin_product_name_hint"
                 app:errorEnabled="true">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
@@ -84,9 +93,10 @@
                 style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Description"
+                android:layout_marginBottom="@dimen/spacing_12"
+                android:hint="@string/admin_product_description_hint"
                 app:errorEnabled="true">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDescription"
                     android:layout_width="match_parent"
@@ -100,10 +110,11 @@
                 style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Price (₱)"
+                android:layout_marginBottom="@dimen/spacing_12"
+                android:hint="@string/admin_product_price_hint"
                 app:errorEnabled="true"
                 app:prefixText="₱ ">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPrice"
                     android:layout_width="match_parent"
@@ -116,9 +127,10 @@
                 style="@style/Style.DoughlyCrumbl.Input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:hint="Category"
+                android:layout_marginBottom="@dimen/spacing_12"
+                android:hint="@string/admin_product_category_hint"
                 app:errorEnabled="true">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCategory"
                     android:layout_width="match_parent"
@@ -126,28 +138,40 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilStock"
-                style="@style/Style.DoughlyCrumbl.Input"
+            <!-- Available toggle — replaces the old etStock text field (P0 fix) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="Stock"
-                app:errorEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etStock"
-                    android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/spacing_20"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/minTouchTarget"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1"
+                    android:text="@string/admin_product_available"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyLarge" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchAvailable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    app:thumbTint="@color/colorSurface"
+                    app:trackTint="@color/colorPrimary" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 style="@style/Style.DoughlyCrumbl.Button.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save Product"
+                android:layout_height="@dimen/heightButtonPrimary"
+                android:text="@string/admin_save_product"
                 android:textAllCaps="false" />
+
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

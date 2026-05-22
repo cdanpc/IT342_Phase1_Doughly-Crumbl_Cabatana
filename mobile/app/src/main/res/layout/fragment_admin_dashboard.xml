@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
+    android:background="@color/colorBackground">
 
     <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="Dashboard"
-        app:titleTextColor="@color/colorSurface" />
+        app:title="@string/admin_dashboard_title"
+        app:titleTextColor="@color/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -34,19 +44,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/marginPage">
 
                 <!-- Stat Cards Row 1 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/spacing_8"
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
+                        android:layout_marginEnd="@dimen/spacing_4"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/statusOrderPlacedBg"
                         app:cardCornerRadius="@dimen/radiusCard"
@@ -57,7 +67,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="@dimen/paddingCard">
 
                             <TextView
                                 android:id="@+id/tvPendingCount"
@@ -65,22 +75,23 @@
                                 android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="28sp"
+                                android:textSize="@dimen/textDisplayMedium"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pending"
+                                android:text="@string/pending"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/textCaption" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="@dimen/spacing_4"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/statusPreparingBg"
                         app:cardCornerRadius="@dimen/radiusCard"
@@ -91,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="@dimen/paddingCard">
 
                             <TextView
                                 android:id="@+id/tvConfirmedCount"
@@ -99,30 +110,32 @@
                                 android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="28sp"
+                                android:textSize="@dimen/textDisplayMedium"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Confirmed"
+                                android:text="@string/admin_stat_confirmed"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/textCaption" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
                 </LinearLayout>
 
                 <!-- Stat Cards Row 2 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="@dimen/spacing_20"
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
+                        android:layout_marginEnd="@dimen/spacing_4"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/statusPreparingBg"
                         app:cardCornerRadius="@dimen/radiusCard"
@@ -133,7 +146,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="@dimen/paddingCard">
 
                             <TextView
                                 android:id="@+id/tvPreparingCount"
@@ -141,22 +154,23 @@
                                 android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="28sp"
+                                android:textSize="@dimen/textDisplayMedium"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Preparing"
+                                android:text="@string/preparing"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/textCaption" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="@dimen/spacing_4"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/statusCompletedBg"
                         app:cardCornerRadius="@dimen/radiusCard"
@@ -167,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="@dimen/paddingCard">
 
                             <TextView
                                 android:id="@+id/tvReadyCount"
@@ -175,24 +189,26 @@
                                 android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="28sp"
+                                android:textSize="@dimen/textDisplayMedium"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ready"
+                                android:text="@string/admin_stat_ready"
                                 android:textColor="@color/colorSurface"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/textCaption" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Recent Orders"
+                    android:layout_marginBottom="@dimen/spacing_8"
+                    android:text="@string/admin_recent_orders"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -200,7 +216,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false" />
+
             </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

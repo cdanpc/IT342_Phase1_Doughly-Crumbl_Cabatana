@@ -6,12 +6,22 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- Cart items list -->
+    <TextView
+        android:id="@+id/tvCartTitle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/heightCartHeader"
+        android:gravity="center"
+        android:text="@string/cart_title"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCartTitle"
         app:layout_constraintBottom_toTopOf="@id/orderSummaryCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -25,50 +35,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingTop="@dimen/spacing_8"
+                android:paddingBottom="@dimen/spacing_24" />
 
-            <!-- Empty cart state -->
             <LinearLayout
                 android:id="@+id/emptyState"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="24dp"
+                android:padding="@dimen/spacing_24"
                 android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="🛍"
-                    android:textSize="64sp" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="@dimen/avatarLarge"
+                    android:layout_height="@dimen/avatarLarge"
+                    app:cardBackgroundColor="@color/colorPrimaryLight"
+                    app:cardCornerRadius="@dimen/radiusAvatar"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/iconSizeLarge"
+                        android:layout_height="@dimen/iconSizeLarge"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/cart_empty_title"
+                        android:src="@drawable/ic_nav_cart"
+                        app:tint="@color/colorPrimary" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Your cart is empty"
+                    android:layout_marginTop="@dimen/spacing_16"
+                    android:text="@string/cart_empty_title"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
                 <TextView
                     android:id="@+id/tvEmpty"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/spacing_4"
                     android:gravity="center"
-                    android:text="Add some delicious items from our menu"
+                    android:text="@string/cart_empty_body"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnBrowseMenu"
                     style="@style/Style.DoughlyCrumbl.Button.Outlined"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Browse Menu"
+                    android:layout_height="@dimen/heightButtonSecondary"
+                    android:layout_marginTop="@dimen/spacing_16"
+                    android:text="@string/browse_menu"
                     android:textAllCaps="false" />
 
             </LinearLayout>
@@ -84,16 +103,19 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <!-- Order summary card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/orderSummaryCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:layout_marginBottom="@dimen/spacing_12"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/colorSurface"
         app:cardCornerRadius="@dimen/radiusCard"
         app:cardElevation="@dimen/elevationCard"
+        app:strokeColor="@color/colorBorder"
+        app:strokeWidth="0.5dp"
         app:layout_constraintBottom_toTopOf="@id/btnCheckout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -102,7 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/paddingCard">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,14 +136,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Subtotal"
+                    android:text="@string/subtotal"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <TextView
                     android:id="@+id/tvSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="₱0.00"
+                    android:text="@string/price_zero"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                     android:textColor="@color/colorTextPrimary" />
 
@@ -130,7 +152,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -138,23 +160,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Delivery Fee"
+                    android:text="@string/delivery_fee"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
-                <TextView
+                <com.google.android.material.chip.Chip
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="To be quoted"
+                    android:layout_height="@dimen/heightChip"
+                    android:text="@string/delivery_fee_pending"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-                    android:textStyle="italic" />
+                    android:textColor="@color/colorPrimary"
+                    app:chipBackgroundColor="@color/colorPrimaryLight"
+                    app:chipCornerRadius="@dimen/radiusPill"
+                    app:chipStrokeWidth="0dp" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:layout_marginBottom="@dimen/spacing_12"
                 android:background="@color/colorBorder" />
 
             <LinearLayout
@@ -167,49 +192,48 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Total"
+                    android:text="@string/total"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge" />
 
                 <TextView
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="₱0.00"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
-                    android:textSize="15sp" />
+                    android:text="@string/price_zero"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price" />
 
             </LinearLayout>
 
-            <!-- Info note: delivery fee disclaimer -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="@color/colorBackground"
+                android:layout_marginTop="@dimen/spacing_12"
+                app:cardBackgroundColor="@color/colorPrimaryLight"
                 app:cardCornerRadius="@dimen/radiusSmall"
                 app:cardElevation="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:padding="@dimen/spacing_8">
 
                     <ImageView
                         android:id="@+id/ivDeliveryPin"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:contentDescription="Location"
-                        android:src="@android:drawable/ic_menu_mylocation"
-                        android:tint="@color/colorTextMuted"
+                        android:layout_width="@dimen/iconSizeSmall"
+                        android:layout_height="@dimen/iconSizeSmall"
+                        android:contentDescription="@string/delivery_fee"
+                        android:src="@drawable/ic_location"
+                        app:tint="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:text="Delivery fee will be calculated based on your location"
+                        android:layout_marginStart="@dimen/spacing_8"
+                        android:text="@string/delivery_fee_note"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                        android:textColor="@color/colorTextSecondary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivDeliveryPin"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -222,18 +246,18 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Checkout button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCheckout"
         style="@style/Style.DoughlyCrumbl.Button.Primary"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="@dimen/heightButtonPrimary"
+        android:layout_marginStart="@dimen/marginPage"
+        android:layout_marginEnd="@dimen/marginPage"
+        android:layout_marginBottom="@dimen/spacing_16"
         android:enabled="false"
-        android:text="Proceed to Checkout"
+        android:text="@string/proceed_to_checkout"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

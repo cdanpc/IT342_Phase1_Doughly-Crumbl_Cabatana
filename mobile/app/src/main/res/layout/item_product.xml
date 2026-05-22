@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_marginStart="@dimen/marginPage"
+    android:layout_marginEnd="@dimen/marginPage"
+    android:layout_marginBottom="@dimen/spacing_12"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/ripple_card"
@@ -14,77 +16,104 @@
     app:strokeColor="@color/colorBorder"
     app:strokeWidth="0.5dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="@dimen/spacing_12">
 
         <ImageView
             android:id="@+id/ivProduct"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/heightProductImage"
+            android:layout_width="@dimen/productThumbLarge"
+            android:layout_height="@dimen/productThumbLarge"
             android:scaleType="centerCrop"
-            android:contentDescription="Product image"
-            android:background="@color/colorBorder" />
+            android:contentDescription="@string/product_image_desc"
+            android:background="@drawable/bg_image_rounded"
+            android:clipToOutline="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_12">
+            android:layout_marginStart="@dimen/spacing_12"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
+            app:layout_constraintEnd_toStartOf="@id/btnFavorite"
+            app:layout_constraintTop_toTopOf="@id/ivProduct" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFavorite"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="@dimen/productActionSize"
+            android:layout_height="@dimen/productActionSize"
+            android:minWidth="0dp"
+            android:minHeight="@dimen/minTouchTarget"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:padding="0dp"
+            android:contentDescription="@string/add_product_to_favorites"
+            android:textAllCaps="false"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="@dimen/radiusPill"
+            app:icon="@drawable/ic_heart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivProduct" />
 
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_4"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price" />
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:layout_marginTop="@dimen/spacing_4"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
+            app:layout_constraintEnd_toStartOf="@id/btnAddToCart"
+            app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_8"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
+            app:layout_constraintStart_toEndOf="@id/ivProduct"
+            app:layout_constraintEnd_toStartOf="@id/btnAddToCart"
+            app:layout_constraintTop_toBottomOf="@id/tvCategory" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="⭐ 4.8"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddToCart"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="@dimen/productActionSize"
+            android:layout_height="@dimen/productActionSize"
+            android:minWidth="0dp"
+            android:minHeight="@dimen/minTouchTarget"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:padding="0dp"
+            android:contentDescription="@string/add_product_to_cart"
+            android:textAllCaps="false"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="@dimen/radiusPill"
+            app:icon="@drawable/ic_nav_cart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/ivProduct" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddToCart"
-                    style="@style/Widget.Material3.Button.Icon"
-                    android:layout_width="@dimen/minTouchTarget"
-                    android:layout_height="@dimen/minTouchTarget"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:insetTop="8dp"
-                    android:insetBottom="8dp"
-                    android:insetLeft="8dp"
-                    android:insetRight="8dp"
-                    android:padding="0dp"
-                    android:text="+"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/colorPrimary"
-                    app:cornerRadius="16dp"
-                    app:iconPadding="0dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

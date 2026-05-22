@@ -4,76 +4,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_marginStart="@dimen/marginPage"
+    android:layout_marginEnd="@dimen/marginPage"
+    android:layout_marginBottom="@dimen/spacing_8"
     app:cardCornerRadius="@dimen/radiusCard"
-    app:cardElevation="@dimen/elevationCard">
+    app:cardElevation="@dimen/elevationCard"
+    app:cardBackgroundColor="@color/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_12"
+        android:gravity="center_vertical">
 
         <!-- Image placeholder -->
         <View
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:background="@color/colorBorder" />
+            android:layout_width="@dimen/avatarLarge"
+            android:layout_height="@dimen/avatarLarge"
+            android:background="@drawable/bg_skeleton_rect" />
 
-        <!-- Content placeholder -->
+        <!-- Text placeholders -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:orientation="vertical">
 
-            <!-- Name line 1 -->
             <View
                 android:layout_width="140dp"
-                android:layout_height="12dp"
-                android:layout_marginBottom="6dp"
+                android:layout_height="14dp"
+                android:layout_marginBottom="@dimen/spacing_8"
                 android:background="@drawable/bg_skeleton_rect" />
 
-            <!-- Name line 2 (shorter) -->
             <View
-                android:layout_width="100dp"
-                android:layout_height="12dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="80dp"
+                android:layout_height="11dp"
+                android:layout_marginBottom="@dimen/spacing_12"
                 android:background="@drawable/bg_skeleton_rect" />
 
-            <!-- Price -->
             <View
                 android:layout_width="64dp"
                 android:layout_height="14dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_skeleton_rect" />
 
-            <!-- Bottom row: rating + add button -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="48dp"
-                    android:layout_height="10dp"
-                    android:layout_weight="0"
-                    android:background="@drawable/bg_skeleton_rect" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <!-- Add button circle placeholder -->
-                <View
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="@drawable/bg_skeleton_rect" />
-
-            </LinearLayout>
-
         </LinearLayout>
+
+        <!-- Add button placeholder -->
+        <View
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_skeleton_rect" />
 
     </LinearLayout>
 

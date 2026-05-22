@@ -4,70 +4,93 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/spacing_8"
-    android:layout_marginVertical="@dimen/spacing_4"
+    android:layout_marginStart="@dimen/marginPage"
+    android:layout_marginEnd="@dimen/marginPage"
+    android:layout_marginBottom="@dimen/spacing_12"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/ripple_card"
+    app:cardBackgroundColor="@color/colorSurface"
     app:cardCornerRadius="@dimen/radiusCard"
     app:cardElevation="@dimen/elevationCard"
-    app:cardBackgroundColor="@color/colorSurface"
     app:strokeColor="@color/colorBorder"
     app:strokeWidth="0.5dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_16">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvOrderId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@color/colorSurface"
-                android:textSize="11sp"
-                app:chipMinHeight="28dp" />
-        </LinearLayout>
+        android:minHeight="@dimen/heightOrderItemMin"
+        android:padding="@dimen/paddingCard">
 
         <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="match_parent"
+            android:id="@+id/tvOrderId"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_4"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+            android:textColor="@color/colorGold"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/chipStatus"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/heightChip"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+            android:textColor="@color/colorPrimary"
+            app:chipCornerRadius="@dimen/radiusPill"
+            app:chipMinHeight="@dimen/heightChip"
+            app:chipStrokeWidth="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvStatusFull"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_8"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
+            app:layout_constraintEnd_toStartOf="@id/ivChevron"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderId" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_4"
-            android:textSize="11sp"
-            android:textColor="@color/colorTextMuted"
-            android:visibility="gone" />
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+            app:layout_constraintEnd_toStartOf="@id/ivChevron"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStatusFull" />
 
         <TextView
             android:id="@+id/tvTotal"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_4"
-            android:gravity="end"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price" />
-    </LinearLayout>
+            android:layout_marginTop="@dimen/spacing_8"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
+            app:layout_constraintEnd_toStartOf="@id/ivChevron"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+        <ImageView
+            android:id="@+id/ivChevron"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize"
+            android:contentDescription="@string/view_order_details"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/colorTextMuted"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

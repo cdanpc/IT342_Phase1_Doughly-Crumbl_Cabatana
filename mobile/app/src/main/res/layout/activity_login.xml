@@ -6,41 +6,41 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_crimson">
 
-    <!-- ── HEADER GUIDELINE (38% down) ── -->
+    <!-- ── HEADER GUIDELINE ── -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="317dp" />
+        app:layout_constraintGuide_begin="@dimen/heightAuthHeaderGuide" />
 
     <!-- ── DECORATIVE CIRCLES ── -->
     <View
-        android:layout_width="114dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/sizeDecorCircle1W"
+        android:layout_height="@dimen/sizeLogo"
         android:alpha="0.10"
         android:background="@drawable/bg_circle_white_alpha"
-        android:layout_marginStart="-30dp"
-        android:layout_marginTop="-30dp"
+        android:layout_marginStart="@dimen/negativeDecorMarginL"
+        android:layout_marginTop="@dimen/negativeDecorMarginL"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/sizeDecorCircle2"
+        android:layout_height="@dimen/sizeDecorCircle2"
         android:alpha="0.07"
         android:background="@drawable/bg_circle_white_alpha"
-        android:layout_marginEnd="-20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/negativeDecorMarginM"
+        android:layout_marginTop="@dimen/spacing_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- ── LOGO ── -->
     <FrameLayout
         android:id="@+id/logoContainer"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        android:elevation="6dp"
+        android:layout_width="@dimen/sizeLogo"
+        android:layout_height="@dimen/heightLogoContainer"
+        android:elevation="@dimen/elevationFab"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tvWelcome"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,20 +48,14 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_bias="0.45">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.10"
-             />
-
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/sizeLogo"
+            android:layout_height="@dimen/sizeLogo"
             android:layout_gravity="center"
-            android:contentDescription="Doughly Crumbl logo"
-            android:elevation="4dp"
-            android:padding="10dp"
+            android:contentDescription="@string/logo_content_description"
+            android:elevation="@dimen/elevationCard"
+            android:padding="@dimen/spacing_8"
             android:scaleType="fitCenter"
             android:src="@drawable/logo_doughly_white" />
 
@@ -72,12 +66,12 @@
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="@dimen/spacing_12"
         android:fontFamily="@font/poppins"
         android:letterSpacing="0.01"
-        android:text="Welcome Back"
+        android:text="@string/login_welcome_title"
         android:textColor="@color/colorSurface"
-        android:textSize="24sp"
+        android:textSize="@dimen/textDisplaySmall"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tvSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,12 +83,12 @@
         android:id="@+id/tvSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/spacing_4"
         android:alpha="0.85"
         android:fontFamily="@font/poppins"
-        android:text="Sign in to continue ordering"
+        android:text="@string/login_welcome_subtitle"
         android:textColor="@color/colorPrimaryLight"
-        android:textSize="13sp"
+        android:textSize="@dimen/textBodyMedium"
         app:layout_constraintBottom_toTopOf="@id/guidelineHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,60 +105,70 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
 
-
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/marginPage"
-            android:paddingTop="32dp"
+            android:paddingTop="@dimen/spacing_32"
             android:paddingEnd="@dimen/marginPage"
-            android:paddingBottom="32dp">
+            android:paddingBottom="@dimen/spacing_32">
 
             <!-- Section label -->
             <TextView
                 android:id="@+id/tvSectionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:text="Sign In"
+                android:layout_marginBottom="@dimen/spacing_24"
+                android:text="@string/login_section_label"
                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- ── EMAIL ── -->
             <!-- ── EMAIL ── -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/spacing_24"
                 android:background="@drawable/bg_input"
-                app:startIconDrawable="@drawable/ic_email"
-                app:startIconTint="@color/colorPrimary"
-                app:errorEnabled="false"
                 app:boxBackgroundMode="none"
+                app:errorEnabled="false"
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvSectionLabel">
+                app:layout_constraintTop_toBottomOf="@id/tvSectionLabel"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/heightInput"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
                     android:gravity="center_vertical"
-                    android:hint="Email address"
+                    android:hint="@string/hint_email_address"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/textBodyLarge" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Email error label -->
+            <TextView
+                android:id="@+id/tvEmailError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_4"
+                android:paddingTop="@dimen/spacing_4"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                android:textColor="@color/colorError"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilEmail" />
 
             <!-- ── PASSWORD ── -->
             <com.google.android.material.textfield.TextInputLayout
@@ -172,55 +176,70 @@
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_16"
                 android:background="@drawable/bg_input"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/colorPrimary"
-                app:endIconMode="password_toggle"
                 app:boxBackgroundMode="none"
+                app:endIconMode="password_toggle"
                 app:errorEnabled="false"
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilEmail">
+                app:layout_constraintTop_toBottomOf="@id/tvEmailError"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/heightInput"
                     android:background="@null"
                     android:fontFamily="@font/poppins"
                     android:gravity="center_vertical"
-                    android:hint="Password"
+                    android:hint="@string/login_hint_password"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/textBodyLarge" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password error label -->
+            <TextView
+                android:id="@+id/tvPasswordError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_4"
+                android:paddingTop="@dimen/spacing_4"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                android:textColor="@color/colorError"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 
             <!-- Forgot password -->
             <TextView
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/minTouchTarget"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="Forgot password?"
+                android:paddingStart="@dimen/spacing_4"
+                android:paddingEnd="@dimen/spacing_4"
+                android:text="@string/login_forgot_password"
                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+                app:layout_constraintTop_toBottomOf="@id/tvPasswordError" />
 
             <!-- ── ERROR BANNER ── -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/errorBanner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_16"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/colorErrorBg"
                 app:cardCornerRadius="@dimen/radiusCard"
@@ -236,16 +255,16 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="14dp"
-                    android:paddingTop="12dp"
-                    android:paddingEnd="14dp"
-                    android:paddingBottom="12dp">
+                    android:paddingStart="@dimen/spacing_12"
+                    android:paddingTop="@dimen/spacing_12"
+                    android:paddingEnd="@dimen/spacing_12"
+                    android:paddingBottom="@dimen/spacing_12">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginEnd="10dp"
-                        android:contentDescription="Error"
+                        android:layout_width="@dimen/iconSizeSmall"
+                        android:layout_height="@dimen/iconSizeSmall"
+                        android:layout_marginEnd="@dimen/spacing_8"
+                        android:contentDescription="@string/error"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_warning"
                         app:tint="@color/colorError" />
@@ -255,7 +274,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Invalid email or password. Please try again."
+                        android:text="@string/login_error_default"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:textColor="@color/colorError" />
 
@@ -269,12 +288,11 @@
                 style="@style/Style.DoughlyCrumbl.Button.Primary"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/heightButtonPrimary"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/spacing_20"
                 android:fontFamily="@font/poppins"
-                android:text="Sign In"
-                android:background="@drawable/bg_card_login"
+                android:text="@string/login_button"
                 android:textAllCaps="false"
-                android:textSize="15sp"
+                android:textSize="@dimen/textTitleMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/errorBanner" />
@@ -284,7 +302,7 @@
                 android:id="@+id/loadingContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone"
@@ -294,18 +312,18 @@
 
                 <ProgressBar
                     android:id="@+id/progressBar"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_width="@dimen/iconSizeSmall"
+                    android:layout_height="@dimen/iconSizeSmall"
+                    android:layout_marginEnd="@dimen/spacing_8"
                     android:indeterminateTint="@color/colorPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Signing you in…"
+                    android:text="@string/login_signing_in"
                     android:textColor="@color/colorTextSecondary"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/textBodyMedium" />
 
             </LinearLayout>
 
@@ -313,8 +331,8 @@
             <View
                 android:id="@+id/dividerLeft"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="24dp"
+                android:layout_height="@dimen/heightDivider"
+                android:layout_marginTop="@dimen/spacing_24"
                 android:background="@color/colorBorder"
                 app:layout_constraintBottom_toBottomOf="@id/tvOr"
                 app:layout_constraintEnd_toStartOf="@id/tvOr"
@@ -325,13 +343,13 @@
                 android:id="@+id/tvOr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
+                android:layout_marginTop="@dimen/spacing_24"
+                android:layout_marginStart="@dimen/spacing_12"
+                android:layout_marginEnd="@dimen/spacing_12"
                 android:fontFamily="@font/poppins"
-                android:text="or continue with"
+                android:text="@string/login_or_continue"
                 android:textColor="@color/colorTextMuted"
-                android:textSize="12sp"
+                android:textSize="@dimen/textCaption"
                 app:layout_constraintEnd_toStartOf="@id/dividerRight"
                 app:layout_constraintStart_toEndOf="@id/dividerLeft"
                 app:layout_constraintTop_toBottomOf="@id/loadingContainer" />
@@ -339,7 +357,7 @@
             <View
                 android:id="@+id/dividerRight"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/heightDivider"
                 android:background="@color/colorBorder"
                 app:layout_constraintBottom_toBottomOf="@id/tvOr"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -347,54 +365,36 @@
                 app:layout_constraintTop_toTopOf="@id/tvOr" />
 
             <!-- ── GOOGLE BUTTON ── -->
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogle"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/heightButtonSecondary"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/colorSurface"
-                app:cardCornerRadius="@dimen/radiusButton"
-                app:cardElevation="2dp"
+                android:layout_marginTop="@dimen/spacing_20"
+                android:fontFamily="@font/poppins"
+                android:text="@string/login_google"
+                android:textAllCaps="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/textBodyLarge"
+                app:backgroundTint="@color/colorSurface"
+                app:cornerRadius="@dimen/radiusButton"
+                app:icon="@drawable/ic_google"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/spacing_8"
+                app:iconSize="@dimen/iconSizeSmall"
+                app:iconTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvOr"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginEnd="10dp"
-                        android:contentDescription="Google logo"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_google" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="Continue with Google"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                app:strokeWidth="1dp" />
 
             <!-- ── SIGN UP LINK ── -->
             <LinearLayout
                 android:id="@+id/signUpRow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="@dimen/spacing_28"
                 android:gravity="center"
                 android:minHeight="@dimen/minTouchTarget"
                 android:orientation="horizontal"
@@ -406,14 +406,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account? "
+                    android:text="@string/login_no_account"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
 
                 <TextView
                     android:id="@+id/tvRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign Up"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:text="@string/login_sign_up"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
                     android:textColor="@color/colorPrimary" />
 
