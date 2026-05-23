@@ -39,7 +39,7 @@
 }
 
 .admin-orders__row {
-  border-bottom: 1px solid #F0F0F0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .admin-orders__row:last-child {
@@ -78,7 +78,8 @@
 }
 
 .admin-orders__view-btn:hover {
-  background: #f8d7de;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
 }
 
 .admin-orders__error {
@@ -120,7 +121,7 @@
   font-weight: 600;
   font-family: inherit;
   color: var(--color-text-primary);
-  background: #fff;
+  background: var(--color-white);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
