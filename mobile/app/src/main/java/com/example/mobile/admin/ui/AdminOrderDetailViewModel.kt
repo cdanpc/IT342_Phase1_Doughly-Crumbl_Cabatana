@@ -7,18 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.admin.data.AdminRepository
 import com.example.mobile.model.Order
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
-
-object OrderStatusHelper {
-    fun allowedTransitions(status: String): List<String> = when (status) {
-        "PENDING"   -> listOf("CONFIRMED", "CANCELLED")
-        "CONFIRMED" -> listOf("PREPARING", "CANCELLED")
-        "PREPARING" -> listOf("READY", "CANCELLED")
-        "READY"     -> listOf("DELIVERED")
-        else        -> emptyList()
-    }
-}
 
 class AdminOrderDetailViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
@@ -39,7 +30,7 @@ class AdminOrderDetailViewModel(private val sessionManager: SessionManager) : Vi
             try {
                 val r = repository.getOrderDetail(id)
                 if (r.isSuccessful) _order.value = r.body()
-                else _error.value = "Failed to load order"
+                else _error.value = ApiErrorParser.message(r, "Failed to load order")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {
@@ -54,7 +45,7 @@ class AdminOrderDetailViewModel(private val sessionManager: SessionManager) : Vi
             try {
                 val r = repository.updateOrderStatus(id, status)
                 if (r.isSuccessful) _order.value = r.body()
-                else _error.value = "Status update failed"
+                else _error.value = ApiErrorParser.message(r, "Status update failed")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {
@@ -69,7 +60,7 @@ class AdminOrderDetailViewModel(private val sessionManager: SessionManager) : Vi
             try {
                 val r = repository.quoteDeliveryFee(id, fee)
                 if (r.isSuccessful) _order.value = r.body()
-                else _error.value = "Failed to quote delivery fee"
+                else _error.value = ApiErrorParser.message(r, "Failed to quote delivery fee")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {

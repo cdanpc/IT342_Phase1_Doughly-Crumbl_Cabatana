@@ -1,0 +1,27 @@
+.orders-page {
+  min-height: 100%;
+  padding: 32px 24px 48px;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(139, 0, 32, 0.05), transparent 30%),
+    var(--color-body-bg);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.orders-page__hero {
+  margin-bottom: var(--space-6);
+}
+
+.orders-page__list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.orders-page__spin {
+  animation: spin 1s linear infinite;
+}
+
+@media (max-width: 768px) {
+  .orders-page {
+    padding: 24px 16px 40px;
+  }
+}

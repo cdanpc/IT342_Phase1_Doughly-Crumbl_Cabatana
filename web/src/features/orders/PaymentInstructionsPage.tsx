@@ -50,6 +50,7 @@ const ACCOUNT_DETAILS: Record<string, { label: string; value: string }[]> = {
 };
 
 function getDefaultPaymentMethod(order: Order | null): PaymentMethod {
+  if (order?.paymentMethod) return order.paymentMethod;
   if (!order?.deliveryNotes) return 'GCASH';
   const notes = order.deliveryNotes.toLowerCase();
   if (notes.includes('maya')) return 'MAYA';
@@ -85,7 +86,7 @@ export default function PaymentInstructionsPage() {
   }, [id]);
 
   const isPickup = useMemo(
-    () => order?.deliveryAddress.toLowerCase().includes('pickup') ?? false,
+    () => order?.fulfillmentMethod === 'PICKUP' || order?.deliveryAddress.toLowerCase().includes('pickup') || false,
     [order]
   );
 
@@ -106,20 +107,8 @@ export default function PaymentInstructionsPage() {
   }
 
   async function handleSubmitCashOnPickup() {
-    if (!order) return;
-    setIsSubmitting(true);
-    try {
-      await submitPayment(order.orderId);
-      toast.success('Payment submitted. Awaiting confirmation.');
-      navigate(ROUTES.ORDERS);
-    } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
-        ?? 'Failed to submit payment. Please try again.';
-      toast.error(msg);
-    } finally {
-      setIsSubmitting(false);
-    }
+    toast.success('Cash on pickup selected. Please prepare exact cash when collecting your order.');
+    navigate(ROUTES.ORDERS);
   }
 
   async function handleSubmitWithProof(file: File) {

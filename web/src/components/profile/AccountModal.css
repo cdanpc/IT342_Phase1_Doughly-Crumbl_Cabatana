@@ -1,0 +1,414 @@
+.account-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.account-modal-shell .ui-modal__body {
+  background: linear-gradient(180deg, #fff 0%, var(--color-surface-soft) 100%);
+}
+
+/* ===== Profile row ===== */
+.account-modal__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.account-modal__profile-actions {
+  margin-left: auto;
+}
+
+.account-modal__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: var(--font-display);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.account-modal__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.account-modal__name {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-modal__role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  width: fit-content;
+}
+
+/* ===== Info fields ===== */
+.account-modal__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.account-modal__field {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.account-modal__field-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.account-modal__field-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 1px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.account-modal__field-value {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* ===== Favorites section ===== */
+.account-modal__favorites {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--color-surface-soft);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.account-modal__favorites-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.account-modal__favorites-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.account-modal__favorites-count {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.account-modal__favorites-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.account-modal__browse-btn {
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.account-modal__browse-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ===== Store info ===== */
+.account-modal__store {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0 2px;
+  border-top: 1px solid var(--color-border);
+}
+
+.account-modal__store-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.account-modal__store-icon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* ===== Note ===== */
+.account-modal__note {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+  text-align: center;
+}
+
+.account-modal__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.account-section,
+.address-manager,
+.account-modal__admin-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.account-section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.account-section__header h3,
+.account-modal__admin-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-text-primary);
+  font-size: var(--text-md);
+}
+
+.account-section__header p,
+.account-modal__admin-card p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.account-form,
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-form__grid,
+.address-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.account-form__actions,
+.address-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.account-modal__error {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-error);
+  background: var(--color-error-light);
+  color: var(--color-error);
+  font-size: var(--text-sm);
+}
+
+.account-modal__error button {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: var(--color-error);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.address-manager__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.address-manager__empty,
+.address-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.address-manager__empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 62px;
+  padding: 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.address-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+
+.address-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+
+.address-card__title span {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+}
+
+.address-card p {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.address-card__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.address-card__actions button,
+.address-form__title button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.address-card__actions button:hover:not(:disabled),
+.address-form__title button:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.address-card__actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.address-form {
+  border-top: 1px solid var(--color-border);
+  padding-top: 14px;
+}
+
+.address-form__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+
+.address-form__title button {
+  margin-left: auto;
+}
+
+.address-form__default {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.account-modal__admin-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .account-modal__grid,
+  .account-form__grid,
+  .address-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-modal__profile {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .account-modal__profile-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .account-modal__favorites {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

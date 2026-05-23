@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.R
 import com.example.mobile.databinding.ItemAdminOrderBinding
 import com.example.mobile.model.Order
+import com.example.mobile.util.OrderStatusUi
 
 class AdminOrderAdapter(
     private val onClick: (Order) -> Unit
@@ -21,10 +22,10 @@ class AdminOrderAdapter(
             b.tvTotal.text = "₱%.2f".format(order.totalAmount)
             b.tvContact.text = order.contactNumber ?: "No contact"
 
-            b.chipStatus.text = statusLabel(order.status)
-            b.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
+            b.chipStatus.text = OrderStatusUi.label(order.status)
+            b.chipStatus.setChipBackgroundColorResource(OrderStatusUi.colorRes(order.status))
 
-            val full = statusFullText(order.status)
+            val full = OrderStatusUi.fullText(order.status)
             if (full.isNotEmpty()) {
                 b.tvStatusFull.text = full
                 b.tvStatusFull.visibility = View.VISIBLE
@@ -45,41 +46,11 @@ class AdminOrderAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position))
 
-    private fun statusLabel(status: String): String = when (status) {
-        "PENDING", "ORDER_PLACED"                    -> "Order Placed"
-        "AWAITING_DELIVERY_QUOTE"                    -> "Getting Quote"
-        "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED"       -> "Payment Due"
-        "PAYMENT_SUBMITTED_AWAITING_CONFIRMATION"    -> "Confirming"
-        "PAYMENT_CONFIRMED"                          -> "Payment Confirmed"
-        "CONFIRMED"                                  -> "Confirmed"
-        "PREPARING"                                  -> "Preparing"
-        "OUT_FOR_DELIVERY"                           -> "On the Way"
-        "READY"                                      -> "Ready"
-        "DELIVERED"                                  -> "Delivered"
-        "COMPLETED"                                  -> "Completed"
-        "CANCELLED"                                  -> "Cancelled"
-        else -> status.lowercase().split("_")
-            .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
-    }
-
-    private fun statusFullText(status: String): String = when (status) {
-        "AWAITING_DELIVERY_QUOTE"                 -> "Awaiting Delivery Quote"
-        "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED"    -> "Delivery Fee Quoted — Payment Required"
-        "PAYMENT_SUBMITTED_AWAITING_CONFIRMATION" -> "Payment Submitted — Awaiting Confirmation"
-        "OUT_FOR_DELIVERY"                        -> "Out for Delivery"
-        else -> ""
-    }
-
-    private fun statusColor(status: String): Int = when (status) {
-        "PENDING"                -> R.color.statusOrderPlaced
-        "CONFIRMED", "PREPARING" -> R.color.statusPreparing
-        "READY", "DELIVERED"     -> R.color.statusCompleted
-        else                     -> R.color.statusCancelled
-    }
-
     private fun paymentColor(paymentStatus: String): Int = when (paymentStatus) {
         "PAID", "PAYMENT_CONFIRMED" -> R.color.statusCompleted
         "PENDING"                   -> R.color.statusOrderPlaced
+        "SUBMITTED"                 -> R.color.statusPreparing
+        "CANCELLED"                 -> R.color.statusCancelled
         else                        -> R.color.colorTextMuted
     }
 

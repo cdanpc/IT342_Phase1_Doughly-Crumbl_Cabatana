@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.model.Notification
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.notifications.data.NotificationsRepository
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
@@ -23,9 +24,16 @@ class NotificationsViewModel(sessionManager: SessionManager) : ViewModel() {
     private val _isEmpty = MutableLiveData(false)
     val isEmpty: LiveData<Boolean> = _isEmpty
 
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
+    private val _isUpdating = MutableLiveData(false)
+    val isUpdating: LiveData<Boolean> = _isUpdating
+
     fun load() {
         viewModelScope.launch {
             _isLoading.value = true
+            _error.value = null
             try {
                 val r = repository.getNotifications()
                 if (r.isSuccessful) {
@@ -33,9 +41,11 @@ class NotificationsViewModel(sessionManager: SessionManager) : ViewModel() {
                     _notifications.value = list
                     _isEmpty.value = list.isEmpty()
                 } else {
+                    _error.value = ApiErrorParser.message(r, "Failed to load notifications")
                     _isEmpty.value = true
                 }
             } catch (e: Exception) {
+                _error.value = e.localizedMessage ?: "Network error"
                 _isEmpty.value = true
             } finally {
                 _isLoading.value = false
@@ -45,21 +55,38 @@ class NotificationsViewModel(sessionManager: SessionManager) : ViewModel() {
 
     fun markAllRead() {
         viewModelScope.launch {
+            _isUpdating.value = true
+            _error.value = null
             try {
-                repository.markAllRead()
-                _notifications.value = _notifications.value?.map { it.copy(isRead = true) }
-            } catch (e: Exception) { /* best effort */ }
+                val r = repository.markAllRead()
+                if (r.isSuccessful) {
+                    _notifications.value = _notifications.value?.map { it.copy(isRead = true) }
+                } else {
+                    _error.value = ApiErrorParser.message(r, "Could not mark notifications as read")
+                }
+            } catch (e: Exception) {
+                _error.value = e.localizedMessage ?: "Network error"
+            } finally {
+                _isUpdating.value = false
+            }
         }
     }
 
     fun markRead(id: Long) {
         viewModelScope.launch {
+            _error.value = null
             try {
-                repository.markRead(id)
-                _notifications.value = _notifications.value?.map {
-                    if (it.id == id) it.copy(isRead = true) else it
+                val r = repository.markRead(id)
+                if (r.isSuccessful) {
+                    _notifications.value = _notifications.value?.map {
+                        if (it.id == id) it.copy(isRead = true) else it
+                    }
+                } else {
+                    _error.value = ApiErrorParser.message(r, "Could not mark notification as read")
                 }
-            } catch (e: Exception) { /* best effort */ }
+            } catch (e: Exception) {
+                _error.value = e.localizedMessage ?: "Network error"
+            }
         }
     }
 }

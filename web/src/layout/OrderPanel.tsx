@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
+import { ArrowRight, ShoppingBag, X } from 'lucide-react';
+import toast from 'react-hot-toast';
+import CartItemRow from '../components/cart/CartItemRow';
+import Button from '../components/ui/Button';
+import EmptyState from '../components/ui/EmptyState';
 import { useCart } from '../shared/hooks/CartContext';
 import { formatPrice } from '../shared/utils/formatters';
 import { ROUTES } from '../shared/utils/routes';
-import toast from 'react-hot-toast';
 import './OrderPanel.css';
 
 export default function OrderPanel() {
   const navigate = useNavigate();
-  const { cart, updateQuantity, removeItem, openCheckout } = useCart();
+  const { cart, updateQuantity, removeItem, openCheckout, closeOrderPanel } = useCart();
   const [pendingItemId, setPendingItemId] = useState<number | null>(null);
 
   const items = cart?.items ?? [];
@@ -52,67 +55,53 @@ export default function OrderPanel() {
     }
   }
 
+  function handleBrowseMenu() {
+    closeOrderPanel();
+    navigate(ROUTES.MENU);
+  }
+
   return (
     <aside className="order-panel">
       <div className="order-panel__header">
-        <ShoppingBag size={20} />
-        Order
+        <span className="order-panel__header-icon"><ShoppingBag size={20} /></span>
+        <div>
+          <h2>Order Bag</h2>
+          <p>{items.length} item{items.length === 1 ? '' : 's'} selected</p>
+        </div>
+        <button
+          className="order-panel__close-btn"
+          onClick={closeOrderPanel}
+          aria-label="Close order bag"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       {items.length === 0 ? (
         <div className="order-panel__empty">
-          <span className="order-panel__empty-icon">🍪</span>
-          <span className="order-panel__empty-title">Your cart is empty</span>
-          <span className="order-panel__empty-text">
-            Browse our menu and add something delicious!
-          </span>
-          <button className="order-panel__browse-btn" onClick={() => navigate(ROUTES.MENU)}>
-            Browse Products
-          </button>
+          <EmptyState
+            title="Your bag is empty"
+            message="Browse the menu and add something freshly baked before checkout."
+            actionLabel="Browse menu"
+            onAction={handleBrowseMenu}
+            icon={<ShoppingBag size={30} />}
+          />
+          <p className="order-panel__empty-note">
+            You can open or close this bag anytime while browsing.
+          </p>
         </div>
       ) : (
         <>
           <div className="order-panel__items">
             {items.map((item) => (
-              <div className="order-panel__item" key={item.cartItemId}>
-                <img
-                  className="order-panel__item-image"
-                  src={item.productImageUrl || '/placeholder-cookie.png'}
-                  alt={item.productName}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://placehold.co/56x56/f0f0f0/999?text=🍪';
-                  }}
-                />
-                <div className="order-panel__item-info">
-                  <span className="order-panel__item-name">{item.productName}</span>
-                  <span className="order-panel__item-category">Cookies</span>
-                  <div className="order-panel__item-controls">
-                    <button
-                      className="order-panel__qty-btn"
-                      onClick={() => handleDecrease(item.cartItemId, item.quantity)}
-                      disabled={pendingItemId === item.cartItemId}
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span className="order-panel__qty-value">{item.quantity}</span>
-                    <button
-                      className="order-panel__qty-btn"
-                      onClick={() => handleIncrease(item.cartItemId, item.quantity)}
-                      disabled={pendingItemId === item.cartItemId}
-                    >
-                      <Plus size={14} />
-                    </button>
-                    <span className="order-panel__item-price">{formatPrice(item.subtotal)}</span>
-                  </div>
-                </div>
-                <button
-                  className="order-panel__item-delete"
-                  onClick={() => handleRemove(item.cartItemId)}
-                  disabled={pendingItemId === item.cartItemId}
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
+              <CartItemRow
+                key={item.cartItemId}
+                item={item}
+                isPending={pendingItemId === item.cartItemId}
+                onDecrease={handleDecrease}
+                onIncrease={handleIncrease}
+                onRemove={handleRemove}
+              />
             ))}
           </div>
 
@@ -123,11 +112,11 @@ export default function OrderPanel() {
             </div>
             <div className="order-panel__summary-row">
               <span>Delivery fee</span>
-              <span>To be quoted</span>
+              <span>Quoted after order</span>
             </div>
             <hr className="order-panel__summary-divider" />
             <div className="order-panel__summary-total">
-              <span>Total</span>
+              <span>Total today</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
           </div>
@@ -136,9 +125,9 @@ export default function OrderPanel() {
             Delivery fee is calculated based on your location and confirmed before payment.
           </p>
 
-          <button className="order-panel__confirm-btn" onClick={openCheckout}>
-            Proceed to Checkout
-          </button>
+          <Button className="order-panel__confirm-btn" onClick={openCheckout} fullWidth>
+            Proceed to checkout <ArrowRight size={18} />
+          </Button>
         </>
       )}
     </aside>

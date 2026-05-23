@@ -9,6 +9,7 @@ import com.example.mobile.cart.data.CartRepository
 import com.example.mobile.model.Cart
 import com.example.mobile.model.CheckoutRequest
 import com.example.mobile.model.Order
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -53,7 +54,7 @@ class CheckoutViewModel(private val sessionManager: SessionManager) : ViewModel(
             try {
                 val r = repository.placeOrder(request)
                 if (r.isSuccessful) _orderPlaced.value = r.body()
-                else _error.value = "Failed to place order: ${r.message()}"
+                else _error.value = ApiErrorParser.message(r, "Failed to place order. Please try again.")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {

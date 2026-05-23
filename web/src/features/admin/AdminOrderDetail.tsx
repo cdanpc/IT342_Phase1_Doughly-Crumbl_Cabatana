@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard, ChevronDown } from 'lucide-react';
 import { getAdminOrderById, updateOrderStatus, quoteDeliveryFee } from '../../shared/api/orderApi';
-import { formatPrice, formatDate, getStatusColor, formatOrderStatus, getStatusFullText } from '../../shared/utils/formatters';
+import { formatPrice, formatDate, formatOrderStatus, getStatusFullText } from '../../shared/utils/formatters';
+import OrderStatusBadge from '../../components/orders/OrderStatusBadge';
 import { ROUTES } from '../../shared/utils/routes';
 import type { Order, OrderStatus } from '../../shared/types';
+import { useNotifications } from '../../shared/hooks/NotificationContext';
 import toast from 'react-hot-toast';
 import '../../shared/components/LoadingSpinner.css';
 import StatusTimeline from '../../shared/components/StatusTimeline';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 import './AdminOrderDetail.css';
 
 const ALL_STATUSES: OrderStatus[] = [
@@ -24,10 +27,19 @@ const ALL_STATUSES: OrderStatus[] = [
 ];
 
 function isPickupOrder(order: Order): boolean {
-  return order.deliveryAddress?.startsWith('Pickup') ?? false;
+  return order.fulfillmentMethod === 'PICKUP' || (order.deliveryAddress?.startsWith('Pickup') ?? false);
 }
 
 function extractPaymentMethod(order: Order): string {
+  if (order.paymentMethod) {
+    const labels: Record<string, string> = {
+      GCASH: 'GCash',
+      MAYA: 'Maya',
+      BANK_TRANSFER: 'Bank Transfer',
+      CASH_ON_PICKUP: 'Cash on Pickup',
+    };
+    return labels[order.paymentMethod] ?? '';
+  }
   const notes = order.deliveryNotes ?? '';
   const match = notes.match(/Payment Method: (.+)/);
   return match ? match[1] : '';
@@ -47,6 +59,7 @@ function getAdminNextStatus(status: string, isPickup: boolean): OrderStatus | nu
 export default function AdminOrderDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { lastNotification } = useNotifications();
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -58,21 +71,30 @@ export default function AdminOrderDetail() {
   const [showOverride, setShowOverride] = useState(false);
   const [overrideStatus, setOverrideStatus] = useState<OrderStatus | ''>('');
 
-  useEffect(() => {
-    async function fetchOrder() {
-      if (!id) return;
-      try {
-        const data = await getAdminOrderById(Number(id));
-        setOrder(data);
-      } catch {
+  const fetchOrder = useCallback(async (silent = false) => {
+    if (!id) return;
+    if (!silent) setIsLoading(true);
+    try {
+      const data = await getAdminOrderById(Number(id));
+      setOrder(data);
+    } catch {
+      if (!silent) {
         setOrder(null);
         toast.error('Failed to load order. Please try again.');
-      } finally {
-        setIsLoading(false);
       }
+    } finally {
+      if (!silent) setIsLoading(false);
     }
-    fetchOrder();
   }, [id]);
+
+  useEffect(() => {
+    fetchOrder();
+  }, [fetchOrder]);
+
+  useEffect(() => {
+    if (!id || lastNotification?.orderId !== Number(id)) return;
+    fetchOrder(true);
+  }, [fetchOrder, id, lastNotification?.id, lastNotification?.orderId]);
 
   async function handleStatusUpdate(newStatus: OrderStatus) {
     if (!order || !id) return;
@@ -126,7 +148,7 @@ export default function AdminOrderDetail() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}>
+      <div className="od__loading">
         <div className="spinner" />
       </div>
     );
@@ -134,8 +156,8 @@ export default function AdminOrderDetail() {
 
   if (!order) {
     return (
-      <div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-        <p style={{ fontSize: 16, marginBottom: 24 }}>Order not found.</p>
+      <div className="od__not-found">
+        <p className="od__not-found-text">Order not found.</p>
         <button onClick={() => navigate(ROUTES.ADMIN_ORDERS)} className="od__btn od__btn--primary">
           Back to Orders
         </button>
@@ -152,8 +174,8 @@ export default function AdminOrderDetail() {
   const nextStatus = getAdminNextStatus(order.status, isPickup);
 
   const paymentMethod = extractPaymentMethod(order);
-  const itemsSubtotal = order.items.reduce((s, i) => s + i.subtotal, 0);
-  const deliveryFee = order.totalAmount - itemsSubtotal;
+  const itemsSubtotal = order.subtotalAmount ?? order.items.reduce((s, i) => s + i.subtotal, 0);
+  const deliveryFee = order.deliveryFee ?? (order.totalAmount - itemsSubtotal);
 
   // Whether to show the standard advance button
   const showAdvanceBtn = !isTerminal && !isDeliveryQuoteStep && !isPaymentSubmitted && !isWaitingForPayment && !!nextStatus;
@@ -177,16 +199,8 @@ export default function AdminOrderDetail() {
           </div>
           <span className="od__date">{formatDate(order.orderDate)}</span>
         </div>
-        <span
-          className="od__status-chip"
-          title={getStatusFullText(order.status) || undefined}
-          style={{
-            background: getStatusColor(order.status) + '20',
-            color: getStatusColor(order.status),
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {formatOrderStatus(order.status)}
+        <span title={getStatusFullText(order.status) || undefined} className="od__status-chip-wrap">
+          <OrderStatusBadge status={order.status} />
         </span>
       </div>
 
@@ -236,7 +250,7 @@ export default function AdminOrderDetail() {
               Override Status
               <ChevronDown
                 size={14}
-                style={{ transform: showOverride ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+                className={`od__override-chevron${showOverride ? ' od__override-chevron--open' : ''}`}
               />
             </button>
             {showOverride && (
@@ -286,7 +300,7 @@ export default function AdminOrderDetail() {
           {/* Waiting for customer payment */}
           {isWaitingForPayment && (
             <div className="od__waiting-banner">
-              <div className="spinner" style={{ width: 22, height: 22, flexShrink: 0, marginTop: 2 }} />
+              <div className="spinner od__waiting-spinner" />
               <div>
                 <div className="od__waiting-title">Waiting for Customer Payment</div>
                 <p className="od__waiting-text">
@@ -343,7 +357,7 @@ export default function AdminOrderDetail() {
                   <p className="od__proof-hint">Click to enlarge</p>
                 </div>
               ) : (
-                <p style={{ fontSize: 13, color: '#1D4ED8', marginBottom: 12 }}>
+                <p className="od__payment-review-hint">
                   The customer has submitted proof of payment. Review and confirm below.
                 </p>
               )}
@@ -388,7 +402,7 @@ export default function AdminOrderDetail() {
                 <div className="od__info-item">
                   <FileText size={15} className="od__info-icon od__info-icon--error" />
                   <div>
-                    <div className="od__info-label" style={{ color: '#DC2626' }}>Cancellation Reason</div>
+                    <div className="od__info-label od__info-label--error">Cancellation Reason</div>
                     <span className="od__cancel-reason">{order.cancellationReason}</span>
                   </div>
                 </div>
@@ -454,41 +468,25 @@ export default function AdminOrderDetail() {
       </div>{/* end grid */}
 
       {/* ── Cancel Modal ── */}
-      {showCancelModal && (
-        <div className="od__modal-overlay" onClick={() => { if (!isUpdating) { setShowCancelModal(false); setCancelReason(''); } }}>
-          <div className="od__modal" onClick={(e) => e.stopPropagation()}>
-            <h3 className="od__modal-title">Cancel Order #{order.orderId}</h3>
-            <p className="od__modal-desc">
-              Provide a reason for cancellation (optional). The customer will see this.
-            </p>
-            <textarea
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
-              placeholder="e.g. Item out of stock, unable to fulfil order..."
-              rows={3}
-              className="od__modal-textarea"
-            />
-            <div className="od__modal-btns">
-              <button
-                className="od__btn"
-                style={{ background: '#f5f5f5', color: 'var(--color-text-primary)' }}
-                onClick={() => { setShowCancelModal(false); setCancelReason(''); }}
-                disabled={isUpdating}
-              >
-                Go Back
-              </button>
-              <button
-                className="od__btn od__btn--cancel"
-                style={{ background: 'var(--color-error)', color: '#fff', border: 'none' }}
-                onClick={handleConfirmCancel}
-                disabled={isUpdating}
-              >
-                {isUpdating ? 'Cancelling...' : 'Confirm Cancel'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={showCancelModal}
+        onClose={() => { if (!isUpdating) { setShowCancelModal(false); setCancelReason(''); } }}
+        onConfirm={handleConfirmCancel}
+        title={`Cancel Order #${order.orderId}`}
+        description="Provide a reason for cancellation (optional). The customer will see this."
+        confirmLabel="Confirm Cancel"
+        cancelLabel="Go Back"
+        isDanger
+        isConfirming={isUpdating}
+      >
+        <textarea
+          value={cancelReason}
+          onChange={(e) => setCancelReason(e.target.value)}
+          placeholder="e.g. Item out of stock, unable to fulfil order..."
+          rows={3}
+          className="od__modal-textarea"
+        />
+      </ConfirmModal>
 
       {/* ── Proof Lightbox ── */}
       {proofExpanded && order.proofImageUrl && (

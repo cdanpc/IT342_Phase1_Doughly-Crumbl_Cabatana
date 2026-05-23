@@ -14,6 +14,12 @@ class AdminProductAdapter(
     private val onDelete: (Product) -> Unit
 ) : ListAdapter<Product, AdminProductAdapter.ViewHolder>(DIFF) {
 
+    var actionsEnabled: Boolean = true
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     inner class ViewHolder(private val b: ItemAdminProductBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(product: Product) {
             b.tvName.text = product.name
@@ -24,6 +30,8 @@ class AdminProductAdapter(
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .centerCrop()
                 .into(b.ivProduct)
+            b.btnEdit.isEnabled = actionsEnabled
+            b.btnDelete.isEnabled = actionsEnabled
             b.btnEdit.setOnClickListener { onEdit(product) }
             b.btnDelete.setOnClickListener { onDelete(product) }
         }

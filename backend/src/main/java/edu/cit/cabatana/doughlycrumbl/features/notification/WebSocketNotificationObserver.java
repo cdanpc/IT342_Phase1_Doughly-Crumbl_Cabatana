@@ -51,6 +51,10 @@ public class WebSocketNotificationObserver implements OrderObserver {
             notifyAdmins(order.getId(), "PAYMENT_SUBMITTED",
                     "Payment Proof Submitted",
                     order.getUser().getName() + " submitted payment proof for order #" + order.getId() + ". Please review.");
+        } else {
+            notifyAdmins(order.getId(), "ORDER_STATUS_UPDATED",
+                    "Order #" + order.getId() + " Status Updated",
+                    order.getUser().getName() + "'s order moved from " + oldStatus + " to " + newStatus + ".");
         }
     }
 
@@ -64,6 +68,10 @@ public class WebSocketNotificationObserver implements OrderObserver {
                 "Your order #" + order.getId() + " has been cancelled."
                         + (order.getCancellationReason() != null ? " Reason: " + order.getCancellationReason() : "")
         );
+
+        notifyAdmins(order.getId(), "ORDER_CANCELLED",
+                "Order #" + order.getId() + " Cancelled",
+                order.getUser().getName() + "'s order was cancelled.");
     }
 
     private void notifyAdmins(Long orderId, String type, String title, String message) {

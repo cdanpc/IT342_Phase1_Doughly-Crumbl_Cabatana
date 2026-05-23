@@ -55,9 +55,8 @@ public class OrderFactory {
         // Calculate total amount
         BigDecimal totalAmount = calculateTotalAmount(orderItems);
 
-        // Determine initial status based on fulfillment method
-        boolean isPickup = request.getDeliveryNotes() != null
-                && request.getDeliveryNotes().contains("Fulfillment: PICKUP");
+        // Determine initial status based on structured fulfillment method.
+        boolean isPickup = "PICKUP".equalsIgnoreCase(request.getFulfillmentMethod());
         String initialStatus = isPickup ? "ORDER_PLACED" : "AWAITING_DELIVERY_QUOTE";
 
         // Build the order
@@ -67,7 +66,10 @@ public class OrderFactory {
                 .deliveryAddress(request.getDeliveryAddress())
                 .contactNumber(request.getContactNumber())
                 .deliveryNotes(request.getDeliveryNotes())
+                .fulfillmentMethod(normalize(request.getFulfillmentMethod(), "DELIVERY"))
+                .paymentMethod(normalize(request.getPaymentMethod(), "GCASH"))
                 .totalAmount(totalAmount)
+                .deliveryFee(BigDecimal.ZERO)
                 .items(orderItems)
                 .build();
 
@@ -87,5 +89,9 @@ public class OrderFactory {
         return orderItems.stream()
                 .map(OrderItem::getSubtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private String normalize(String value, String fallback) {
+        return value == null || value.isBlank() ? fallback : value.trim().toUpperCase();
     }
 }

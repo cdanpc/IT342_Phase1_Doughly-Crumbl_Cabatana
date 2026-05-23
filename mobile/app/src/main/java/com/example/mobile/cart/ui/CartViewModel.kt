@@ -9,6 +9,7 @@ import com.example.mobile.cart.data.CartRepository
 import com.example.mobile.model.Cart
 import com.example.mobile.model.CheckoutRequest
 import com.example.mobile.model.Order
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -45,22 +46,30 @@ class CartViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
     fun updateItem(itemId: Long, qty: Int) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val r = repository.updateItem(itemId, qty)
                 if (r.isSuccessful) _cart.value = r.body()
+                else _error.value = ApiErrorParser.message(r, "Failed to update cart item")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
     fun removeItem(itemId: Long) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val r = repository.removeItem(itemId)
                 if (r.isSuccessful) _cart.value = r.body()
+                else _error.value = ApiErrorParser.message(r, "Failed to remove cart item")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -71,7 +80,7 @@ class CartViewModel(private val sessionManager: SessionManager) : ViewModel() {
             try {
                 val r = repository.placeOrder(request)
                 if (r.isSuccessful) _orderPlaced.value = r.body()
-                else _error.value = "Failed to place order: ${r.message()}"
+                else _error.value = ApiErrorParser.message(r, "Failed to place order")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {

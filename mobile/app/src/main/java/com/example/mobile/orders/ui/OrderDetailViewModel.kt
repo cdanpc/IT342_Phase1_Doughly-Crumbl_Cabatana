@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.cart.data.CartRepository
 import com.example.mobile.model.Order
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.orders.data.OrderRepository
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
 
@@ -31,13 +33,16 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
     private val _reorderResult = MutableLiveData<String?>()
     val reorderResult: LiveData<String?> = _reorderResult
 
+    private val _paymentSubmitted = MutableLiveData<Boolean>()
+    val paymentSubmitted: LiveData<Boolean> = _paymentSubmitted
+
     fun loadOrder(id: Long) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val r = repository.getOrderDetail(id)
                 if (r.isSuccessful) _order.value = r.body()
-                else _error.value = "Failed to load order"
+                else _error.value = ApiErrorParser.message(r, "Failed to load order")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {
@@ -57,10 +62,15 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
             try {
                 var addedCount = 0
                 items.forEach { item ->
-                    val r = cartRepository.addToCart(item.productId!!, item.quantity)
+                    val productId = item.productId ?: return@forEach
+                    val r = cartRepository.addToCart(productId, item.quantity)
                     if (r.isSuccessful) addedCount++
                 }
-                _reorderResult.value = "success:$addedCount"
+                _reorderResult.value = if (addedCount > 0) {
+                    "success:$addedCount"
+                } else {
+                    "error:No items could be re-added."
+                }
             } catch (e: Exception) {
                 _reorderResult.value = "error:Failed to add items to cart."
             } finally {
@@ -78,7 +88,26 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
                     _order.value = r.body()
                     _cancelSuccess.value = true
                 } else {
-                    _error.value = "Could not cancel order"
+                    _error.value = ApiErrorParser.message(r, "Could not cancel order")
+                }
+            } catch (e: Exception) {
+                _error.value = e.localizedMessage
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun submitPayment(id: Long, proof: MultipartBody.Part) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val r = repository.submitPayment(id, proof)
+                if (r.isSuccessful) {
+                    _order.value = r.body()
+                    _paymentSubmitted.value = true
+                } else {
+                    _error.value = ApiErrorParser.message(r, "Could not submit payment proof")
                 }
             } catch (e: Exception) {
                 _error.value = e.localizedMessage

@@ -11,7 +11,7 @@
 | Field        | Detail                                           |
 |--------------|--------------------------------------------------|
 | **Course**   | IT342 — Integrative Programming and Technologies |
-| **Group**    | Group 5 — Cabatana                               |
+| **Section**    | G5 — Cabatana                               |
 | **Domain**   | E-commerce / Food & Beverage                     |
 | **Store**    | Don Gil Garcia St., Capitol Site, Cebu City      |
 | **Status**   | Phase 1 Complete — Backend + Web + Mobile        |

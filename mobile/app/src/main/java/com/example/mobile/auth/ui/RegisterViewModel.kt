@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.auth.data.AuthRepository
 import com.example.mobile.model.AuthResponse
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -23,19 +24,19 @@ class RegisterViewModel(private val sessionManager: SessionManager) : ViewModel(
     private val _authResponse = MutableLiveData<AuthResponse?>()
     val authResponse: LiveData<AuthResponse?> = _authResponse
 
-    fun register(name: String, email: String, password: String, phone: String, address: String) {
+    fun register(name: String, email: String, password: String, confirmPassword: String, phone: String, address: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
             try {
-                val response = repository.register(name, email, password, phone, address)
-                if (response.isSuccessful) {
-                    val body = response.body()!!
+                val response = repository.register(name, email, password, confirmPassword, phone, address)
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
                     sessionManager.saveToken(body.token)
                     sessionManager.saveUser(body.userId, body.name, body.email, body.role)
                     _authResponse.value = body
                 } else {
-                    _error.value = "Registration failed: ${response.message()}"
+                    _error.value = ApiErrorParser.message(response, "Registration failed. Please check your details.")
                 }
             } catch (e: Exception) {
                 _error.value = e.localizedMessage ?: "Network error"

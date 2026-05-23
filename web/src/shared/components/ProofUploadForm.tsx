@@ -2,6 +2,9 @@ import { useRef, useState } from 'react';
 import { Upload, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+const MAX_PROOF_BYTES = 5 * 1024 * 1024;
+const MAX_PROOF_MB = MAX_PROOF_BYTES / 1024 / 1024;
+
 interface ProofUploadFormProps {
   onSubmit: (file: File) => void | Promise<void>;
   isSubmitting?: boolean;
@@ -25,8 +28,8 @@ export default function ProofUploadForm({
         if (fileInputRef.current) fileInputRef.current.value = '';
         return;
       }
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error('File too large. Maximum size is 10 MB.');
+      if (file.size > MAX_PROOF_BYTES) {
+        toast.error(`File too large. Maximum size is ${MAX_PROOF_MB} MB.`);
         if (fileInputRef.current) fileInputRef.current.value = '';
         return;
       }
@@ -83,7 +86,7 @@ export default function ProofUploadForm({
         >
           <Upload size={22} />
           <span style={{ fontSize: 13, fontWeight: 600 }}>Click to upload screenshot</span>
-          <span style={{ fontSize: 12 }}>PNG, JPG up to 10MB</span>
+          <span style={{ fontSize: 12 }}>PNG, JPG up to {MAX_PROOF_MB}MB</span>
         </button>
       ) : (
         <div

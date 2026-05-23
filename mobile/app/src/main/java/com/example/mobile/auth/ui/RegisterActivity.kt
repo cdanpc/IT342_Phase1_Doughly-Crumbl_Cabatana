@@ -1,7 +1,6 @@
 package com.example.mobile.auth.ui
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -36,8 +35,11 @@ class RegisterActivity : AppCompatActivity() {
             binding.btnRegister.isEnabled = !loading
         }
         viewModel.error.observe(this) { msg ->
-            msg?.let {
-                binding.tilPassword.error = it
+            if (msg != null) {
+                binding.tvError.text = msg
+                binding.errorBanner.visibility = View.VISIBLE
+            } else {
+                binding.errorBanner.visibility = View.GONE
             }
         }
         viewModel.authResponse.observe(this) { response ->
@@ -47,16 +49,38 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun showFieldError(til: com.google.android.material.textfield.TextInputLayout, errorView: android.widget.TextView, msg: String?) {
+        til.isActivated = msg != null
+        errorView.text = msg ?: ""
+        errorView.visibility = if (msg != null) View.VISIBLE else View.GONE
+    }
+
+    private fun clearErrorOnType(editText: android.widget.EditText, til: com.google.android.material.textfield.TextInputLayout, errorView: android.widget.TextView) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) { showFieldError(til, errorView, null) }
+        })
+    }
+
     private fun setupListeners() {
+        clearErrorOnType(binding.etName, binding.tilName, binding.tvNameError)
+        clearErrorOnType(binding.etEmail, binding.tilEmail, binding.tvEmailError)
+        clearErrorOnType(binding.etPhone, binding.tilPhone, binding.tvPhoneError)
+        clearErrorOnType(binding.etAddress, binding.tilAddress, binding.tvAddressError)
+        clearErrorOnType(binding.etConfirmPassword, binding.tilConfirmPassword, binding.tvConfirmPasswordError)
+
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
+                showFieldError(binding.tilPassword, binding.tvPasswordError, null)
                 updateStrengthBar(s?.toString() ?: "")
             }
         })
 
         binding.btnRegister.setOnClickListener {
+            binding.errorBanner.visibility = View.GONE
             val name = binding.etName.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val phone = binding.etPhone.text.toString().trim()
@@ -67,48 +91,51 @@ class RegisterActivity : AppCompatActivity() {
             var valid = true
 
             if (name.isEmpty()) {
-                binding.tilName.error = "Name required"
+                showFieldError(binding.tilName, binding.tvNameError, "Name required")
                 valid = false
             } else {
-                binding.tilName.error = null
+                showFieldError(binding.tilName, binding.tvNameError, null)
             }
 
             if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.tilEmail.error = "Enter a valid email"
+                showFieldError(binding.tilEmail, binding.tvEmailError, "Enter a valid email")
                 valid = false
             } else {
-                binding.tilEmail.error = null
+                showFieldError(binding.tilEmail, binding.tvEmailError, null)
             }
 
             if (phone.isEmpty()) {
-                binding.tilPhone.error = "Phone number required"
+                showFieldError(binding.tilPhone, binding.tvPhoneError, "Phone number required")
+                valid = false
+            } else if (!Regex("^(09\\d{9}|\\+639\\d{9})$").matches(phone)) {
+                showFieldError(binding.tilPhone, binding.tvPhoneError, "Enter a valid PH number")
                 valid = false
             } else {
-                binding.tilPhone.error = null
+                showFieldError(binding.tilPhone, binding.tvPhoneError, null)
             }
 
             if (address.isEmpty()) {
-                binding.tilAddress.error = "Delivery address required"
+                showFieldError(binding.tilAddress, binding.tvAddressError, "Delivery address required")
                 valid = false
             } else {
-                binding.tilAddress.error = null
+                showFieldError(binding.tilAddress, binding.tvAddressError, null)
             }
 
             if (password.length < 8) {
-                binding.tilPassword.error = "Min 8 characters"
+                showFieldError(binding.tilPassword, binding.tvPasswordError, "Min 8 characters")
                 valid = false
             } else {
-                binding.tilPassword.error = null
+                showFieldError(binding.tilPassword, binding.tvPasswordError, null)
             }
 
             if (confirmPassword != password) {
-                binding.tilConfirmPassword.error = "Passwords do not match"
+                showFieldError(binding.tilConfirmPassword, binding.tvConfirmPasswordError, "Passwords do not match")
                 valid = false
             } else {
-                binding.tilConfirmPassword.error = null
+                showFieldError(binding.tilConfirmPassword, binding.tvConfirmPasswordError, null)
             }
 
-            if (valid) viewModel.register(name, email, password, phone, address)
+            if (valid) viewModel.register(name, email, password, confirmPassword, phone, address)
         }
 
         binding.tvLogin.setOnClickListener { finish() }

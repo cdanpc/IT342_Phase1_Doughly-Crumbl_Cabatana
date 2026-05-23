@@ -10,6 +10,7 @@ import com.example.mobile.R
 import com.example.mobile.databinding.ActivityAdminOrderDetailBinding
 import com.example.mobile.model.Order
 import com.example.mobile.orders.ui.OrderItemAdapter
+import com.example.mobile.util.OrderStatusUi
 import com.example.mobile.util.SessionManager
 import com.google.android.material.button.MaterialButton
 
@@ -43,12 +44,18 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         }
         viewModel.isLoading.observe(this) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            binding.btnQuoteFee.isEnabled = !loading && viewModel.order.value?.status == "AWAITING_DELIVERY_QUOTE"
+            setStatusButtonsEnabled(!loading)
         }
         viewModel.error.observe(this) { msg ->
             msg?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
         }
 
         binding.btnQuoteFee.setOnClickListener {
+            if (viewModel.order.value?.status != "AWAITING_DELIVERY_QUOTE") {
+                Toast.makeText(this, "Delivery fee can only be quoted while an order is awaiting quote.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val fee = binding.etDeliveryFee.text.toString().toDoubleOrNull()
             if (fee == null || fee < 0) {
                 Toast.makeText(this, "Enter a valid delivery fee", Toast.LENGTH_SHORT).show()
@@ -65,8 +72,12 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         binding.tvCustomerName.text = "Order #${order.orderId}"
         binding.tvCustomerEmail.text = order.contactNumber ?: ""
         binding.tvDate.text = order.orderDate.take(10)
-        binding.chipStatus.text = statusLabel(order.status)
-        binding.chipStatus.setChipBackgroundColorResource(statusColor(order.status))
+        binding.chipStatus.text = OrderStatusUi.label(order.status)
+        binding.chipStatus.setChipBackgroundColorResource(OrderStatusUi.colorRes(order.status))
+        val canQuoteDeliveryFee = order.status == "AWAITING_DELIVERY_QUOTE"
+        binding.tvQuoteDeliveryFeeLabel.visibility = if (canQuoteDeliveryFee) View.VISIBLE else View.GONE
+        binding.layoutQuoteDeliveryFee.visibility = if (canQuoteDeliveryFee) View.VISIBLE else View.GONE
+        binding.btnQuoteFee.isEnabled = canQuoteDeliveryFee && viewModel.isLoading.value != true
 
         adapter.submitList(order.items)
 
@@ -74,9 +85,10 @@ class AdminOrderDetailActivity : AppCompatActivity() {
 
         // Build status transition buttons
         binding.layoutStatusButtons.removeAllViews()
-        OrderStatusHelper.allowedTransitions(order.status).forEach { nextStatus ->
+        val nextStatus = OrderStatusUi.nextAdminStatus(order)
+        if (nextStatus != null && order.status != "COMPLETED" && order.status != "CANCELLED") {
             val btn = MaterialButton(this).apply {
-                text = nextStatus
+                text = "Move to: ${OrderStatusUi.label(nextStatus)}"
                 isAllCaps = false
                 setOnClickListener { viewModel.updateStatus(order.orderId, nextStatus) }
             }
@@ -84,27 +96,9 @@ class AdminOrderDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun statusLabel(status: String): String = when (status) {
-        "PENDING", "ORDER_PLACED"                    -> "Order Placed"
-        "AWAITING_DELIVERY_QUOTE"                    -> "Getting Quote"
-        "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED"       -> "Payment Due"
-        "PAYMENT_SUBMITTED_AWAITING_CONFIRMATION"    -> "Confirming"
-        "PAYMENT_CONFIRMED"                          -> "Payment Confirmed"
-        "CONFIRMED"                                  -> "Confirmed"
-        "PREPARING"                                  -> "Preparing"
-        "OUT_FOR_DELIVERY"                           -> "On the Way"
-        "READY"                                      -> "Ready"
-        "DELIVERED"                                  -> "Delivered"
-        "COMPLETED"                                  -> "Completed"
-        "CANCELLED"                                  -> "Cancelled"
-        else -> status.lowercase().split("_")
-            .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
-    }
-
-    private fun statusColor(status: String) = when (status) {
-        "PENDING"                 -> R.color.statusOrderPlaced
-        "CONFIRMED", "PREPARING"  -> R.color.statusPreparing
-        "READY", "DELIVERED"      -> R.color.statusCompleted
-        else                      -> R.color.statusCancelled
+    private fun setStatusButtonsEnabled(enabled: Boolean) {
+        (0 until binding.layoutStatusButtons.childCount).forEach { index ->
+            binding.layoutStatusButtons.getChildAt(index).isEnabled = enabled
+        }
     }
 }
