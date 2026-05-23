@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { getAdminOrders } from '../../shared/api/orderApi';
 import { formatDate, formatOrderStatus, formatPrice } from '../../shared/utils/formatters';
+import ErrorState from '../../components/ui/ErrorState';
+import PageHeader from '../../components/ui/PageHeader';
 import OrderStatusBadge from '../../components/orders/OrderStatusBadge';
 import { useNotifications } from '../../shared/hooks/NotificationContext';
 import type { Order, OrderStatus } from '../../shared/types';
@@ -30,9 +32,10 @@ export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<OrderStatus | 'ALL'>('ALL');
+  const [loadError, setLoadError] = useState('');
 
   const fetchOrders = useCallback(async (silent = false) => {
-    if (!silent) setIsLoading(true);
+    if (!silent) { setIsLoading(true); setLoadError(''); }
     try {
       const params = filterStatus !== 'ALL' ? { status: filterStatus } : undefined;
       const data = await getAdminOrders(params);
@@ -43,6 +46,7 @@ export default function AdminOrders() {
         ? `Failed to load orders (HTTP ${status})`
         : 'Failed to load orders - backend may be unreachable';
       if (!silent) {
+        setLoadError(msg);
         toast.error(msg, { duration: 8000 });
         setOrders([]);
       }
@@ -70,10 +74,18 @@ export default function AdminOrders() {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="admin-orders__page">
+        <PageHeader title="Orders" />
+        <ErrorState message={loadError} onRetry={() => fetchOrders()} className="admin-orders__error" />
+      </div>
+    );
+  }
+
   return (
     <div className="admin-orders__page">
-      <h2 className="admin-orders__title">Orders</h2>
-      <p className="admin-orders__subtitle">{orders.length} total orders</p>
+      <PageHeader title="Orders" subtitle={`${orders.length} total orders`} />
 
       <div className="admin-orders__filter-row">
         <label className="admin-orders__filter-label">Filter by status</label>

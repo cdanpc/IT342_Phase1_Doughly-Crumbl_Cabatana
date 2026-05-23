@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ProductFormModal from '../../components/admin/ProductFormModal';
 import ProductImage from '../../components/product/ProductImage';
 import ConfirmModal from '../../components/ui/ConfirmModal';
+import ErrorState from '../../components/ui/ErrorState';
+import PageHeader from '../../components/ui/PageHeader';
 import { createProduct, deleteProduct, getAdminProducts, updateProduct, uploadProductImage } from '../../shared/api/productApi';
 import type { Product, ProductRequest } from '../../shared/types';
 import { formatPrice } from '../../shared/utils/formatters';
@@ -29,16 +30,17 @@ export default function AdminProducts() {
   const [isSaving, setIsSaving] = useState(false);
   const [search, setSearch] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
   const [formErrors, setFormErrors] = useState<{ name?: string; price?: string }>({});
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [loadError, setLoadError] = useState('');
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   async function fetchProducts() {
+    setLoadError('');
     try {
       const data = await getAdminProducts();
       setProducts(data);
@@ -47,6 +49,7 @@ export default function AdminProducts() {
       const msg = status
         ? `Failed to load products (HTTP ${status})`
         : 'Failed to load products - backend may be unreachable';
+      setLoadError(msg);
       toast.error(msg, { duration: 8000 });
     } finally {
       setIsLoading(false);
@@ -57,7 +60,6 @@ export default function AdminProducts() {
     setEditingId(null);
     setForm(EMPTY_FORM);
     setImageFile(null);
-    setImagePreview('');
     setFormErrors({});
     setShowModal(true);
   }
@@ -73,7 +75,6 @@ export default function AdminProducts() {
       available: product.available,
     });
     setImageFile(null);
-    setImagePreview(product.imageUrl || '');
     setFormErrors({});
     setShowModal(true);
   }
@@ -83,24 +84,8 @@ export default function AdminProducts() {
     setShowModal(false);
   }
 
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      toast.error('Only image files are accepted (PNG, JPG, WebP, GIF).');
-      e.target.value = '';
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image too large. Maximum size is 5 MB.');
-      e.target.value = '';
-      return;
-    }
-
+  function handleImageChange(file: File | null) {
     setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
   }
 
   async function handleSave() {
@@ -167,17 +152,26 @@ export default function AdminProducts() {
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="admin-products">
+        <PageHeader title="Products" />
+        <ErrorState message={loadError} onRetry={fetchProducts} className="admin-products__error" />
+      </div>
+    );
+  }
+
   return (
     <div className="admin-products">
-      <div className="admin-products__header">
-        <div>
-          <h2 className="admin-products__title">Products</h2>
-          <p className="admin-products__count">{products.length} products</p>
-        </div>
-        <button className="admin-products__add-btn" onClick={openCreate}>
-          <Plus size={16} /> Add Product
-        </button>
-      </div>
+      <PageHeader
+        title="Products"
+        subtitle={`${products.length} products`}
+        action={
+          <button className="admin-products__add-btn" onClick={openCreate}>
+            <Plus size={16} /> Add Product
+          </button>
+        }
+      />
 
       <input
         className="admin-products__search"
@@ -251,11 +245,12 @@ export default function AdminProducts() {
         isEditing={Boolean(editingId)}
         form={form}
         formErrors={formErrors}
-        imagePreview={imagePreview}
+        imageFile={imageFile}
+        existingImageUrl={form.imageUrl || undefined}
         isSaving={isSaving}
         onClose={closeProductModal}
         onSave={handleSave}
-        onFileChange={handleFileChange}
+        onImageChange={handleImageChange}
         onFormChange={setForm}
         onClearError={(field) => setFormErrors((prev) => ({ ...prev, [field]: undefined }))}
       />

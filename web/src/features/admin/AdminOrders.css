@@ -9,19 +9,6 @@
   animation: fadeIn 0.3s ease-out;
 }
 
-.admin-orders__title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 28px;
-  margin-bottom: 4px;
-  color: var(--color-text-primary);
-}
-
-.admin-orders__subtitle {
-  color: var(--color-text-secondary);
-  font-size: 14px;
-  margin-bottom: 24px;
-}
 
 .admin-orders__table-container {
   background: var(--color-white);
@@ -92,6 +79,10 @@
 
 .admin-orders__view-btn:hover {
   background: #f8d7de;
+}
+
+.admin-orders__error {
+  margin-top: 16px;
 }
 
 .admin-orders__empty {

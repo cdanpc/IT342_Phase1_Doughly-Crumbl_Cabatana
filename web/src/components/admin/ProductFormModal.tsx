@@ -1,8 +1,6 @@
-import { useRef } from 'react';
-import type { ChangeEvent } from 'react';
-import { Upload } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
+import FileUploadField from '../ui/FileUploadField';
 import type { ProductRequest } from '../../shared/types';
 
 interface ProductFormErrors {
@@ -15,11 +13,14 @@ interface ProductFormModalProps {
   isEditing: boolean;
   form: ProductRequest;
   formErrors: ProductFormErrors;
-  imagePreview: string;
+  /** The File the user has selected (null = none chosen yet) */
+  imageFile?: File | null;
+  /** Existing image URL shown as preview in edit mode (ignored when imageFile is set) */
+  existingImageUrl?: string;
   isSaving: boolean;
   onClose: () => void;
   onSave: () => void;
-  onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onImageChange: (file: File | null) => void;
   onFormChange: (form: ProductRequest) => void;
   onClearError: (field: keyof ProductFormErrors) => void;
 }
@@ -29,16 +30,15 @@ export default function ProductFormModal({
   isEditing,
   form,
   formErrors,
-  imagePreview,
+  imageFile,
+  existingImageUrl,
   isSaving,
   onClose,
   onSave,
-  onFileChange,
+  onImageChange,
   onFormChange,
   onClearError,
 }: ProductFormModalProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -103,36 +103,17 @@ export default function ProductFormModal({
           )}
         </div>
 
-        <div>
-          <label className="admin-product-field-label">Product Image</label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            className="admin-product-upload__input"
-            onChange={onFileChange}
-          />
-          <button
-            type="button"
-            className="admin-product-upload__area"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {imagePreview ? (
-              <img
-                src={imagePreview}
-                alt="Product preview"
-                className="admin-product-upload__preview"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-            ) : (
-              <Upload size={24} className="admin-product-upload__icon" />
-            )}
-            <span className="admin-product-upload__hint">
-              {imagePreview ? 'Click to change image' : 'Click to upload image'}
-            </span>
-            <span className="admin-product-upload__meta">JPEG, PNG, WebP, GIF - max 5 MB</span>
-          </button>
-        </div>
+        <FileUploadField
+          label="Product Image"
+          file={imageFile}
+          previewUrl={existingImageUrl}
+          onChange={onImageChange}
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          maxSizeMB={5}
+          hint="JPEG, PNG, WebP, GIF — max 5 MB"
+          previewHeight={160}
+          disabled={isSaving}
+        />
 
         <div>
           <label className="admin-product-field-label" htmlFor="admin-product-category">Category</label>
