@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile.R
 import com.example.mobile.databinding.ItemOrderItemBinding
 import com.example.mobile.model.OrderItem
 
@@ -12,9 +13,10 @@ class OrderItemAdapter : ListAdapter<OrderItem, OrderItemAdapter.ViewHolder>(DIF
 
     inner class ViewHolder(private val b: ItemOrderItemBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: OrderItem) {
+            val context = b.root.context
             b.tvName.text = item.productName
-            b.tvQty.text = "x${item.quantity}"
-            b.tvPrice.text = "₱%.2f".format(item.subtotal)
+            b.tvQty.text = context.getString(R.string.quantity_x_format, item.quantity)
+            b.tvPrice.text = context.getString(R.string.price_format, item.subtotal)
         }
     }
 

@@ -20,8 +20,9 @@ class AuthRepository(private val sessionManager: SessionManager) {
         name: String,
         email: String,
         password: String,
+        confirmPassword: String,
         phone: String = "",
         address: String = ""
     ): Response<AuthResponse> =
-        api.register(RegisterRequest(name, email, password, phone, address))
+        api.register(RegisterRequest(name, email, password, confirmPassword, phone, address))
 }

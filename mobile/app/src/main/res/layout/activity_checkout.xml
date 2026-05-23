@@ -6,19 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- Top App Bar -->
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Theme.DoughlyCrumbl.AppBar"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/heightTopAppBar"
         android:background="@color/colorSurface"
-        android:elevation="4dp"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorTextPrimary"
+        app:title="@string/checkout_title"
+        app:titleCentered="true"
         app:titleTextColor="@color/colorTextPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Scrollable content — constrained between toolbar and bottom bar -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -32,9 +34,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="@dimen/marginPage">
 
-            <!-- ── SECTION 1: Order Summary ── -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOrderSummary"
                 android:layout_width="0dp"
@@ -51,60 +52,55 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp">
+                    android:padding="@dimen/paddingCard">
 
-                    <!-- "Order Summary" label -->
                     <TextView
                         android:id="@+id/tvOrderSummaryLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Order Summary"
-                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+                        android:text="@string/order_summary"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
                         app:layout_constraintBottom_toBottomOf="@id/btnToggleSummary"
                         app:layout_constraintEnd_toStartOf="@id/tvItemCount"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/btnToggleSummary" />
 
-                    <!-- Item count pill -->
                     <TextView
                         android:id="@+id/tvItemCount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
+                        android:layout_height="@dimen/heightChip"
+                        android:layout_marginEnd="@dimen/spacing_8"
                         android:background="@drawable/bg_chip_selected"
-                        android:paddingBottom="4dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingTop="4dp"
-                        android:text="0 items"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/spacing_12"
+                        android:paddingEnd="@dimen/spacing_12"
+                        android:text="@string/item_count_format"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
                         android:textColor="@color/colorSurface"
                         app:layout_constraintBottom_toBottomOf="@id/btnToggleSummary"
                         app:layout_constraintEnd_toStartOf="@id/btnToggleSummary"
                         app:layout_constraintTop_toTopOf="@id/btnToggleSummary" />
 
-                    <!-- Expand/collapse toggle -->
                     <TextView
                         android:id="@+id/btnToggleSummary"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="@dimen/minTouchTarget"
+                        android:layout_height="@dimen/minTouchTarget"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:text="▼"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="14sp"
+                        android:text="@string/show_summary"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <!-- Subtotal row (always visible) -->
                     <TextView
                         android:id="@+id/tvSummarySubtotalLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Subtotal"
+                        android:layout_marginTop="@dimen/spacing_12"
+                        android:text="@string/subtotal"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         app:layout_constraintEnd_toStartOf="@id/tvSummarySubtotal"
                         app:layout_constraintStart_toStartOf="parent"
@@ -114,19 +110,18 @@
                         android:id="@+id/tvSummarySubtotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="₱0.00"
+                        android:text="@string/price_zero"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:textColor="@color/colorTextPrimary"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/btnToggleSummary" />
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvSummarySubtotalLabel"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Expanded items container (gone by default) -->
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:id="@+id/layoutExpandedItems"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/spacing_8"
+                        android:orientation="vertical"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -136,41 +131,40 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ── SECTION 2: Fulfillment Method ── -->
             <TextView
                 android:id="@+id/tvFulfillmentLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="How would you like to receive your order?"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:text="@string/checkout_fulfillment_question"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardOrderSummary" />
 
-            <!-- Delivery card -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardDelivery"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="6dp"
+                android:layout_height="@dimen/heightFulfillmentOption"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:layout_marginEnd="@dimen/spacing_4"
                 android:background="@drawable/bg_fulfillment_selected"
+                android:foreground="@drawable/ripple_card"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="16dp"
+                android:padding="@dimen/spacing_12"
                 app:layout_constraintEnd_toStartOf="@id/cardPickup"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvFulfillmentLabel"
                 app:layout_constraintWidth_percent="0.5">
 
-                <TextView
+                <ImageView
                     android:id="@+id/tvDeliveryIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="🚚"
-                    android:textSize="28sp"
+                    android:layout_width="@dimen/iconSize"
+                    android:layout_height="@dimen/iconSize"
+                    android:contentDescription="@string/fulfillment_delivery"
+                    android:src="@drawable/ic_truck"
+                    app:tint="@color/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -179,9 +173,9 @@
                     android:id="@+id/tvDeliveryTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/spacing_8"
                     android:gravity="center"
-                    android:text="Delivery"
+                    android:text="@string/fulfillment_delivery"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -190,39 +184,38 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/spacing_4"
                     android:gravity="center"
-                    android:text="We'll bring it to you"
+                    android:text="@string/fulfillment_delivery_body"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDeliveryTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Pickup card -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardPickup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="@dimen/spacing_4"
                 android:background="@drawable/bg_fulfillment_unselected"
+                android:foreground="@drawable/ripple_card"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="16dp"
+                android:padding="@dimen/spacing_12"
                 app:layout_constraintBottom_toBottomOf="@id/cardDelivery"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cardDelivery"
                 app:layout_constraintTop_toTopOf="@id/cardDelivery">
 
-                <TextView
+                <ImageView
                     android:id="@+id/tvPickupIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="🏪"
-                    android:textSize="28sp"
+                    android:layout_width="@dimen/iconSize"
+                    android:layout_height="@dimen/iconSize"
+                    android:contentDescription="@string/fulfillment_pickup"
+                    android:src="@drawable/ic_store"
+                    app:tint="@color/colorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -231,9 +224,9 @@
                     android:id="@+id/tvPickupTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/spacing_8"
                     android:gravity="center"
-                    android:text="Pickup"
+                    android:text="@string/fulfillment_pickup"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -242,48 +235,44 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="@dimen/spacing_4"
                     android:gravity="center"
-                    android:text="Collect at our store"
+                    android:text="@string/fulfillment_pickup_body"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPickupTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- ── Contact Number (always visible — required for both DELIVERY and PICKUP) ── -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilContactPhone"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Contact number"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:hint="@string/contact_number"
                 app:boxBackgroundMode="none"
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardDelivery"
-                app:startIconDrawable="@android:drawable/ic_menu_call">
+                app:startIconDrawable="@drawable/ic_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etContactPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_input"
-
                     android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ── SECTION 3: Delivery Details ── -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/sectionDeliveryDetails"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/spacing_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilContactPhone">
@@ -292,8 +281,8 @@
                     android:id="@+id/tvDeliveryAddressLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Delivery Address"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+                    android:text="@string/delivery_address"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -303,21 +292,20 @@
                     style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Street / Barangay"
+                    android:layout_marginTop="@dimen/spacing_8"
+                    android:hint="@string/street_barangay"
                     app:boxBackgroundMode="none"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDeliveryAddressLabel"
-                    app:startIconDrawable="@android:drawable/ic_menu_mylocation">
+                    app:startIconDrawable="@drawable/ic_location">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etStreet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_input"
-    
                         android:inputType="textPostalAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -327,8 +315,8 @@
                     style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="City"
+                    android:layout_marginTop="@dimen/spacing_8"
+                    android:hint="@string/city"
                     app:boxBackgroundMode="none"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -340,7 +328,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_input"
-    
                         android:inputType="textPostalAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -350,8 +337,8 @@
                     style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Landmark (optional)"
+                    android:layout_marginTop="@dimen/spacing_8"
+                    android:hint="@string/landmark_optional"
                     app:boxBackgroundMode="none"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -362,18 +349,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_input"
-    
                         android:inputType="text" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Delivery fee row -->
                 <TextView
                     android:id="@+id/tvDeliveryFeeLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Estimated Delivery Fee"
+                    android:layout_marginTop="@dimen/spacing_12"
+                    android:text="@string/estimated_delivery_fee"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/tvDeliveryFee"
@@ -384,23 +369,20 @@
                     android:id="@+id/tvDeliveryFee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="To be quoted"
+                    android:text="@string/delivery_fee_pending"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tilLandmark" />
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvDeliveryFeeLabel"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- ── SECTION 4: Order Notes ── -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNotes"
                 style="@style/Widget.DoughlyCrumbl.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Any special requests or notes?"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:hint="@string/checkout_notes_hint"
                 app:boxBackgroundMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -409,195 +391,79 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNotes"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="@dimen/heightInputMultiLine"
                     android:background="@drawable/bg_input"
-
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minLines="3" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ── SECTION 5: Payment Method ── -->
             <TextView
                 android:id="@+id/tvPaymentLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Payment Method"
-                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:text="@string/payment_method"
+                android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilNotes" />
 
-            <!-- GCash -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                 android:id="@+id/paymentGcash"
+                layout="@layout/include_payment_gcash"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_payment_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_height="@dimen/heightPaymentOption"
+                android:layout_marginTop="@dimen/spacing_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPaymentLabel">
+                app:layout_constraintTop_toBottomOf="@id/tvPaymentLabel" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="💙 GCash"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbGcash"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/rbGcash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/colorPrimary"
-                    android:clickable="false"
-                    android:focusable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Maya -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                 android:id="@+id/paymentMaya"
+                layout="@layout/include_payment_maya"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_payment_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_height="@dimen/heightPaymentOption"
+                android:layout_marginTop="@dimen/spacing_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/paymentGcash">
+                app:layout_constraintTop_toBottomOf="@id/paymentGcash" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="💚 Maya"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbMaya"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/rbMaya"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/colorPrimary"
-                    android:clickable="false"
-                    android:focusable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Bank Transfer -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                 android:id="@+id/paymentBank"
+                layout="@layout/include_payment_bank"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_payment_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_height="@dimen/heightPaymentOption"
+                android:layout_marginTop="@dimen/spacing_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/paymentMaya">
+                app:layout_constraintTop_toBottomOf="@id/paymentMaya" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="🏦 Bank Transfer"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbBank"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/rbBank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/colorPrimary"
-                    android:clickable="false"
-                    android:focusable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Cash on Pickup (disabled for Delivery) -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <include
                 android:id="@+id/paymentCash"
+                layout="@layout/include_payment_cash"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:alpha="0.4"
-                android:background="@drawable/bg_payment_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_height="@dimen/heightPaymentOption"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:layout_marginBottom="@dimen/spacing_16"
+                android:alpha="0.45"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/paymentBank">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="💵 Cash on Pickup"
-                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/rbCash"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/rbCash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/colorPrimary"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@id/paymentBank" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ── Sticky Bottom Bar ── -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorSurface"
-        android:elevation="8dp"
-        android:padding="16dp"
+        android:elevation="@dimen/elevationBottomNav"
+        android:padding="@dimen/marginPage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -606,12 +472,11 @@
             android:id="@+id/tvTotal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/spacing_8"
             android:gravity="end"
-            android:text="Total: ₱0.00"
+            android:text="@string/price_zero"
             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -620,8 +485,8 @@
             android:id="@+id/btnPlaceOrder"
             style="@style/Style.DoughlyCrumbl.Button.Primary"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Place Order"
+            android:layout_height="@dimen/heightButtonPrimary"
+            android:text="@string/place_order"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

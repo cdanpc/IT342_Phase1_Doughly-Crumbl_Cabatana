@@ -45,7 +45,9 @@ class OrdersFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.orders.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
-            binding.tvEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            val isEmpty = list.isEmpty()
+            binding.emptyState.visibility = if (isEmpty) View.VISIBLE else View.GONE
+            binding.recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->

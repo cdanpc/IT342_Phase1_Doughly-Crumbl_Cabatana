@@ -1,10 +1,10 @@
 package com.example.mobile.cart.ui
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +13,7 @@ import com.example.mobile.databinding.ActivityCheckoutBinding
 import com.example.mobile.model.Cart
 import com.example.mobile.model.CheckoutRequest
 import com.example.mobile.util.SessionManager
+import com.google.android.material.snackbar.Snackbar
 
 class CheckoutActivity : AppCompatActivity() {
 
@@ -33,7 +34,7 @@ class CheckoutActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            title = "Checkout"
+            title = getString(R.string.checkout_title)
         }
 
         val session = SessionManager(this)
@@ -56,20 +57,27 @@ class CheckoutActivity : AppCompatActivity() {
         viewModel.cart.observe(this) { cart ->
             cart ?: return@observe
             val count = cart.items.size
-            binding.tvItemCount.text = "$count ${if (count == 1) "item" else "items"}"
-            binding.tvSummarySubtotal.text = "₱%.2f".format(cart.totalAmount)
-            binding.tvTotal.text = "Total: ₱%.2f".format(cart.totalAmount)
+            binding.tvItemCount.text = if (count == 1) {
+                getString(R.string.item_count_single)
+            } else {
+                getString(R.string.item_count_format, count)
+            }
+            val total = getString(R.string.price_format, cart.totalAmount)
+            binding.tvSummarySubtotal.text = total
+            binding.tvTotal.text = getString(R.string.checkout_total_format, total)
             buildExpandedItems(cart)
         }
         viewModel.isLoading.observe(this) { loading ->
             binding.btnPlaceOrder.isEnabled = !loading
+            binding.btnPlaceOrder.text = getString(
+                if (loading) R.string.placing_order else R.string.place_order
+            )
         }
         viewModel.error.observe(this) { msg ->
-            msg?.let { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+            msg?.let { showMessage(it) }
         }
         viewModel.orderPlaced.observe(this) { order ->
             order ?: return@observe
-            Toast.makeText(this, "Order #${order.orderId} placed successfully!", Toast.LENGTH_LONG).show()
             setResult(RESULT_OK)
             finish()
         }
@@ -78,17 +86,22 @@ class CheckoutActivity : AppCompatActivity() {
     private fun toggleOrderSummary() {
         val expanded = binding.layoutExpandedItems.visibility == View.VISIBLE
         binding.layoutExpandedItems.visibility = if (expanded) View.GONE else View.VISIBLE
-        binding.btnToggleSummary.text = if (expanded) "▼" else "▲"
+        binding.btnToggleSummary.text = getString(
+            if (expanded) R.string.show_summary else R.string.hide_summary
+        )
     }
 
     private fun buildExpandedItems(cart: Cart) {
         binding.layoutExpandedItems.removeAllViews()
         cart.items.forEach { item ->
             val tv = TextView(this).apply {
-                text = "${item.productName}  ×${item.quantity}   ₱%.2f".format(item.subtotal)
-                textSize = 12f
+                text = "${item.productName} x${item.quantity}   ${
+                    getString(R.string.price_format, item.subtotal)
+                }"
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.textCaption))
                 setTextColor(ContextCompat.getColor(this@CheckoutActivity, R.color.colorTextSecondary))
-                setPadding(0, 6, 0, 6)
+                val vPad = resources.getDimensionPixelSize(R.dimen.spacing_4)
+                setPadding(0, vPad, 0, vPad)
             }
             binding.layoutExpandedItems.addView(tv)
         }
@@ -114,8 +127,10 @@ class CheckoutActivity : AppCompatActivity() {
             if (method == Fulfillment.DELIVERY) View.VISIBLE else View.GONE
 
         val cashEnabled = method == Fulfillment.PICKUP
-        binding.paymentCash.alpha = if (cashEnabled) 1f else 0.4f
-        binding.rbCash.isEnabled = cashEnabled
+        binding.paymentCash.root.alpha = if (cashEnabled) 1f else 0.45f
+        binding.paymentCash.root.isEnabled = cashEnabled
+        binding.paymentCash.root.isClickable = cashEnabled
+        binding.paymentCash.rbCash.isEnabled = cashEnabled
         if (!cashEnabled && selectedPayment == Payment.CASH_ON_PICKUP) {
             applyPayment(Payment.GCASH)
         }
@@ -123,10 +138,10 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun setupPayment() {
         applyPayment(Payment.GCASH)
-        binding.paymentGcash.setOnClickListener { applyPayment(Payment.GCASH) }
-        binding.paymentMaya.setOnClickListener { applyPayment(Payment.MAYA) }
-        binding.paymentBank.setOnClickListener { applyPayment(Payment.BANK_TRANSFER) }
-        binding.paymentCash.setOnClickListener {
+        binding.paymentGcash.root.setOnClickListener { applyPayment(Payment.GCASH) }
+        binding.paymentMaya.root.setOnClickListener { applyPayment(Payment.MAYA) }
+        binding.paymentBank.root.setOnClickListener { applyPayment(Payment.BANK_TRANSFER) }
+        binding.paymentCash.root.setOnClickListener {
             if (selectedFulfillment == Fulfillment.PICKUP) applyPayment(Payment.CASH_ON_PICKUP)
         }
     }
@@ -135,10 +150,10 @@ class CheckoutActivity : AppCompatActivity() {
         selectedPayment = method
         data class Option(val container: View, val radio: RadioButton, val pm: Payment)
         listOf(
-            Option(binding.paymentGcash, binding.rbGcash, Payment.GCASH),
-            Option(binding.paymentMaya, binding.rbMaya, Payment.MAYA),
-            Option(binding.paymentBank, binding.rbBank, Payment.BANK_TRANSFER),
-            Option(binding.paymentCash, binding.rbCash, Payment.CASH_ON_PICKUP)
+            Option(binding.paymentGcash.root, binding.paymentGcash.rbGcash, Payment.GCASH),
+            Option(binding.paymentMaya.root, binding.paymentMaya.rbMaya, Payment.MAYA),
+            Option(binding.paymentBank.root, binding.paymentBank.rbBank, Payment.BANK_TRANSFER),
+            Option(binding.paymentCash.root, binding.paymentCash.rbCash, Payment.CASH_ON_PICKUP)
         ).forEach { opt ->
             val selected = opt.pm == method
             opt.container.setBackgroundResource(
@@ -151,23 +166,57 @@ class CheckoutActivity : AppCompatActivity() {
     private fun validateAndPlaceOrder() {
         val contactNumber = binding.etContactPhone.text?.toString()?.trim().orEmpty()
         if (contactNumber.isEmpty()) {
-            Toast.makeText(this, "Please enter your contact number", Toast.LENGTH_SHORT).show()
+            binding.tilContactPhone.error = getString(R.string.contact_required)
             return
         }
+        if (!Regex("^(09\\d{9}|\\+639\\d{9})$").matches(contactNumber)) {
+            binding.tilContactPhone.error = getString(R.string.contact_invalid)
+            return
+        }
+        binding.tilContactPhone.error = null
+
         val deliveryAddress: String
         if (selectedFulfillment == Fulfillment.DELIVERY) {
             val street = binding.etStreet.text?.toString()?.trim().orEmpty()
             val city = binding.etCity.text?.toString()?.trim().orEmpty()
+            var valid = true
             if (street.isEmpty() || city.isEmpty()) {
-                Toast.makeText(this, "Please fill in your delivery address", Toast.LENGTH_SHORT).show()
-                return
+                binding.tilStreet.error = if (street.isEmpty()) getString(R.string.street_required) else null
+                binding.tilCity.error = if (city.isEmpty()) getString(R.string.city_required) else null
+                valid = false
+            } else {
+                binding.tilStreet.error = null
+                binding.tilCity.error = null
             }
+            if (!valid) return
+
             val landmark = binding.etLandmark.text?.toString()?.trim().orEmpty()
             deliveryAddress = if (landmark.isNotBlank()) "$street, $city, $landmark" else "$street, $city"
         } else {
-            deliveryAddress = "Pickup at store"
+            deliveryAddress = getString(R.string.fulfillment_pickup_body)
+            binding.tilStreet.error = null
+            binding.tilCity.error = null
         }
-        val notes = binding.etNotes.text?.toString()?.trim()?.ifBlank { null }
-        viewModel.placeOrder(CheckoutRequest(deliveryAddress, contactNumber, notes))
+        val userNotes = binding.etNotes.text?.toString()?.trim()?.ifBlank { null }
+        viewModel.placeOrder(
+            CheckoutRequest(
+                deliveryAddress = deliveryAddress,
+                contactNumber = contactNumber,
+                fulfillmentMethod = selectedFulfillment.name,
+                paymentMethod = selectedPayment.name,
+                deliveryNotes = userNotes
+            )
+        )
+    }
+
+    private fun paymentLabel(payment: Payment): String = when (payment) {
+        Payment.GCASH -> getString(R.string.payment_gcash)
+        Payment.MAYA -> getString(R.string.payment_maya)
+        Payment.BANK_TRANSFER -> getString(R.string.payment_bank)
+        Payment.CASH_ON_PICKUP -> getString(R.string.payment_cash_pickup)
+    }
+
+    private fun showMessage(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 }

@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -106,5 +107,66 @@ class OrderServiceTest {
         assertThat(order.getPaymentStatus()).isEqualTo("CANCELLED");
         assertThat(order.getCancellationReason()).isEqualTo("Customer request");
         verify(eventPublisher).publishOrderCancelled(order);
+    }
+
+    @Test
+    void quoteDeliveryFee_pickupOrder_throwsBadRequest() {
+        Order order = Order.builder()
+                .id(4L)
+                .status("ORDER_PLACED")
+                .fulfillmentMethod("PICKUP")
+                .build();
+        when(orderRepository.findById(4L)).thenReturn(Optional.of(order));
+
+        assertThatThrownBy(() -> orderService.quoteDeliveryFee(4L, BigDecimal.valueOf(80)))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Pickup orders do not need");
+
+        verify(orderRepository, never()).save(any());
+    }
+
+    @Test
+    void quoteDeliveryFee_wrongStatus_throwsBadRequest() {
+        Order order = Order.builder()
+                .id(5L)
+                .status("COMPLETED")
+                .fulfillmentMethod("DELIVERY")
+                .build();
+        when(orderRepository.findById(5L)).thenReturn(Optional.of(order));
+
+        assertThatThrownBy(() -> orderService.quoteDeliveryFee(5L, BigDecimal.valueOf(80)))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("awaiting a delivery quote");
+
+        verify(orderRepository, never()).save(any());
+    }
+
+    @Test
+    void quoteDeliveryFee_awaitingQuote_updatesTotalAndStatus() {
+        Order order = Order.builder()
+                .id(6L)
+                .status("AWAITING_DELIVERY_QUOTE")
+                .fulfillmentMethod("DELIVERY")
+                .totalAmount(BigDecimal.valueOf(500))
+                .deliveryFee(BigDecimal.ZERO)
+                .build();
+        OrderResponse dto = new OrderResponse();
+        dto.setOrderId(6L);
+
+        when(orderRepository.findById(6L)).thenReturn(Optional.of(order));
+        when(orderRepository.save(order)).thenReturn(order);
+        when(orderAdapter.toDto(order)).thenReturn(dto);
+
+        OrderResponse result = orderService.quoteDeliveryFee(6L, BigDecimal.valueOf(80));
+
+        assertThat(result.getOrderId()).isEqualTo(6L);
+        assertThat(order.getDeliveryFee()).isEqualByComparingTo("80");
+        assertThat(order.getTotalAmount()).isEqualByComparingTo("580");
+        assertThat(order.getStatus()).isEqualTo("DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED");
+        verify(eventPublisher).publishOrderStatusChanged(
+                order,
+                "AWAITING_DELIVERY_QUOTE",
+                "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED"
+        );
     }
 }

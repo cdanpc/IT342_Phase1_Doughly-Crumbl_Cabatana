@@ -20,8 +20,21 @@ public class ProductService {
 
     public Page<ProductResponse> getAllAvailableProducts(String search, String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAllAvailable(category, pageable)
-                .map(productAdapter::toDto);
+        String cleanSearch = search == null || search.isBlank() ? null : search.trim();
+        String cleanCategory = category == null || category.isBlank() ? null : category.trim();
+
+        Page<Product> products;
+        if (cleanSearch != null && cleanCategory != null) {
+            products = productRepository.searchAvailableByCategory(cleanSearch, cleanCategory, pageable);
+        } else if (cleanSearch != null) {
+            products = productRepository.searchAvailable(cleanSearch, pageable);
+        } else if (cleanCategory != null) {
+            products = productRepository.findAvailableByCategory(cleanCategory, pageable);
+        } else {
+            products = productRepository.findByAvailableTrue(pageable);
+        }
+
+        return products.map(productAdapter::toDto);
     }
 
     public ProductResponse getProductById(Long id) {

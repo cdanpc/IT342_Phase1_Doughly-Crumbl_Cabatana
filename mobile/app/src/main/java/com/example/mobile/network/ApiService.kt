@@ -5,6 +5,9 @@ import com.example.mobile.model.AuthResponse
 import com.example.mobile.model.Cart
 import com.example.mobile.model.CartItemRequest
 import com.example.mobile.model.CheckoutRequest
+import com.example.mobile.model.CustomerProfile
+import com.example.mobile.model.DeliveryAddress
+import com.example.mobile.model.DeliveryAddressRequest
 import com.example.mobile.model.MessageResponse
 import com.example.mobile.model.Notification
 import com.example.mobile.model.Order
@@ -12,6 +15,7 @@ import com.example.mobile.model.PagedResponse
 import com.example.mobile.model.Product
 import com.example.mobile.model.ProductRequest
 import com.example.mobile.model.RegisterRequest
+import com.example.mobile.model.UpdateCustomerProfileRequest
 import com.example.mobile.model.UpdateOrderStatusRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -78,6 +82,13 @@ interface ApiService {
         @Query("reason") reason: String? = null
     ): Response<Order>
 
+    @Multipart
+    @PUT("orders/{id}/submit-payment")
+    suspend fun submitPayment(
+        @Path("id") id: Long,
+        @Part proof: MultipartBody.Part? = null
+    ): Response<Order>
+
     // --- Notifications ---
     @GET("notifications")
     suspend fun getNotifications(): Response<List<Notification>>
@@ -90,6 +101,37 @@ interface ApiService {
 
     @PUT("notifications/read-all")
     suspend fun markAllNotificationsRead(): Response<Void>
+
+    // --- Customer profile ---
+    @GET("profile")
+    suspend fun getProfile(): Response<CustomerProfile>
+
+    @PUT("profile")
+    suspend fun updateProfile(@Body request: UpdateCustomerProfileRequest): Response<CustomerProfile>
+
+    @GET("profile/addresses")
+    suspend fun getDeliveryAddresses(): Response<List<DeliveryAddress>>
+
+    @POST("profile/addresses")
+    suspend fun addDeliveryAddress(@Body request: DeliveryAddressRequest): Response<DeliveryAddress>
+
+    @PUT("profile/addresses/{id}")
+    suspend fun updateDeliveryAddress(
+        @Path("id") id: Long,
+        @Body request: DeliveryAddressRequest
+    ): Response<DeliveryAddress>
+
+    @DELETE("profile/addresses/{id}")
+    suspend fun deleteDeliveryAddress(@Path("id") id: Long): Response<Void>
+
+    @GET("profile/favorites")
+    suspend fun getFavorites(): Response<List<Product>>
+
+    @POST("profile/favorites/{productId}")
+    suspend fun addFavorite(@Path("productId") productId: Long): Response<List<Product>>
+
+    @DELETE("profile/favorites/{productId}")
+    suspend fun removeFavorite(@Path("productId") productId: Long): Response<Void>
 
     // --- Admin: Products ---
     @GET("admin/products")

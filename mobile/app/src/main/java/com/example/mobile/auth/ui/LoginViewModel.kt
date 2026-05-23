@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.auth.data.AuthRepository
 import com.example.mobile.model.AuthResponse
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -29,13 +30,13 @@ class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
             _error.value = null
             try {
                 val response = repository.login(email, password)
-                if (response.isSuccessful) {
-                    val body = response.body()!!
+                val body = response.body()
+                if (response.isSuccessful && body != null) {
                     sessionManager.saveToken(body.token)
                     sessionManager.saveUser(body.userId, body.name, body.email, body.role)
                     _authResponse.value = body
                 } else {
-                    _error.value = "Login failed: ${response.message()}"
+                    _error.value = ApiErrorParser.message(response, "Login failed. Please try again.")
                 }
             } catch (e: Exception) {
                 _error.value = e.localizedMessage ?: "Network error"

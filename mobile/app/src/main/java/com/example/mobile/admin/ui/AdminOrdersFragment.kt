@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobile.databinding.FragmentAdminOrdersBinding
+import com.example.mobile.util.OrderStatusUi
 import com.example.mobile.util.SessionManager
 
 class AdminOrdersFragment : Fragment() {
@@ -19,8 +20,8 @@ class AdminOrdersFragment : Fragment() {
     private lateinit var viewModel: AdminOrdersViewModel
     private lateinit var adapter: AdminOrderAdapter
 
-    private val statuses = listOf(null, "PENDING", "CONFIRMED", "PREPARING", "READY", "DELIVERED", "CANCELLED")
-    private val statusLabels = listOf("All", "Pending", "Confirmed", "Preparing", "Ready", "Delivered", "Cancelled")
+    private val statuses = listOf<String?>(null) + OrderStatusUi.adminStatuses
+    private val statusLabels = listOf("All Statuses") + OrderStatusUi.adminStatuses.map(OrderStatusUi::label)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAdminOrdersBinding.inflate(inflater, container, false)

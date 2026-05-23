@@ -13,7 +13,7 @@
     app:cardCornerRadius="@dimen/radiusCard"
     app:cardElevation="@dimen/elevationCard"
     app:strokeColor="@color/colorBorder"
-    app:strokeWidth="0.5dp">
+    app:strokeWidth="@dimen/strokeWidthCardThin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,8 +43,8 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="@color/colorSurface"
-                android:textSize="11sp"
-                app:chipMinHeight="28dp" />
+                android:textSize="@dimen/textCaption"
+                app:chipMinHeight="@dimen/heightChipSmall" />
         </LinearLayout>
 
         <!-- Row 2: Date -->
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_4"
-            android:textSize="11sp"
+            android:textSize="@dimen/textCaption"
             android:textColor="@color/colorTextMuted"
             android:visibility="gone" />
 
@@ -86,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:focusable="false"
-                android:textSize="10sp"
-                app:chipMinHeight="24dp" />
+                android:textSize="@dimen/textSmall"
+                app:chipMinHeight="@dimen/heightChipTiny" />
         </LinearLayout>
 
         <!-- Row 4: Total -->

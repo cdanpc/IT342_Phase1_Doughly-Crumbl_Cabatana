@@ -2,7 +2,10 @@ package com.example.mobile.auth.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobile.MainActivity
@@ -29,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.isLoading.observe(this) { loading ->
-            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            binding.loadingContainer.visibility = if (loading) View.VISIBLE else View.GONE
             binding.btnLogin.isEnabled = !loading
         }
         viewModel.error.observe(this) { msg ->
@@ -49,31 +52,48 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun showFieldError(til: com.google.android.material.textfield.TextInputLayout, errorView: android.widget.TextView, msg: String?) {
+        til.isActivated = msg != null
+        errorView.text = msg ?: ""
+        errorView.visibility = if (msg != null) View.VISIBLE else View.GONE
+    }
+
+    private fun clearErrorOnType(editText: android.widget.EditText, til: com.google.android.material.textfield.TextInputLayout, errorView: android.widget.TextView) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) { showFieldError(til, errorView, null) }
+        })
+    }
+
     private fun setupListeners() {
+        clearErrorOnType(binding.etEmail, binding.tilEmail, binding.tvEmailError)
+        clearErrorOnType(binding.etPassword, binding.tilPassword, binding.tvPasswordError)
+
         binding.btnLogin.setOnClickListener {
             binding.errorBanner.visibility = View.GONE
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString()
             if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.tilEmail.error = "Enter a valid email"
+                showFieldError(binding.tilEmail, binding.tvEmailError, "Enter a valid email")
                 return@setOnClickListener
             }
-            binding.tilEmail.error = null
+            showFieldError(binding.tilEmail, binding.tvEmailError, null)
             if (password.isEmpty()) {
-                binding.tilPassword.error = "Password required"
+                showFieldError(binding.tilPassword, binding.tvPasswordError, "Password required")
                 return@setOnClickListener
             }
-            binding.tilPassword.error = null
+            showFieldError(binding.tilPassword, binding.tvPasswordError, null)
             viewModel.login(email, password)
         }
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
         binding.tvForgotPassword.setOnClickListener {
-            // placeholder — no forgot password screen yet
+            Toast.makeText(this, "Password reset is not available yet.", Toast.LENGTH_SHORT).show()
         }
         binding.btnGoogle.setOnClickListener {
-            // placeholder — Google OAuth not implemented yet
+            Toast.makeText(this, "Google sign-in is not available yet.", Toast.LENGTH_SHORT).show()
         }
     }
 }

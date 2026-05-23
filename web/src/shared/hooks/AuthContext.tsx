@@ -10,6 +10,7 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
+  updateCurrentUser: (data: Partial<Pick<AuthUser, 'name' | 'email'>>) => void;
   logout: () => void;
 }
 
@@ -47,6 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('auth', JSON.stringify(authUser));
   }, []);
 
+  const updateCurrentUser = useCallback((data: Partial<Pick<AuthUser, 'name' | 'email'>>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...data };
+      localStorage.setItem('auth', JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem('auth');
@@ -61,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         login,
         register,
+        updateCurrentUser,
         logout,
       }}
     >

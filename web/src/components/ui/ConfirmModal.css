@@ -1,0 +1,20 @@
+.confirm-modal__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.confirm-modal__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.confirm-modal__actions .ui-button {
+  min-height: 40px;
+  padding: 9px 20px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-md);
+}

@@ -30,7 +30,7 @@ class ProductServiceTest {
         ProductResponse dto = ProductResponse.builder().id(1L).name("Choco Cookie").price(BigDecimal.valueOf(50)).build();
         Page<Product> page = new PageImpl<>(List.of(p));
 
-        when(productRepository.findAllAvailable(isNull(), any())).thenReturn(page);
+        when(productRepository.findByAvailableTrue(any())).thenReturn(page);
         when(productAdapter.toDto(p)).thenReturn(dto);
 
         Page<ProductResponse> result = productService.getAllAvailableProducts(null, null, 0, 10);

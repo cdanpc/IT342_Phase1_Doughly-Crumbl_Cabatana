@@ -12,6 +12,8 @@ import { useAuth } from './AuthContext';
 interface NotificationContextValue {
   notifications: Notification[];
   unreadCount: number;
+  lastNotification: Notification | null;
+  isRealtimeConnected: boolean;
   markRead: (id: number) => Promise<void>;
   markAllRead: () => Promise<void>;
 }
@@ -19,11 +21,13 @@ interface NotificationContextValue {
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 
 // /ws/websocket is the native WebSocket path Spring exposes alongside SockJS
-const WS_BROKER_URL = 'ws://localhost:8080/ws/websocket';
+const WS_BROKER_URL = import.meta.env.VITE_WS_BROKER_URL ?? 'ws://localhost:8080/ws/websocket';
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const { user, isAuthenticated } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [lastNotification, setLastNotification] = useState<Notification | null>(null);
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
   const clientRef = useRef<Client | null>(null);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -53,21 +57,27 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       connectHeaders: { Authorization: `Bearer ${token}` },
       reconnectDelay: 5000,
       onConnect: () => {
+        setIsRealtimeConnected(true);
         client.subscribe(`/topic/notifications/${user.userId}`, (frame) => {
           try {
             const notification: Notification = JSON.parse(frame.body);
+            setLastNotification(notification);
             setNotifications((prev) => [notification, ...prev]);
           } catch {
             // ignore malformed frames
           }
         });
       },
+      onDisconnect: () => setIsRealtimeConnected(false),
+      onStompError: () => setIsRealtimeConnected(false),
+      onWebSocketClose: () => setIsRealtimeConnected(false),
     });
 
     client.activate();
     clientRef.current = client;
 
     return () => {
+      setIsRealtimeConnected(false);
       client.deactivate();
       clientRef.current = null;
     };
@@ -86,7 +96,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ notifications, unreadCount, markRead, markAllRead }}>
+    <NotificationContext.Provider
+      value={{ notifications, unreadCount, lastNotification, isRealtimeConnected, markRead, markAllRead }}
+    >
       {children}
     </NotificationContext.Provider>
   );

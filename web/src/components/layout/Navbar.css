@@ -1,0 +1,80 @@
+.site-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 250, 246, 0.88);
+  border-bottom: 1px solid rgba(139, 0, 32, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.site-navbar__inner {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.site-navbar__brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-navbar__brand:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 6px;
+  border-radius: var(--radius-md);
+}
+
+.site-navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-left: auto;
+}
+
+.site-navbar__links a {
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.site-navbar__links a:hover {
+  color: var(--color-primary);
+}
+
+.site-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 860px) {
+  .site-navbar__links {
+    display: none;
+  }
+
+  .site-navbar__inner {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-navbar__inner {
+    min-height: 72px;
+  }
+
+  .site-navbar__actions .ui-button--ghost {
+    display: none;
+  }
+
+  .site-navbar__actions .ui-button {
+    min-height: 42px;
+    padding-inline: 16px;
+    font-size: var(--text-sm);
+  }
+
+  .brand-logo__text {
+    display: none;
+  }
+}

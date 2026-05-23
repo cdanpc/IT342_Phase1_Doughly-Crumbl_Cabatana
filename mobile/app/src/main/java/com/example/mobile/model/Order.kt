@@ -24,6 +24,12 @@ data class Order(
     @SerializedName("deliveryNotes")
     val deliveryNotes: String? = null,
 
+    @SerializedName("fulfillmentMethod")
+    val fulfillmentMethod: String? = null,
+
+    @SerializedName("paymentMethod")
+    val paymentMethod: String? = null,
+
     @SerializedName("proofImageUrl")
     val proofImageUrl: String? = null,
 
@@ -32,6 +38,12 @@ data class Order(
 
     @SerializedName("items")
     val items: List<OrderItem> = emptyList(),
+
+    @SerializedName("subtotalAmount")
+    val subtotalAmount: Double? = null,
+
+    @SerializedName("deliveryFee")
+    val deliveryFee: Double? = null,
 
     @SerializedName("totalAmount")
     val totalAmount: Double = 0.0,

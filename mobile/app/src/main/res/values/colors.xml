@@ -34,6 +34,11 @@
     <color name="statusOutForDeliveryBg">#FFF7ED</color>
     <color name="statusReadyForPickup">#0D9488</color>
     <color name="statusReadyForPickupBg">#F0FDFA</color>
+    <color name="statusPaymentSubmitted">#3B82F6</color>
+    <color name="statusPaymentConfirmed">#0891B2</color>
+    <color name="statusPreparingWeb">#8B5CF6</color>
+    <color name="statusOutForDeliveryWeb">#2563EB</color>
+    <color name="statusDefault">#666666</color>
     <color name="statusCompleted">#1A7A4A</color>
     <color name="statusCompletedBg">#E8F5EE</color>
     <color name="statusCancelled">#DC2626</color>
@@ -48,4 +53,8 @@
 
     <!-- Aliases for layout compatibility -->
     <color name="colorErrorSurface">#FDECEA</color>
+
+    <!-- Loyalty badge gold -->
+    <color name="colorGold">#F59E0B</color>
+    <color name="colorGoldBg">#FFF8E1</color>
 </resources>

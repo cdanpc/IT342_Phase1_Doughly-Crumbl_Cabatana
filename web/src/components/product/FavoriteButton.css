@@ -1,0 +1,37 @@
+.fav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, transform 0.15s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.fav-btn:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  transform: scale(1.1);
+}
+
+.fav-btn--active {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.fav-btn--active:hover {
+  background: #f0d0d6;
+}
+
+.fav-btn__icon {
+  transition: fill 0.2s, color 0.2s;
+}
+
+.fav-btn:active {
+  transform: scale(0.92);
+}

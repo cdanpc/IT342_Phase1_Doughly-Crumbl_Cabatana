@@ -11,10 +11,19 @@
     <!-- Heights -->
     <dimen name="heightButtonPrimary">52dp</dimen>
     <dimen name="heightButtonSecondary">44dp</dimen>
-    <dimen name="heightInput">52dp</dimen>
-    <dimen name="heightBottomNav">64dp</dimen>
+    <dimen name="heightInput">56dp</dimen>
+    <dimen name="heightBottomNav">80dp</dimen>
     <dimen name="heightTopAppBar">56dp</dimen>
     <dimen name="heightChip">36dp</dimen>
+    <dimen name="heightChipSmall">28dp</dimen>
+    <dimen name="heightChipTiny">24dp</dimen>
+    <dimen name="strokeWidthCardThin">0.5dp</dimen>
+    <dimen name="heightHomeHeader">112dp</dimen>
+    <dimen name="heightHomePromo">168dp</dimen>
+    <dimen name="heightProductDetailImage">220dp</dimen>
+    <dimen name="heightCartHeader">88dp</dimen>
+    <dimen name="heightPaymentOption">64dp</dimen>
+    <dimen name="heightFulfillmentOption">104dp</dimen>
 
     <!-- Spacing -->
     <dimen name="marginPage">16dp</dimen>
@@ -36,6 +45,16 @@
     <dimen name="avatarSmall">40dp</dimen>
     <dimen name="avatarMedium">56dp</dimen>
     <dimen name="avatarLarge">72dp</dimen>
+    <dimen name="productThumbLarge">88dp</dimen>
+    <dimen name="cartThumbSize">88dp</dimen>
+    <dimen name="productActionSize">48dp</dimen>
+    <dimen name="promoLogoSize">112dp</dimen>
+    <dimen name="dragHandleWidth">40dp</dimen>
+    <dimen name="dragHandleHeight">4dp</dimen>
+    <dimen name="timelineRailWidth">24dp</dimen>
+    <dimen name="timelineDotSize">16dp</dimen>
+    <dimen name="timelineLineWidth">2dp</dimen>
+    <dimen name="timelineLineHeight">36dp</dimen>
 
     <!-- Elevation / Shadow -->
     <dimen name="elevationCard">2dp</dimen>
@@ -43,17 +62,37 @@
     <dimen name="elevationFab">6dp</dimen>
 
     <!-- 8dp grid spacing -->
+    <dimen name="spacing_2">2dp</dimen>
     <dimen name="spacing_4">4dp</dimen>
     <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_12">12dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_28">28dp</dimen>
     <dimen name="spacing_32">32dp</dimen>
     <dimen name="spacing_48">48dp</dimen>
     <dimen name="spacing_64">64dp</dimen>
 
+    <!-- Logo / brand asset sizes -->
+    <dimen name="sizeLogo">120dp</dimen>
+    <dimen name="sizeLogoSmall">100dp</dimen>
+    <dimen name="sizeLogoInline">32dp</dimen>
+    <dimen name="heightLogoContainer">80dp</dimen>
+    <dimen name="heightAuthHeaderGuide">317dp</dimen>
+    <dimen name="sizeDecorCircle1W">114dp</dimen>
+    <dimen name="sizeDecorCircle2">80dp</dimen>
+    <dimen name="negativeDecorMarginL">-30dp</dimen>
+    <dimen name="negativeDecorMarginM">-20dp</dimen>
+    <dimen name="sizeQrCode">200dp</dimen>
+    <dimen name="heightDivider">1dp</dimen>
+
     <!-- Typography sizes -->
+    <dimen name="textDisplayXLarge">32sp</dimen>
+    <dimen name="textSmall">10sp</dimen>
+    <dimen name="textDisplayMedium">28sp</dimen>
     <dimen name="textDisplayLarge">26sp</dimen>
+    <dimen name="textDisplaySmall">24sp</dimen>
     <dimen name="textHeadlineLarge">22sp</dimen>
     <dimen name="textHeadlineMedium">18sp</dimen>
     <dimen name="textTitleLarge">16sp</dimen>
@@ -65,8 +104,15 @@
 
     <!-- Component heights -->
     <dimen name="heightListItem">56dp</dimen>
+    <dimen name="heightCartItemMin">128dp</dimen>
+    <dimen name="heightInputMultiLine">96dp</dimen>
+    <dimen name="heightOrderItemMin">132dp</dimen>
+    <dimen name="iconSizeStar">14dp</dimen>
+    <dimen name="overlapProfileCard">24dp</dimen>
+    <dimen name="negativeOverlapProfileCard">-24dp</dimen>
     <dimen name="heightHeroBanner">200dp</dimen>
     <dimen name="heightProductImage">130dp</dimen>
     <dimen name="heightAdminProductImage">72dp</dimen>
+    <dimen name="heightAdminProductPreview">180dp</dimen>
     <dimen name="heightProofOfPayment">180dp</dimen>
 </resources>

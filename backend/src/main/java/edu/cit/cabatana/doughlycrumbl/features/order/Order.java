@@ -49,6 +49,16 @@ public class Order {
     @Column(name = "delivery_notes", columnDefinition = "TEXT")
     private String deliveryNotes;
 
+    @Column(name = "fulfillment_method", nullable = false, length = 20,
+            columnDefinition = "VARCHAR(20) DEFAULT 'DELIVERY'")
+    @Builder.Default
+    private String fulfillmentMethod = "DELIVERY";
+
+    @Column(name = "payment_method", nullable = false, length = 30,
+            columnDefinition = "VARCHAR(30) DEFAULT 'GCASH'")
+    @Builder.Default
+    private String paymentMethod = "GCASH";
+
     @Column(name = "proof_image_url", length = 500)
     private String proofImageUrl;
 
@@ -57,6 +67,11 @@ public class Order {
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
+
+    @Column(name = "delivery_fee", nullable = false, precision = 10, scale = 2,
+            columnDefinition = "NUMERIC(10,2) DEFAULT 0")
+    @Builder.Default
+    private BigDecimal deliveryFee = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

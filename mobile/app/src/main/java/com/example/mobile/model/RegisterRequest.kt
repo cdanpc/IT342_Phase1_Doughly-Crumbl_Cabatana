@@ -12,6 +12,9 @@ data class RegisterRequest(
     @SerializedName("password")
     val password: String,
 
+    @SerializedName("confirmPassword")
+    val confirmPassword: String,
+
     @SerializedName("phoneNumber")
     val phoneNumber: String = "",
 

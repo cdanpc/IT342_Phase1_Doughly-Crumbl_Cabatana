@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.admin.data.AdminRepository
 import com.example.mobile.model.Product
+import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.util.SessionManager
 import kotlinx.coroutines.launch
 
@@ -33,7 +34,7 @@ class AdminProductsViewModel(private val sessionManager: SessionManager) : ViewM
             try {
                 val r = repository.getProducts()
                 if (r.isSuccessful) _products.value = r.body()?.content ?: emptyList()
-                else _error.value = "Failed to load products"
+                else _error.value = ApiErrorParser.message(r, "Failed to load products")
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
             } finally {
@@ -44,16 +45,21 @@ class AdminProductsViewModel(private val sessionManager: SessionManager) : ViewM
 
     fun deleteProduct(id: Long) {
         viewModelScope.launch {
+            if (_isLoading.value == true) return@launch
+            _isLoading.value = true
+            _error.value = null
             try {
                 val r = repository.deleteProduct(id)
                 if (r.isSuccessful) {
                     _deleteSuccess.value = true
                     loadProducts()
                 } else {
-                    _error.value = "Delete failed"
+                    _error.value = ApiErrorParser.message(r, "Delete failed")
                 }
             } catch (e: Exception) {
                 _error.value = e.localizedMessage
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -22,9 +22,13 @@ public class OrderResponse {
     private String deliveryAddress;
     private String contactNumber;
     private String deliveryNotes;
+    private String fulfillmentMethod;
+    private String paymentMethod;
     private String proofImageUrl;
     private String cancellationReason;
     private List<OrderItemResponse> items;
+    private BigDecimal subtotalAmount;
+    private BigDecimal deliveryFee;
     private BigDecimal totalAmount;
     private Integer itemCount;
 

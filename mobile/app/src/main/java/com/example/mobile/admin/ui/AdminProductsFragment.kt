@@ -55,6 +55,8 @@ class AdminProductsFragment : Fragment() {
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            binding.fab.isEnabled = !loading
+            adapter.actionsEnabled = !loading
         }
         viewModel.error.observe(viewLifecycleOwner) { msg ->
             msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }

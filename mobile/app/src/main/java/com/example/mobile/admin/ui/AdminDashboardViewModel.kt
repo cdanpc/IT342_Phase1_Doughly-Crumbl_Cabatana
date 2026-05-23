@@ -45,12 +45,16 @@ class AdminDashboardViewModel(sessionManager: SessionManager) : ViewModel() {
                     val orders = r.body() ?: emptyList()
                     val grouped = orders.groupBy { it.status }
                     _stats.value = DashboardStats(
-                        pending   = grouped["PENDING"]?.size ?: 0,
-                        confirmed = grouped["CONFIRMED"]?.size ?: 0,
-                        preparing = grouped["PREPARING"]?.size ?: 0,
-                        ready     = grouped["READY"]?.size ?: 0,
-                        delivered = grouped["DELIVERED"]?.size ?: 0,
-                        cancelled = grouped["CANCELLED"]?.size ?: 0
+                        pending = countStatuses(
+                            grouped,
+                            "ORDER_PLACED",
+                            "AWAITING_DELIVERY_QUOTE"
+                        ),
+                        confirmed = countStatuses(grouped, "CONFIRMED", "PAYMENT_CONFIRMED"),
+                        preparing = countStatuses(grouped, "PREPARING"),
+                        ready = countStatuses(grouped, "READY", "OUT_FOR_DELIVERY"),
+                        delivered = countStatuses(grouped, "COMPLETED"),
+                        cancelled = countStatuses(grouped, "CANCELLED")
                     )
                     _recentOrders.value = orders.take(5)
                 } else {
@@ -63,6 +67,9 @@ class AdminDashboardViewModel(sessionManager: SessionManager) : ViewModel() {
             }
         }
     }
+
+    private fun countStatuses(grouped: Map<String, List<Order>>, vararg statuses: String): Int =
+        statuses.sumOf { grouped[it]?.size ?: 0 }
 }
 
 class AdminDashboardViewModelFactory(private val sessionManager: SessionManager) : ViewModelProvider.Factory {

@@ -5,6 +5,7 @@ import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
 import edu.cit.cabatana.doughlycrumbl.features.order.OrderResponse.OrderItemResponse;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,13 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
                 .deliveryAddress(order.getDeliveryAddress())
                 .contactNumber(order.getContactNumber())
                 .deliveryNotes(order.getDeliveryNotes())
+                .fulfillmentMethod(order.getFulfillmentMethod())
+                .paymentMethod(order.getPaymentMethod())
                 .proofImageUrl(order.getProofImageUrl())
                 .cancellationReason(order.getCancellationReason())
                 .items(items)
+                .subtotalAmount(subtotalAmount(order))
+                .deliveryFee(deliveryFee(order))
                 .totalAmount(order.getTotalAmount())
                 .itemCount(calculateItemCount(items))
                 .build();
@@ -45,6 +50,11 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
                 .orderId(order.getId())
                 .orderDate(order.getOrderDate())
                 .status(order.getStatus())
+                .paymentStatus(order.getPaymentStatus())
+                .fulfillmentMethod(order.getFulfillmentMethod())
+                .paymentMethod(order.getPaymentMethod())
+                .subtotalAmount(subtotalAmount(order))
+                .deliveryFee(deliveryFee(order))
                 .totalAmount(order.getTotalAmount())
                 .itemCount(calculateItemCount(order.getItems()))
                 .build();
@@ -71,5 +81,14 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
                     return 0;
                 })
                 .sum();
+    }
+
+    private BigDecimal deliveryFee(Order order) {
+        return order.getDeliveryFee() != null ? order.getDeliveryFee() : BigDecimal.ZERO;
+    }
+
+    private BigDecimal subtotalAmount(Order order) {
+        BigDecimal total = order.getTotalAmount() != null ? order.getTotalAmount() : BigDecimal.ZERO;
+        return total.subtract(deliveryFee(order));
     }
 }

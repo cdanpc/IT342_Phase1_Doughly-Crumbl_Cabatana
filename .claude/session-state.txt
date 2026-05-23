@@ -1,12 +1,30 @@
-Last saved: 2026-05-07
+Last saved: 2026-05-19
 Branch: mobile/core-features
-Last commit: (see git log after handoff commit)
+Last commit: 76a6298 chore: session handoff [auto]
 
-Key changes this session:
-  - Sign out crash fixed (SessionManager keystore corruption + finish() on logout)
-  - Notification click now navigates to detail (OrderDetailActivity or NotificationDetailActivity)
-  - Payment instructions rewritten: correct GCash/Maya/BPI details + QR codes
-  - Toolbar buttons removed (notification bell + search — not wired up)
-  - Logos added: logo_doughly_red, logo_doughly_white, logo_in_ig
-  - App launcher icon updated to logo_in_ig across all mipmap densities
-  - BASE_URL set to 192.168.1.52:8080 for physical device testing (same WiFi)
+Session summary: backend credential setup only. No code changes.
+- Created backend/.env with real Supabase credentials (gitignored, not committed).
+- Backend startup not yet verified — run from cmd.exe, not PowerShell.
+- Next task: verify backend starts, then QA golden path on device/emulator.
+
+Modified files:
+ M .claude/memory/mistakes.md
+ M .claude/session-state.txt
+ M .claude/settings.local.json
+ M CLAUDE.md
+ M README.md
+ M backend/.gitignore
+ M backend/mvnw.cmd
+ M backend/pom.xml
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/CheckoutRequest.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/Order.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderAdapter.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderFactory.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderResponse.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/order/OrderService.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductRepository.java
+ M backend/src/main/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductService.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/auth/AuthControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/cart/CartControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductControllerIntegrationTest.java
+ M backend/src/test/java/edu/cit/cabatana/doughlycrumbl/features/product/ProductServiceTest.java

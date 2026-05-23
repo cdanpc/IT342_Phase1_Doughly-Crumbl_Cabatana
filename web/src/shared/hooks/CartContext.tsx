@@ -96,7 +96,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const openOrderPanel = useCallback(() => setIsOrderPanelOpen(true), []);
   const closeOrderPanel = useCallback(() => setIsOrderPanelOpen(false), []);
   const toggleOrderPanel = useCallback(() => setIsOrderPanelOpen((prev) => !prev), []);
-  const openCheckout = useCallback(() => setIsCheckoutOpen(true), []);
+  const openCheckout = useCallback(() => {
+    setIsOrderPanelOpen(false);
+    setIsCheckoutOpen(true);
+  }, []);
   const closeCheckout = useCallback(() => setIsCheckoutOpen(false), []);
 
   return (

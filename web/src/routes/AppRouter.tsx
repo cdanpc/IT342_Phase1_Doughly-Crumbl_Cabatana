@@ -60,7 +60,7 @@ export default function AppRouter() {
           <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
           <Route path={ROUTES.PAYMENT_INSTRUCTIONS} element={<PaymentInstructionsPage />} />
           <Route path={ROUTES.ORDER_SUCCESS} element={<OrderConfirmationPage />} />
-<Route path={ROUTES.CARE_GUIDE} element={<CareGuidePage />} />
+          <Route path={ROUTES.CARE_GUIDE} element={<CareGuidePage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
         </Route>
 

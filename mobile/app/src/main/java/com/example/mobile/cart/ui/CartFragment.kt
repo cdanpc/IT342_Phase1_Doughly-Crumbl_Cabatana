@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,8 +29,12 @@ class CartFragment : Fragment() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             viewModel.loadCart()
-            activity?.findViewById<BottomNavigationView>(R.id.bottomNav)
-                ?.selectedItemId = R.id.nav_orders
+            Snackbar.make(requireView(), getString(R.string.order_placed_success), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.view_orders)) {
+                    activity?.findViewById<BottomNavigationView>(R.id.bottomNav)
+                        ?.selectedItemId = R.id.nav_orders
+                }
+                .show()
         }
     }
 
@@ -80,19 +85,25 @@ class CartFragment : Fragment() {
             binding.emptyState.visibility = if (isEmpty) View.VISIBLE else View.GONE
             binding.recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
             binding.orderSummaryCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            binding.btnCheckout.visibility = if (isEmpty) View.GONE else View.VISIBLE
             binding.btnCheckout.isEnabled = !isEmpty
 
-            binding.tvSubtotal.text = "₱%.2f".format(cart?.totalAmount ?: 0.0)
-            binding.tvTotal.text = "₱%.2f".format(cart?.totalAmount ?: 0.0)
+            binding.tvSubtotal.text = getString(R.string.price_format, cart?.totalAmount ?: 0.0)
+            binding.tvTotal.text = getString(R.string.price_format, cart?.totalAmount ?: 0.0)
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            adapter.actionsEnabled = !loading
             if (loading) binding.btnCheckout.isEnabled = false
         }
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
             binding.swipeRefresh.isRefreshing = false
+            msg?.let {
+                Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.retry)) { viewModel.loadCart() }
+                    .show()
+            }
         }
     }
 

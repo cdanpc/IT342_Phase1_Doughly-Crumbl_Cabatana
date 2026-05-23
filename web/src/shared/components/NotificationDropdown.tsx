@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Bell, CheckCheck } from 'lucide-react';
 import { useNotifications } from '../hooks/NotificationContext';
 import type { Notification } from '../types';
 import './NotificationDropdown.css';
 
 interface Props {
   onClose: () => void;
+  onSelectNotification: (notification: Notification) => void;
 }
 
 function timeAgo(dateStr: string): string {
@@ -18,9 +19,8 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-export default function NotificationDropdown({ onClose }: Props) {
-  const { notifications, unreadCount, markRead, markAllRead } = useNotifications();
-  const navigate = useNavigate();
+export default function NotificationDropdown({ onClose, onSelectNotification }: Props) {
+  const { notifications, unreadCount, markAllRead } = useNotifications();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,19 +29,20 @@ export default function NotificationDropdown({ onClose }: Props) {
         onClose();
       }
     }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [onClose]);
 
-  async function handleClick(n: Notification) {
-    if (!n.read) {
-      try { await markRead(n.id); } catch { /* badge self-corrects on next load */ }
-    }
-    if (n.orderId) {
-      const isAdminNotif = ['NEW_ORDER', 'PAYMENT_SUBMITTED'].includes(n.type);
-      navigate(isAdminNotif ? `/admin/orders/${n.orderId}` : `/orders/${n.orderId}`);
-    }
+  function handleClick(n: Notification) {
     onClose();
+    onSelectNotification(n);
   }
 
   async function handleMarkAllRead() {
@@ -51,20 +52,24 @@ export default function NotificationDropdown({ onClose }: Props) {
   return (
     <div className="notif-dropdown" ref={ref}>
       <div className="notif-dropdown__header">
-        <span className="notif-dropdown__title">Notifications</span>
+        <span className="notif-dropdown__title"><Bell size={16} /> Notifications</span>
         {unreadCount > 0 && (
           <button className="notif-dropdown__mark-all" onClick={handleMarkAllRead}>
-            Mark all read
+            <CheckCheck size={14} /> Mark all read
           </button>
         )}
       </div>
 
       <div className="notif-dropdown__list">
         {notifications.length === 0 ? (
-          <div className="notif-dropdown__empty">No notifications yet.</div>
+          <div className="notif-dropdown__empty">
+            <Bell size={26} />
+            <strong>No notifications yet</strong>
+            <span>Order and payment updates will appear here.</span>
+          </div>
         ) : (
           notifications.map((n) => (
-            <div
+            <button
               key={n.id}
               className={`notif-dropdown__item${n.read ? '' : ' notif-dropdown__item--unread'}`}
               onClick={() => handleClick(n)}
@@ -72,7 +77,7 @@ export default function NotificationDropdown({ onClose }: Props) {
               <div className="notif-dropdown__item-title">{n.title}</div>
               <div className="notif-dropdown__item-message">{n.message}</div>
               <div className="notif-dropdown__item-time">{timeAgo(n.createdAt)}</div>
-            </div>
+            </button>
           ))
         )}
       </div>

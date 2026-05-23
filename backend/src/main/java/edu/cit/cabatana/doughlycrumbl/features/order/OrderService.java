@@ -73,6 +73,10 @@ public class OrderService {
         if (cart.getItems().isEmpty()) {
             throw new BadRequestException("Cart is empty");
         }
+        if ("CASH_ON_PICKUP".equalsIgnoreCase(request.getPaymentMethod())
+                && !"PICKUP".equalsIgnoreCase(request.getFulfillmentMethod())) {
+            throw new BadRequestException("Cash on pickup is only available for pickup orders");
+        }
 
         // Factory Pattern: Delegate complex order creation to factory
         Order order = orderFactory.createOrderFromCart(user, cart, request);
@@ -209,11 +213,15 @@ public class OrderService {
             throw new BadRequestException(
                     "Cannot submit payment for an order in status: " + current);
         }
-
-        if (proofImage != null && !proofImage.isEmpty()) {
-            String proofUrl = fileUploadService.saveImage(proofImage);
-            order.setProofImageUrl(proofUrl);
+        if ("CASH_ON_PICKUP".equalsIgnoreCase(order.getPaymentMethod())) {
+            throw new BadRequestException("Cash on pickup orders do not require payment proof");
         }
+        if (proofImage == null || proofImage.isEmpty()) {
+            throw new BadRequestException("Payment proof image is required");
+        }
+
+        String proofUrl = fileUploadService.saveImage(proofImage);
+        order.setProofImageUrl(proofUrl);
 
         String oldStatus = current;
         order.setStatus("PAYMENT_SUBMITTED_AWAITING_CONFIRMATION");
@@ -269,13 +277,25 @@ public class OrderService {
         if (deliveryFee == null || deliveryFee.compareTo(BigDecimal.ZERO) < 0) {
             throw new BadRequestException("Delivery fee must be a non-negative amount");
         }
+        if ("PICKUP".equalsIgnoreCase(order.getFulfillmentMethod())) {
+            throw new BadRequestException("Pickup orders do not need a delivery fee quote");
+        }
+        String oldStatus = order.getStatus();
+        if (!"AWAITING_DELIVERY_QUOTE".equals(oldStatus)
+                && !"DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED".equals(oldStatus)) {
+            throw new BadRequestException("Delivery fee can only be quoted while an order is awaiting a delivery quote");
+        }
 
-        // Add delivery fee on top of existing totalAmount (items subtotal)
-        order.setTotalAmount(order.getTotalAmount().add(deliveryFee));
+        BigDecimal existingDeliveryFee = order.getDeliveryFee() != null ? order.getDeliveryFee() : BigDecimal.ZERO;
+        BigDecimal itemSubtotal = order.getTotalAmount().subtract(existingDeliveryFee);
+        order.setDeliveryFee(deliveryFee);
+        order.setTotalAmount(itemSubtotal.add(deliveryFee));
         order.setStatus("DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED");
 
         Order saved = orderRepository.save(order);
-        eventPublisher.publishOrderStatusChanged(saved, "AWAITING_DELIVERY_QUOTE", "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED");
+        if (!"DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED".equals(oldStatus)) {
+            eventPublisher.publishOrderStatusChanged(saved, oldStatus, "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED");
+        }
         return orderAdapter.toDto(saved);
     }
 

@@ -117,9 +117,13 @@ export interface Order {
   deliveryAddress: string;
   contactNumber: string;
   deliveryNotes: string;
+  fulfillmentMethod?: 'DELIVERY' | 'PICKUP';
+  paymentMethod?: 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';
   proofImageUrl?: string;
   cancellationReason?: string;
   items: OrderItem[];
+  subtotalAmount?: number;
+  deliveryFee?: number;
   totalAmount: number;
   itemCount?: number;
 }
@@ -127,6 +131,8 @@ export interface Order {
 export interface CheckoutRequest {
   deliveryAddress: string;
   contactNumber: string;
+  fulfillmentMethod: 'DELIVERY' | 'PICKUP';
+  paymentMethod: 'GCASH' | 'MAYA' | 'BANK_TRANSFER' | 'CASH_ON_PICKUP';
   deliveryNotes?: string;
 }
 

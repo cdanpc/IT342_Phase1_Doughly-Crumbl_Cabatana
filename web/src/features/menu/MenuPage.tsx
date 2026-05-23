@@ -1,11 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import toast from 'react-hot-toast';
+import MenuHero from '../../components/menu/MenuHero';
+import CategoryTabs from '../../components/menu/CategoryTabs';
+import ProductGrid from '../../components/menu/ProductGrid';
+import ProductDetailModal from '../../components/product/ProductDetailModal';
+import SectionHeader from '../../components/layout/SectionHeader';
 import { getProducts } from '../../shared/api/productApi';
 import { useCart } from '../../shared/hooks/CartContext';
-import { formatPrice } from '../../shared/utils/formatters';
+import useDebouncedValue from '../../shared/hooks/useDebouncedValue';
 import type { Product } from '../../shared/types';
-import toast from 'react-hot-toast';
 import './MenuPage.css';
 
 const CATEGORIES = [
@@ -18,41 +22,53 @@ const CATEGORIES = [
 
 export default function MenuPage() {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
+  const debouncedSearchQuery = useDebouncedValue(searchQuery.trim(), 300);
   const { addToCart, openOrderPanel } = useCart();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [addingId, setAddingId] = useState<number | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [detailQuantity, setDetailQuantity] = useState(1);
 
   const fetchProducts = useCallback(async () => {
     setIsLoading(true);
+    setLoadError('');
     try {
       const params: { search?: string; category?: string; size?: number } = { size: 50 };
-      if (searchQuery) params.search = searchQuery;
+      if (debouncedSearchQuery) params.search = debouncedSearchQuery;
       if (selectedCategory !== 'All') params.category = selectedCategory;
 
       const data = await getProducts(params);
       setProducts(data.content);
-    } catch {
-      toast.error('Failed to load products. Please try again.');
+    } catch (err: unknown) {
+      const message = 'Failed to load products. Please try again.';
+      setLoadError(message);
+      toast.error(message);
       setProducts([]);
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, selectedCategory]);
+  }, [debouncedSearchQuery, selectedCategory]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  async function handleAddToCart(e: React.MouseEvent, product: Product) {
-    e.stopPropagation();
-    if (addingId !== null) return;
+  function openProduct(product: Product) {
+    setSelectedProduct(product);
+    setDetailQuantity(1);
+  }
+
+  async function addProductToCart(product: Product, quantity = 1) {
+    if (addingId !== null || !product.available) return;
     setAddingId(product.id);
     try {
-      await addToCart(product.id, 1);
+      await addToCart(product.id, quantity);
       openOrderPanel();
+      setSelectedProduct(null);
     } catch {
       toast.error('Failed to add item. Please try again.');
     } finally {
@@ -60,90 +76,53 @@ export default function MenuPage() {
     }
   }
 
+  async function handleCardAddToCart(event: React.MouseEvent<HTMLButtonElement>, product: Product) {
+    event.stopPropagation();
+    await addProductToCart(product);
+  }
+
   return (
     <div className="menu-page">
-      {/* Hero Banner */}
-      <div className="menu-hero">
-        <div className="menu-hero__content">
-          <p className="menu-hero__label">Welcome to Doughly Crumbl</p>
-          <h2 className="menu-hero__title">Freshly Baked Happiness</h2>
-          <button className="menu-hero__btn">Order Now</button>
-        </div>
-      </div>
+      <MenuHero onOrderNow={() => document.getElementById('menu-products')?.scrollIntoView({ behavior: 'smooth' })} />
 
-      {/* Products Section */}
-      <section className="menu-section">
-        <div className="menu-section__header">
-          <h3 className="menu-section__title">Featured Delights</h3>
-        </div>
+      <section className="menu-section" id="menu-products">
+        <SectionHeader
+          eyebrow="Fresh menu"
+          title={debouncedSearchQuery ? `Results for "${debouncedSearchQuery}"` : 'Featured delights'}
+          description="Choose a category, inspect the details, and add fresh cookies to your order bag."
+        />
 
-        {/* Category Pills */}
-        <div className="menu-category-tabs">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              className={`menu-category-tab${selectedCategory === cat.value ? ' menu-category-tab--active' : ''}`}
-              onClick={() => setSelectedCategory(cat.value)}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+        <CategoryTabs
+          categories={CATEGORIES}
+          selectedCategory={selectedCategory}
+          onSelect={setSelectedCategory}
+        />
 
-        {isLoading ? (
-          <div className="product-grid">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="product-card product-card--skeleton">
-                <div className="product-card__image-wrapper skeleton" />
-                <div className="product-card__body">
-                  <div className="skeleton skeleton-text" style={{ width: '80%', height: 14 }} />
-                  <div className="skeleton skeleton-text skeleton-text--short" style={{ width: '50%', height: 12 }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : products.length === 0 ? (
-          <div className="menu-empty">
-            <div className="menu-empty__icon">🍪</div>
-            <p className="menu-empty__text">No products found. Try a different search or category.</p>
+        {loadError ? (
+          <div className="menu-page__error" role="alert">
+            <strong>Could not load products</strong>
+            <span>{loadError}</span>
+            <button type="button" onClick={fetchProducts}>Try again</button>
           </div>
         ) : (
-          <div className="product-grid">
-            {products.map((product) => (
-              <div key={product.id} className="product-card">
-                <div className="product-card__image-wrapper">
-                  <img
-                    className="product-card__image"
-                    src={product.imageUrl || 'https://placehold.co/300x300/f0f0f0/999?text=🍪'}
-                    alt={product.name}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://placehold.co/300x300/f0f0f0/999?text=🍪';
-                    }}
-                  />
-                </div>
-                <div className="product-card__body">
-                  <div className="product-card__name-row">
-                    <span className="product-card__name">{product.name}</span>
-                    <button
-                      className="product-card__cart-btn"
-                      onClick={(e) => handleAddToCart(e, product)}
-                      disabled={addingId === product.id}
-                      style={{ opacity: addingId === product.id ? 0.5 : 1 }}
-                    >
-                      <ShoppingCart size={18} />
-                      <span className="sr-only">Add 1 item</span>
-                    </button>
-                  </div>
-                  <div className="product-card__price-row">
-                    <span className="product-card__price">{formatPrice(product.price)}</span>
-                    <span className="product-card__rating">★ 4.8</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProductGrid
+            products={products}
+            addingId={addingId}
+            isLoading={isLoading}
+            onAddToCart={handleCardAddToCart}
+            onOpenProduct={openProduct}
+          />
         )}
       </section>
+
+      <ProductDetailModal
+        product={selectedProduct}
+        quantity={detailQuantity}
+        isAdding={selectedProduct ? addingId === selectedProduct.id : false}
+        onQuantityChange={setDetailQuantity}
+        onAddToCart={() => selectedProduct && addProductToCart(selectedProduct, detailQuantity)}
+        onClose={() => setSelectedProduct(null)}
+      />
     </div>
   );
 }

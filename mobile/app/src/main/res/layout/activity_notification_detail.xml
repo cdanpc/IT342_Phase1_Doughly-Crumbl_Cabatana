@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorSurface"
         app:navigationIcon="@drawable/ic_back"
-        app:title="Notification"
+        app:title="@string/notification_detail_title"
         app:titleTextAppearance="@style/TextAppearance.DoughlyCrumbl.TitleMedium"
         app:titleTextColor="@color/colorTextPrimary" />
 
@@ -46,7 +46,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/heightDivider"
                     android:layout_marginVertical="@dimen/spacing_12"
                     android:background="@color/colorBorder" />
 

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@android:color/transparent" />
-    <stroke android:width="1.5dp" android:color="@color/colorPrimary" />
-    <corners android:radius="@dimen/radiusButton" />
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorPrimaryLight">
+
+    <!-- Clips ripple to the button's rounded corner bounds -->
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorSurface" />
+            <corners android:radius="@dimen/radiusButton" />
+        </shape>
+    </item>
+
+    <!-- Transparent fill with crimson stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke android:width="1.5dp" android:color="@color/colorPrimary" />
+            <corners android:radius="@dimen/radiusButton" />
+        </shape>
+    </item>
+
+</ripple>

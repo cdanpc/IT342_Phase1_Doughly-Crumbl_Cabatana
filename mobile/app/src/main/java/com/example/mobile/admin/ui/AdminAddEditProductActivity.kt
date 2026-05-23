@@ -2,12 +2,14 @@ package com.example.mobile.admin.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.mobile.R
 import com.example.mobile.databinding.ActivityAdminAddEditProductBinding
 import com.example.mobile.model.Product
 import com.example.mobile.model.ProductRequest
@@ -41,13 +43,15 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         val factory = AdminAddEditProductViewModelFactory(session)
         viewModel = ViewModelProvider(this, factory)[AdminAddEditProductViewModel::class.java]
 
-        // Decode editing product if passed
         intent.getStringExtra("productJson")?.let { json ->
             editingProduct = Gson().fromJson(json, Product::class.java)
         }
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = if (editingProduct == null) "Add Product" else "Edit Product"
+        supportActionBar?.title = if (editingProduct == null)
+            getString(R.string.admin_add_product_title)
+        else
+            getString(R.string.admin_edit_product_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
@@ -62,11 +66,9 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         binding.etDescription.setText(p.description ?: "")
         binding.etPrice.setText(p.price.toString())
         binding.etCategory.setText(p.category)
-        binding.etStock.setText(if (p.available) "1" else "0")
+        binding.switchAvailable.isChecked = p.available
         binding.etImageUrl.setText(p.imageUrl ?: "")
-        Glide.with(this).load(p.imageUrl)
-            .placeholder(android.R.drawable.ic_menu_gallery)
-            .into(binding.ivPreview)
+        Glide.with(this).load(p.imageUrl).centerCrop().into(binding.ivPreview)
     }
 
     private fun observeViewModel() {
@@ -80,12 +82,12 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         viewModel.uploadedImageUrl.observe(this) { url ->
             url?.let {
                 binding.etImageUrl.setText(it)
-                Toast.makeText(this, "Image uploaded", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.admin_image_uploaded), Toast.LENGTH_SHORT).show()
             }
         }
         viewModel.saveSuccess.observe(this) { product ->
             product ?: return@observe
-            Toast.makeText(this, "Product saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.admin_product_saved), Toast.LENGTH_SHORT).show()
             setResult(RESULT_OK)
             finish()
         }
@@ -99,10 +101,33 @@ class AdminAddEditProductActivity : AppCompatActivity() {
     }
 
     private fun uploadImage(uri: Uri) {
-        val stream = contentResolver.openInputStream(uri) ?: return
-        val bytes = stream.readBytes()
-        stream.close()
-        val requestBody = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        val mimeType = contentResolver.getType(uri)
+        if (mimeType?.startsWith("image/") != true) {
+            Toast.makeText(this, getString(R.string.select_image_file), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val fileSize = queryFileSize(uri)
+        if (fileSize != null && fileSize > MAX_IMAGE_BYTES) {
+            Toast.makeText(this, getString(R.string.image_size_limit), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val bytes = try {
+            contentResolver.openInputStream(uri)?.use { it.readBytes() }
+        } catch (e: Exception) {
+            null
+        }
+        if (bytes == null) {
+            Toast.makeText(this, getString(R.string.image_read_failed), Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (bytes.size > MAX_IMAGE_BYTES) {
+            Toast.makeText(this, getString(R.string.image_size_limit), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val requestBody = bytes.toRequestBody(mimeType.toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", "image.jpg", requestBody)
         viewModel.uploadImage(part)
     }
@@ -112,17 +137,15 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         val desc = binding.etDescription.text.toString().trim()
         val priceStr = binding.etPrice.text.toString().trim()
         val category = binding.etCategory.text.toString().trim()
-        val availableStr = binding.etStock.text.toString().trim()
+        val available = binding.switchAvailable.isChecked
         val imageUrl = binding.etImageUrl.text.toString().trim().ifEmpty { null }
 
         var valid = true
-        if (name.isEmpty()) { binding.tilName.error = "Required"; valid = false } else binding.tilName.error = null
-        if (desc.isEmpty()) { binding.tilDescription.error = "Required"; valid = false } else binding.tilDescription.error = null
+        if (name.isEmpty()) { binding.tilName.error = getString(R.string.error_required); valid = false } else binding.tilName.error = null
+        if (desc.isEmpty()) { binding.tilDescription.error = getString(R.string.error_required); valid = false } else binding.tilDescription.error = null
         val price = priceStr.toDoubleOrNull()
-        if (price == null || price <= 0) { binding.tilPrice.error = "Enter a valid price"; valid = false } else binding.tilPrice.error = null
-        if (category.isEmpty()) { binding.tilCategory.error = "Required"; valid = false } else binding.tilCategory.error = null
-        val availableInput = availableStr.toIntOrNull()
-        if (availableInput == null) { binding.tilStock.error = "Enter 1 (available) or 0 (unavailable)"; valid = false } else binding.tilStock.error = null
+        if (price == null || price <= 0) { binding.tilPrice.error = getString(R.string.error_invalid_price); valid = false } else binding.tilPrice.error = null
+        if (category.isEmpty()) { binding.tilCategory.error = getString(R.string.error_required); valid = false } else binding.tilCategory.error = null
 
         if (!valid) return
 
@@ -134,8 +157,18 @@ class AdminAddEditProductActivity : AppCompatActivity() {
                 price = price!!,
                 imageUrl = imageUrl,
                 category = category,
-                available = availableInput!! != 0
+                available = available
             )
         )
+    }
+
+    private fun queryFileSize(uri: Uri): Long? =
+        contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+            val index = cursor.getColumnIndex(OpenableColumns.SIZE)
+            if (index >= 0 && cursor.moveToFirst()) cursor.getLong(index) else null
+        }
+
+    companion object {
+        private const val MAX_IMAGE_BYTES = 5L * 1024L * 1024L
     }
 }

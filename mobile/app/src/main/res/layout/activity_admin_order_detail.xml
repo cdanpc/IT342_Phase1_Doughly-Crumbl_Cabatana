@@ -1,57 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
+    android:background="@color/colorBackground">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:titleTextColor="@color/colorSurface" />
+        app:titleTextColor="@color/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/marginPage">
 
             <!-- Customer Info -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/spacing_12"
+                app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
-                app:cardBackgroundColor="@color/colorSurface"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="@dimen/spacing_12">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
+                        android:layout_marginBottom="@dimen/spacing_4"
                         android:orientation="horizontal">
 
                         <TextView
@@ -66,7 +74,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorSurface"
-                            android:textSize="11sp" />
+                            android:textSize="@dimen/textCaption" />
                     </LinearLayout>
 
                     <TextView
@@ -79,7 +87,7 @@
                         android:id="@+id/tvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/spacing_4"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -88,26 +96,26 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/spacing_12"
+                app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
-                app:cardBackgroundColor="@color/colorSurface"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="@dimen/spacing_12">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Items"
+                        android:layout_marginBottom="@dimen/spacing_8"
+                        android:text="@string/order_items"
                         android:textColor="@color/colorTextPrimary"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/textBodyLarge"
                         android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -122,18 +130,18 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/spacing_12"
+                app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
-                app:cardBackgroundColor="@color/colorSurface"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="@dimen/spacing_12">
 
                     <TextView
                         android:id="@+id/tvSubtotal"
@@ -146,7 +154,7 @@
                         android:id="@+id/tvDeliveryFeeDisplay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/spacing_4"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                         android:visibility="gone" />
@@ -155,27 +163,30 @@
                         android:id="@+id/tvGrandTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/spacing_4"
                         android:gravity="end"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Price"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/textTitleLarge"
                         android:visibility="gone" />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_height="@dimen/heightDivider"
+                        android:layout_marginTop="@dimen/spacing_8"
+                        android:layout_marginBottom="@dimen/spacing_8"
                         android:background="@color/colorBorder" />
 
                     <TextView
+                        android:id="@+id/tvQuoteDeliveryFeeLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Quote delivery fee:"
+                        android:layout_marginBottom="@dimen/spacing_4"
+                        android:text="@string/admin_quote_delivery_fee_label"
                         android:textColor="@color/colorTextSecondary"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/textLabel" />
 
                     <LinearLayout
+                        android:id="@+id/layoutQuoteDeliveryFee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -184,9 +195,9 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_marginEnd="@dimen/spacing_8"
                             android:layout_weight="1"
-                            android:hint="₱ Fee">
+                            android:hint="@string/admin_delivery_fee_hint">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etDeliveryFee"
@@ -200,7 +211,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Set"
+                            android:text="@string/admin_set_fee"
                             android:textAllCaps="false" />
                     </LinearLayout>
                 </LinearLayout>
@@ -210,25 +221,25 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
-                app:cardBackgroundColor="@color/colorSurface"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="@dimen/spacing_12">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="Update status to:"
+                        android:layout_marginBottom="@dimen/spacing_8"
+                        android:text="@string/admin_update_status_label"
                         android:textColor="@color/colorTextPrimary"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/textBodyLarge"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -239,6 +250,8 @@
                         android:orientation="horizontal" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

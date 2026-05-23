@@ -1,0 +1,28 @@
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--color-primary);
+}
+
+.brand-logo__mark {
+  width: 48px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.brand-logo__text {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.brand-logo--white {
+  color: var(--color-white);
+}
+
+.brand-logo--white .brand-logo__mark {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
+}

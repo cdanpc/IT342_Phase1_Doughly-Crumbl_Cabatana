@@ -1,13 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
-import { Plus, Pencil, Trash2, X, Upload } from 'lucide-react';
-import { getAdminProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from '../../shared/api/productApi';
-import { formatPrice } from '../../shared/utils/formatters';
-import type { Product, ProductRequest } from '../../shared/types';
+import { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { Pencil, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import ProductFormModal from '../../components/admin/ProductFormModal';
+import ProductImage from '../../components/product/ProductImage';
+import ConfirmModal from '../../components/ui/ConfirmModal';
+import { createProduct, deleteProduct, getAdminProducts, updateProduct, uploadProductImage } from '../../shared/api/productApi';
+import type { Product, ProductRequest } from '../../shared/types';
+import { formatPrice } from '../../shared/utils/formatters';
 import '../../shared/components/LoadingSpinner.css';
+import './AdminProducts.css';
 
 const EMPTY_FORM: ProductRequest = {
-  name: '', description: '', price: 0, imageUrl: '', category: 'CLASSIC', available: true,
+  name: '',
+  description: '',
+  price: 0,
+  imageUrl: '',
+  category: 'CLASSIC',
+  available: true,
 };
 
 export default function AdminProducts() {
@@ -19,11 +29,10 @@ export default function AdminProducts() {
   const [isSaving, setIsSaving] = useState(false);
   const [search, setSearch] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [imagePreview, setImagePreview] = useState('');
   const [formErrors, setFormErrors] = useState<{ name?: string; price?: string }>({});
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -37,7 +46,7 @@ export default function AdminProducts() {
       const status = (err as { response?: { status?: number } })?.response?.status;
       const msg = status
         ? `Failed to load products (HTTP ${status})`
-        : 'Failed to load products — backend may be unreachable';
+        : 'Failed to load products - backend may be unreachable';
       toast.error(msg, { duration: 8000 });
     } finally {
       setIsLoading(false);
@@ -69,19 +78,27 @@ export default function AdminProducts() {
     setShowModal(true);
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function closeProductModal() {
+    if (isSaving) return;
+    setShowModal(false);
+  }
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
     if (!file.type.startsWith('image/')) {
       toast.error('Only image files are accepted (PNG, JPG, WebP, GIF).');
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      e.target.value = '';
       return;
     }
+
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image too large. Maximum size is 5 MB.');
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      e.target.value = '';
       return;
     }
+
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   }
@@ -89,7 +106,7 @@ export default function AdminProducts() {
   async function handleSave() {
     const errs: { name?: string; price?: string } = {};
     if (!form.name.trim()) errs.name = 'Product name is required.';
-    if (form.price <= 0) errs.price = 'Price must be greater than ₱0.';
+    if (form.price <= 0) errs.price = 'Price must be greater than PHP 0.';
     if (Object.keys(errs).length > 0) {
       setFormErrors(errs);
       return;
@@ -98,22 +115,24 @@ export default function AdminProducts() {
 
     setIsSaving(true);
     try {
-      let finalForm = { ...form };
+      let finalForm = { ...form, name: form.name.trim(), description: form.description.trim() };
       if (imageFile) {
         const uploadedUrl = await uploadProductImage(imageFile);
         finalForm = { ...finalForm, imageUrl: uploadedUrl };
       }
+
       if (editingId) {
         await updateProduct(editingId, finalForm);
-        toast.success('Product updated!');
+        toast.success('Product updated.');
       } else {
         await createProduct(finalForm);
-        toast.success('Product created!');
+        toast.success('Product created.');
       }
+
       setShowModal(false);
       fetchProducts();
     } catch {
-      toast.error('Failed to save product');
+      toast.error('Failed to save product.');
     } finally {
       setIsSaving(false);
     }
@@ -124,110 +143,97 @@ export default function AdminProducts() {
     setIsDeleting(true);
     try {
       await deleteProduct(deleteTargetId);
-      toast.success('Product deleted');
+      toast.success('Product deleted.');
       setProducts((prev) => prev.filter((p) => p.id !== deleteTargetId));
       setDeleteTargetId(null);
     } catch {
-      toast.error('Failed to delete product');
+      toast.error('Failed to delete product.');
     } finally {
       setIsDeleting(false);
     }
   }
 
   const filtered = products.filter(
-    (p) => p.name.toLowerCase().includes(search.toLowerCase()) ||
-           p.category.toLowerCase().includes(search.toLowerCase())
+    (product) =>
+      product.name.toLowerCase().includes(search.toLowerCase()) ||
+      product.category.toLowerCase().includes(search.toLowerCase())
   );
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}>
+      <div className="admin-products__loading">
         <div className="spinner" />
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '32px 24px', animation: 'fadeIn 0.3s ease-out' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+    <div className="admin-products">
+      <div className="admin-products__header">
         <div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 28 }}>Products</h2>
-          <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginTop: 4 }}>
-            {products.length} products
-          </p>
+          <h2 className="admin-products__title">Products</h2>
+          <p className="admin-products__count">{products.length} products</p>
         </div>
-        <button
-          onClick={openCreate}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            background: 'var(--color-primary)', color: '#fff', padding: '10px 20px',
-            borderRadius: 'var(--radius-sm)', fontWeight: 600, fontSize: 14,
-            border: 'none', cursor: 'pointer',
-          }}
-        >
+        <button className="admin-products__add-btn" onClick={openCreate}>
           <Plus size={16} /> Add Product
         </button>
       </div>
 
-      {/* Search */}
       <input
-        style={{
-          width: '100%', maxWidth: 400, padding: '10px 16px',
-          border: '1.5px solid var(--color-border)', borderRadius: 'var(--radius-full)',
-          fontSize: 14, marginBottom: 24, outline: 'none',
-        }}
+        className="admin-products__search"
         type="text"
         placeholder="Search products..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Table */}
-      <div style={{ background: '#fff', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-card)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="admin-products__table-wrap">
+        <table className="admin-products__table">
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-              <th style={thStyle}>Image</th>
-              <th style={thStyle}>Name</th>
-              <th style={thStyle}>Category</th>
-              <th style={thStyle}>Price</th>
-              <th style={thStyle}>Available</th>
-              <th style={{ ...thStyle, textAlign: 'right' }}>Actions</th>
+            <tr>
+              <th className="admin-products__th">Image</th>
+              <th className="admin-products__th">Name</th>
+              <th className="admin-products__th">Category</th>
+              <th className="admin-products__th">Price</th>
+              <th className="admin-products__th">Available</th>
+              <th className="admin-products__th admin-products__th--right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((product) => (
-              <tr key={product.id} style={{ borderBottom: '1px solid #F0F0F0' }}>
-                <td style={tdStyle}>
-                  <img
-                    src={product.imageUrl || 'https://placehold.co/40x40/f0f0f0/999?text=🍪'}
+              <tr key={product.id}>
+                <td className="admin-products__td">
+                  <ProductImage
+                    src={product.imageUrl}
                     alt={product.name}
-                    style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }}
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/40x40/f0f0f0/999?text=🍪'; }}
+                    className="admin-products__product-img"
                   />
                 </td>
-                <td style={{ ...tdStyle, fontWeight: 600 }}>{product.name}</td>
-                <td style={tdStyle}>
-                  <span style={{
-                    background: 'var(--color-primary-light)', color: 'var(--color-primary)',
-                    fontSize: 12, fontWeight: 600, padding: '3px 10px', borderRadius: 'var(--radius-full)',
-                  }}>
-                    {product.category}
-                  </span>
+                <td className="admin-products__td admin-products__td--name">{product.name}</td>
+                <td className="admin-products__td">
+                  <span className="admin-products__category-badge">{product.category}</span>
                 </td>
-                <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--color-primary)' }}>
+                <td className="admin-products__td admin-products__td--price">
                   {formatPrice(product.price)}
                 </td>
-                <td style={tdStyle}>
-                  <span style={{ color: product.available ? 'var(--color-success)' : 'var(--color-error)', fontWeight: 600, fontSize: 13 }}>
+                <td className="admin-products__td">
+                  <span className={product.available ? 'admin-products__avail--yes' : 'admin-products__avail--no'}>
                     {product.available ? 'Yes' : 'No'}
                   </span>
                 </td>
-                <td style={{ ...tdStyle, textAlign: 'right' }}>
-                  <button onClick={() => openEdit(product)} style={actionBtnStyle}>
+                <td className="admin-products__td admin-products__td--right">
+                  <button
+                    className="admin-products__action-btn"
+                    onClick={() => openEdit(product)}
+                    aria-label={`Edit ${product.name}`}
+                  >
                     <Pencil size={15} />
                   </button>
-                  <button onClick={() => setDeleteTargetId(product.id)} style={{ ...actionBtnStyle, color: 'var(--color-error)' }}>
+                  <button
+                    className="admin-products__action-btn admin-products__action-btn--danger"
+                    onClick={() => setDeleteTargetId(product.id)}
+                    aria-label={`Delete ${product.name}`}
+                  >
                     <Trash2 size={15} />
                   </button>
                 </td>
@@ -236,203 +242,34 @@ export default function AdminProducts() {
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: 32, color: 'var(--color-text-muted)' }}>
-            No products found.
-          </div>
+          <div className="admin-products__empty">No products found.</div>
         )}
       </div>
 
-      {/* Modal */}
-      {showModal && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', zIndex: 100,
-        }}>
-          <div style={{
-            background: '#fff', borderRadius: 'var(--radius-md)', padding: 32,
-            width: 480, maxHeight: '90vh', overflowY: 'auto', position: 'relative',
-          }}>
-            <button onClick={() => setShowModal(false)} style={{
-              position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer',
-            }}>
-              <X size={20} />
-            </button>
+      <ProductFormModal
+        isOpen={showModal}
+        isEditing={Boolean(editingId)}
+        form={form}
+        formErrors={formErrors}
+        imagePreview={imagePreview}
+        isSaving={isSaving}
+        onClose={closeProductModal}
+        onSave={handleSave}
+        onFileChange={handleFileChange}
+        onFormChange={setForm}
+        onClearError={(field) => setFormErrors((prev) => ({ ...prev, [field]: undefined }))}
+      />
 
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, marginBottom: 24 }}>
-              {editingId ? 'Edit Product' : 'Add Product'}
-            </h3>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div>
-                <label style={labelStyle}>Name *</label>
-                <input
-                  style={{ ...inputStyle, ...(formErrors.name ? { borderColor: 'var(--color-error)' } : {}) }}
-                  value={form.name}
-                  onChange={(e) => { setForm({ ...form, name: e.target.value }); setFormErrors((p) => ({ ...p, name: undefined })); }}
-                />
-                {formErrors.name && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{formErrors.name}</span>}
-              </div>
-              <div>
-                <label style={labelStyle}>Description</label>
-                <textarea
-                  style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }}
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Price *</label>
-                <input
-                  style={{ ...inputStyle, ...(formErrors.price ? { borderColor: 'var(--color-error)' } : {}) }}
-                  type="number" min="0" step="0.01"
-                  value={form.price}
-                  onChange={(e) => { setForm({ ...form, price: Number(e.target.value) }); setFormErrors((p) => ({ ...p, price: undefined })); }}
-                />
-                {formErrors.price && <span style={{ fontSize: 12, color: 'var(--color-error)', marginTop: 4, display: 'block' }}>{formErrors.price}</span>}
-              </div>
-              <div>
-                <label style={labelStyle}>Product Image</label>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  style={{
-                    border: '2px dashed var(--color-border)', borderRadius: 'var(--radius-sm)',
-                    padding: '16px', textAlign: 'center', cursor: 'pointer',
-                    background: '#FAFAFA', transition: 'border-color 0.15s',
-                  }}
-                >
-                  {imagePreview ? (
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      style={{ maxHeight: 120, maxWidth: '100%', objectFit: 'contain', borderRadius: 6, marginBottom: 8 }}
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
-                  ) : (
-                    <Upload size={24} style={{ color: 'var(--color-text-muted)', marginBottom: 8 }} />
-                  )}
-                  <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', margin: 0 }}>
-                    {imagePreview ? 'Click to change image' : 'Click to upload image'}
-                  </p>
-                  <p style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 4 }}>
-                    JPEG, PNG, WebP, GIF — max 5 MB
-                  </p>
-                </div>
-              </div>
-              <div>
-                <label style={labelStyle}>Category</label>
-                <select style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-                  <option value="CLASSIC">Classic</option>
-                  <option value="SPECIALTY">Specialty</option>
-                  <option value="SEASONAL">Seasonal</option>
-                  <option value="BEST_SELLERS">Best Sellers</option>
-                </select>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <input type="checkbox" checked={form.available} onChange={(e) => setForm({ ...form, available: e.target.checked })} />
-                <label style={{ fontSize: 14 }}>Available</label>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
-              <button onClick={() => setShowModal(false)} style={{
-                flex: 1, padding: 12, background: '#f5f5f5', color: 'var(--color-text-primary)',
-                fontWeight: 600, border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer',
-              }}>
-                Cancel
-              </button>
-              <button onClick={handleSave} disabled={isSaving} style={{
-                flex: 1, padding: 12, background: 'var(--color-primary)', color: '#fff',
-                fontWeight: 600, border: 'none', borderRadius: 'var(--radius-sm)',
-                cursor: isSaving ? 'not-allowed' : 'pointer', opacity: isSaving ? 0.6 : 1,
-              }}>
-                {isSaving ? 'Saving...' : editingId ? 'Update' : 'Create'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete confirmation modal */}
-      {deleteTargetId !== null && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200,
-          }}
-          onClick={() => { if (!isDeleting) setDeleteTargetId(null); }}
-        >
-          <div
-            style={{
-              background: '#fff', borderRadius: 'var(--radius-md)', padding: 28,
-              width: 380, boxShadow: 'var(--shadow-card)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
-              Delete Product
-            </h3>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24, lineHeight: 1.5 }}>
-              Are you sure you want to delete this product? This action cannot be undone.
-            </p>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-              <button
-                onClick={() => setDeleteTargetId(null)}
-                disabled={isDeleting}
-                style={{
-                  padding: '9px 18px', borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--color-border)', background: '#fff',
-                  fontSize: 14, cursor: isDeleting ? 'not-allowed' : 'pointer',
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                disabled={isDeleting}
-                style={{
-                  padding: '9px 18px', borderRadius: 'var(--radius-sm)',
-                  border: 'none', background: 'var(--color-error)', color: '#fff',
-                  fontWeight: 700, fontSize: 14,
-                  cursor: isDeleting ? 'not-allowed' : 'pointer',
-                  opacity: isDeleting ? 0.7 : 1,
-                }}
-              >
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={deleteTargetId !== null}
+        onClose={() => { if (!isDeleting) setDeleteTargetId(null); }}
+        onConfirm={confirmDelete}
+        title="Delete Product"
+        description="Are you sure you want to delete this product? This action cannot be undone."
+        confirmLabel="Delete"
+        isDanger
+        isConfirming={isDeleting}
+      />
     </div>
   );
 }
-
-const thStyle: React.CSSProperties = {
-  textAlign: 'left', padding: '12px 16px', fontSize: 13, fontWeight: 600,
-  color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-border)',
-};
-
-const tdStyle: React.CSSProperties = {
-  padding: '12px 16px', fontSize: 14, verticalAlign: 'middle',
-};
-
-const actionBtnStyle: React.CSSProperties = {
-  background: 'none', border: 'none', cursor: 'pointer', padding: '6px',
-  color: 'var(--color-text-secondary)', transition: 'color 0.15s',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6,
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '10px 14px', border: '1.5px solid var(--color-border)',
-  borderRadius: 'var(--radius-sm)', fontSize: 14, outline: 'none', fontFamily: 'inherit',
-};
