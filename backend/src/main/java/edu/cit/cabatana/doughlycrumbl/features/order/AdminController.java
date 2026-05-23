@@ -67,7 +67,7 @@ public class AdminController {
 
     @PostMapping("/products/upload-image")
     public ResponseEntity<Map<String, String>> uploadProductImage(
-            @RequestParam MultipartFile file) {
+            @RequestPart("image") MultipartFile file) {
         String url = fileUploadService.saveImage(file);
         return ResponseEntity.ok(Map.of("url", url));
     }

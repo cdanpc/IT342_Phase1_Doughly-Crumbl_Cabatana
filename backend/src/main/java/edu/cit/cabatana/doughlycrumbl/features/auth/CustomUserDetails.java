@@ -19,6 +19,12 @@ public class CustomUserDetails implements UserDetails {
     private final String email;
     private final String password;
     private final String role;
+    private final boolean enabled;
+    private final boolean accountNonLocked;
+
+    public CustomUserDetails(Long id, String name, String email, String password, String role) {
+        this(id, name, email, password, role, true, true);
+    }
 
     public static CustomUserDetails fromUser(User user) {
         return new CustomUserDetails(
@@ -26,7 +32,9 @@ public class CustomUserDetails implements UserDetails {
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getRole()
+                user.getRole(),
+                !Boolean.FALSE.equals(user.getEnabled()),
+                !Boolean.TRUE.equals(user.getAccountLocked())
         );
     }
 
@@ -47,7 +55,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
@@ -57,6 +65,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

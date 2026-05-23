@@ -50,7 +50,7 @@ public class OrderController {
     public ResponseEntity<OrderResponse> submitPayment(
             @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long id,
-            @RequestParam(required = false) MultipartFile proof) {
+            @RequestPart(required = false) MultipartFile proof) {
         return ResponseEntity.ok(orderService.submitPayment(id, user.getId(), proof));
     }
 }

@@ -21,4 +21,6 @@ public class CustomerProfileResponse {
     private Integer completedOrders;
     private Integer cancelledOrders;
     private BigDecimal rating;
+    private Integer meritTier;
+    private String meritTierName;
 }

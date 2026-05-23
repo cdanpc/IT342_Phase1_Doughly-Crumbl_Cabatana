@@ -1,22 +1,21 @@
 package edu.cit.cabatana.doughlycrumbl.features.order;
 
+import edu.cit.cabatana.doughlycrumbl.features.rating.OrderRatingRepository;
 import edu.cit.cabatana.doughlycrumbl.shared.util.EntityToDtoAdapter;
 
 import edu.cit.cabatana.doughlycrumbl.features.order.OrderResponse.OrderItemResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Adapter Pattern Implementation - Order Entity to DTO Adapter
- * 
- * This adapter converts Order entities to OrderResponse DTOs,
- * handling the complexity of nested item mappings and calculations.
- */
 @Component
+@RequiredArgsConstructor
 public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
+
+    private final OrderRatingRepository ratingRepository;
 
     @Override
     public OrderResponse toDto(Order order) {
@@ -24,8 +23,15 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
                 .map(this::toItemResponse)
                 .collect(Collectors.toList());
 
+        Integer rating = ratingRepository
+                .findByOrderIdAndUserId(order.getId(), order.getUser().getId())
+                .map(r -> r.getRating())
+                .orElse(null);
+
         return OrderResponse.builder()
                 .orderId(order.getId())
+                .customerName(order.getUser() != null ? order.getUser().getName() : null)
+                .customerEmail(order.getUser() != null ? order.getUser().getEmail() : null)
                 .orderDate(order.getOrderDate())
                 .status(order.getStatus())
                 .paymentStatus(order.getPaymentStatus())
@@ -41,6 +47,7 @@ public class OrderAdapter implements EntityToDtoAdapter<Order, OrderResponse> {
                 .deliveryFee(deliveryFee(order))
                 .totalAmount(order.getTotalAmount())
                 .itemCount(calculateItemCount(items))
+                .rating(rating)
                 .build();
     }
 

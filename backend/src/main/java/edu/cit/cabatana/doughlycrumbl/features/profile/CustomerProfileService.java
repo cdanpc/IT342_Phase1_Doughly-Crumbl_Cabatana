@@ -6,6 +6,7 @@ import edu.cit.cabatana.doughlycrumbl.features.product.Product;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductAdapter;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductRepository;
 import edu.cit.cabatana.doughlycrumbl.features.product.ProductResponse;
+import edu.cit.cabatana.doughlycrumbl.features.rating.OrderRatingRepository;
 import edu.cit.cabatana.doughlycrumbl.features.user.User;
 import edu.cit.cabatana.doughlycrumbl.features.user.UserRepository;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
@@ -27,6 +28,14 @@ public class CustomerProfileService {
     private final ProductAdapter productAdapter;
     private final DeliveryAddressRepository addressRepository;
     private final FavoriteProductRepository favoriteRepository;
+    private final OrderRatingRepository ratingRepository;
+
+    private static final int[][] MERIT_MILESTONES = {
+            {15, 5}, {10, 4}, {5, 3}, {3, 2}, {1, 1}
+    };
+    private static final String[] MERIT_TIER_NAMES = {
+            "Newcomer", "New Crumbler", "Topping Ready", "Discount Ready", "Cookie Box", "VIP Crumbler"
+    };
 
     public CustomerProfileResponse getProfile(Long userId) {
         User user = getUser(userId);
@@ -34,6 +43,13 @@ public class CustomerProfileService {
         int total = orders.size();
         int completed = (int) orders.stream().filter(order -> "COMPLETED".equals(order.getStatus())).count();
         int cancelled = (int) orders.stream().filter(order -> "CANCELLED".equals(order.getStatus())).count();
+
+        Double avgRating = ratingRepository.averageRatingByUserId(userId);
+        BigDecimal rating = avgRating != null
+                ? BigDecimal.valueOf(avgRating).setScale(1, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO.setScale(1);
+
+        int meritTier = computeMeritTier(completed);
 
         return CustomerProfileResponse.builder()
                 .userId(user.getId())
@@ -44,7 +60,9 @@ public class CustomerProfileService {
                 .totalOrders(total)
                 .completedOrders(completed)
                 .cancelledOrders(cancelled)
-                .rating(calculateRating(total, completed, cancelled))
+                .rating(rating)
+                .meritTier(meritTier)
+                .meritTierName(MERIT_TIER_NAMES[meritTier])
                 .build();
     }
 
@@ -134,6 +152,13 @@ public class CustomerProfileService {
         favoriteRepository.delete(favorite);
     }
 
+    private int computeMeritTier(int completedOrders) {
+        for (int[] milestone : MERIT_MILESTONES) {
+            if (completedOrders >= milestone[0]) return milestone[1];
+        }
+        return 0;
+    }
+
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
@@ -162,16 +187,6 @@ public class CustomerProfileService {
                 .address(address.getAddress())
                 .defaultAddress(address.getDefaultAddress())
                 .build();
-    }
-
-    private BigDecimal calculateRating(int total, int completed, int cancelled) {
-        if (total == 0) {
-            return BigDecimal.ZERO.setScale(1);
-        }
-        double completionRatio = (double) completed / total;
-        double cancellationPenalty = (double) cancelled / total;
-        double value = Math.max(0.0, Math.min(5.0, 4.0 + completionRatio - cancellationPenalty));
-        return BigDecimal.valueOf(value).setScale(1, RoundingMode.HALF_UP);
     }
 
     private String clean(String value) {

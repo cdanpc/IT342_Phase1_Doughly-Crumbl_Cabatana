@@ -44,6 +44,14 @@ public class User {
     @Builder.Default
     private String role = "CUSTOMER";
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    @Builder.Default
+    private Boolean enabled = true;
+
+    @Column(name = "account_locked", nullable = false, columnDefinition = "boolean default false")
+    @Builder.Default
+    private Boolean accountLocked = false;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

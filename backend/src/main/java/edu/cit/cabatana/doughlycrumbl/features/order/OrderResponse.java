@@ -16,6 +16,8 @@ import java.util.List;
 public class OrderResponse {
 
     private Long orderId;
+    private String customerName;
+    private String customerEmail;
     private LocalDateTime orderDate;
     private String status;
     private String paymentStatus;
@@ -31,6 +33,7 @@ public class OrderResponse {
     private BigDecimal deliveryFee;
     private BigDecimal totalAmount;
     private Integer itemCount;
+    private Integer rating;
 
     @Data
     @Builder
