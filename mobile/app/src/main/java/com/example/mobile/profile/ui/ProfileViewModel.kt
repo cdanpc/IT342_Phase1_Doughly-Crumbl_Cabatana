@@ -29,6 +29,8 @@ class ProfileViewModel(private val sessionManager: SessionManager) : ViewModel()
     val addresses: LiveData<List<DeliveryAddress>> = _addresses
     private val _favoritesCount = MutableLiveData(0)
     val favoritesCount: LiveData<Int> = _favoritesCount
+    /** Set to true by the Fragment before calling loadFavoritesCount() so the observer knows to show a message. */
+    var favoritesTapped: Boolean = false
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
@@ -59,6 +61,22 @@ class ProfileViewModel(private val sessionManager: SessionManager) : ViewModel()
                 val r = repository.getAddresses()
                 if (r.isSuccessful) _addresses.value = r.body().orEmpty()
                 else _message.value = ApiErrorParser.message(r, "Failed to load delivery addresses")
+            } catch (e: Exception) {
+                _message.value = e.localizedMessage
+            }
+        }
+    }
+
+    fun deleteAddress(id: Long) {
+        viewModelScope.launch {
+            try {
+                val r = repository.deleteAddress(id)
+                if (r.isSuccessful) {
+                    _message.value = "Address removed"
+                    loadAddresses()
+                } else {
+                    _message.value = ApiErrorParser.message(r, "Failed to delete address")
+                }
             } catch (e: Exception) {
                 _message.value = e.localizedMessage
             }

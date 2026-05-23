@@ -25,6 +25,9 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    /** True only when the user explicitly tapped "Delivery Addresses" row. */
+    private var addressDialogRequested = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,15 +44,13 @@ class ProfileFragment : Fragment() {
         val factory = ProfileViewModelFactory(session)
         val viewModel = ViewModelProvider(this, factory)[ProfileViewModel::class.java]
 
+        // Seed UI from session while the network call completes
         val name = viewModel.name
         binding.tvName.text = name.ifEmpty { getString(R.string.profile_unknown_user) }
         binding.tvEmail.text = viewModel.email.ifEmpty { getString(R.string.profile_unknown_email) }
-        binding.tvAvatarInitials.text = name.split(" ")
-            .mapNotNull { it.firstOrNull()?.uppercaseChar() }
-            .take(2)
-            .joinToString("")
-            .ifEmpty { "?" }
+        updateAvatarInitials(name)
 
+        // Stats + full profile come back together from loadStats()
         viewModel.stats.observe(viewLifecycleOwner) { (total, completed, _) ->
             binding.tvOrderCount.text = total.toString()
             binding.tvCompletedCount.text = completed.toString()
@@ -58,32 +59,41 @@ class ProfileFragment : Fragment() {
             profile ?: return@observe
             bindProfile(profile)
         }
+
+        // Only show address dialog when the user explicitly requested it
         viewModel.addresses.observe(viewLifecycleOwner) { addresses ->
-            showAddressDialog(addresses, viewModel)
+            if (addressDialogRequested) {
+                addressDialogRequested = false
+                showAddressDialog(addresses, viewModel)
+            }
         }
-        viewModel.favoritesCount.observe(viewLifecycleOwner) { count ->
-            if (count > 0) showMessage(getString(R.string.favorites_count_format, count))
-        }
+
         viewModel.message.observe(viewLifecycleOwner) { message ->
             message?.let { showMessage(it) }
         }
-        binding.tvRating.text = getString(R.string.profile_default_rating)
 
         viewModel.loadStats()
-        viewModel.loadFavoritesCount()
 
+        // --- Row click listeners ---
         binding.rowMyOrders.setOnClickListener {
             requireActivity().findViewById<BottomNavigationView>(R.id.bottomNav)
                 ?.selectedItemId = R.id.nav_orders
         }
         binding.rowFavorites.setOnClickListener {
-            val count = viewModel.favoritesCount.value ?: 0
-            showMessage(
-                if (count == 0) getString(R.string.favorites_empty)
-                else getString(R.string.favorites_count_format, count)
-            )
+            viewModel.favoritesTapped = true
+            viewModel.loadFavoritesCount()
+        }
+        viewModel.favoritesCount.observe(viewLifecycleOwner) { count ->
+            if (viewModel.favoritesTapped) {
+                viewModel.favoritesTapped = false
+                showMessage(
+                    if (count == 0) getString(R.string.favorites_empty)
+                    else getString(R.string.favorites_count_format, count)
+                )
+            }
         }
         binding.rowDeliveryAddress.setOnClickListener {
+            addressDialogRequested = true
             viewModel.loadAddresses()
         }
         binding.rowEditProfile.setOnClickListener {
@@ -117,12 +127,22 @@ class ProfileFragment : Fragment() {
     private fun bindProfile(profile: CustomerProfile) {
         binding.tvName.text = profile.name.ifEmpty { getString(R.string.profile_unknown_user) }
         binding.tvEmail.text = profile.email.ifEmpty { getString(R.string.profile_unknown_email) }
-        binding.tvAvatarInitials.text = profile.name.split(" ")
+        updateAvatarInitials(profile.name)
+
+        // Show actual rating if non-zero, otherwise show placeholder
+        binding.tvRating.text = if (profile.rating > 0.0) {
+            "%.1f".format(profile.rating)
+        } else {
+            getString(R.string.profile_default_rating)
+        }
+    }
+
+    private fun updateAvatarInitials(name: String) {
+        binding.tvAvatarInitials.text = name.split(" ")
             .mapNotNull { it.firstOrNull()?.uppercaseChar() }
             .take(2)
             .joinToString("")
             .ifEmpty { "?" }
-        binding.tvRating.text = "%.1f".format(profile.rating)
     }
 
     private fun showEditProfileDialog(profile: CustomerProfile?, viewModel: ProfileViewModel) {
@@ -155,19 +175,40 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showAddressDialog(addresses: List<DeliveryAddress>, viewModel: ProfileViewModel) {
-        val labels = if (addresses.isEmpty()) {
-            arrayOf(getString(R.string.addresses_empty))
-        } else {
-            addresses.map { address ->
-                val defaultText = if (address.defaultAddress) " - Default" else ""
-                "${address.label}$defaultText\n${address.address}"
-            }.toTypedArray()
+        if (addresses.isEmpty()) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.saved_addresses_title)
+                .setMessage(R.string.addresses_empty)
+                .setPositiveButton(R.string.add_address) { _, _ -> showAddAddressDialog(viewModel) }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+            return
         }
+
+        val labels = addresses.map { addr ->
+            val defaultMark = if (addr.defaultAddress) " ★" else ""
+            "${addr.label}$defaultMark\n${addr.address}"
+        }.toTypedArray()
 
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.saved_addresses_title)
-            .setItems(labels, null)
+            .setItems(labels) { _, which ->
+                showAddressOptions(addresses[which], viewModel)
+            }
             .setPositiveButton(R.string.add_address) { _, _ -> showAddAddressDialog(viewModel) }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showAddressOptions(address: DeliveryAddress, viewModel: ProfileViewModel) {
+        val options = arrayOf(getString(R.string.delete_address))
+        AlertDialog.Builder(requireContext())
+            .setTitle("${address.label}\n${address.address}")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> viewModel.deleteAddress(address.id)
+                }
+            }
             .setNegativeButton(R.string.cancel, null)
             .show()
     }

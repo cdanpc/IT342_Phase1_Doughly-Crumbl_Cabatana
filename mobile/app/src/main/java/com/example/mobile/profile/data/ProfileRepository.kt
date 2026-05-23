@@ -13,6 +13,7 @@ class ProfileRepository(sessionManager: SessionManager) {
     suspend fun updateProfile(request: UpdateCustomerProfileRequest) = api.updateProfile(request)
     suspend fun getAddresses() = api.getDeliveryAddresses()
     suspend fun addAddress(request: DeliveryAddressRequest) = api.addDeliveryAddress(request)
+    suspend fun deleteAddress(id: Long) = api.deleteDeliveryAddress(id)
     suspend fun getFavorites() = api.getFavorites()
     suspend fun addFavorite(productId: Long) = api.addFavorite(productId)
     suspend fun removeFavorite(productId: Long) = api.removeFavorite(productId)

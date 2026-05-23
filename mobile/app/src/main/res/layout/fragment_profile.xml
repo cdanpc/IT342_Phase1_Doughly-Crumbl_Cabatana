@@ -20,14 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Crimson header -->
+            <!-- Profile header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorBackground"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/spacing_48"
+                android:paddingBottom="@dimen/spacing_24"
                 android:paddingTop="@dimen/spacing_24"
                 android:paddingStart="@dimen/marginPage"
                 android:paddingEnd="@dimen/marginPage">
@@ -35,14 +35,14 @@
                 <FrameLayout
                     android:layout_width="@dimen/avatarLarge"
                     android:layout_height="@dimen/avatarLarge"
-                    android:background="@drawable/bg_circle_white">
+                    android:background="@drawable/bg_avatar_initials">
 
                     <TextView
                         android:id="@+id/tvAvatarInitials"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorSurface"
                         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
                         android:textStyle="bold" />
 
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_12"
-                    android:textColor="@color/colorSurface"
+                    android:textColor="@color/colorTextPrimary"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
                     android:textStyle="bold" />
 
@@ -62,54 +62,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
-                    android:textColor="@color/colorPrimaryLight"
+                    android:textColor="@color/colorTextSecondary"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium" />
-
-                <!-- Loyalty badge -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_8"
-                    android:background="@drawable/bg_circle_white_alpha"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/spacing_12"
-                    android:paddingEnd="@dimen/spacing_12"
-                    android:paddingTop="@dimen/spacing_4"
-                    android:paddingBottom="@dimen/spacing_4">
-
-                    <ImageView
-                        android:layout_width="@dimen/iconSizeStar"
-                        android:layout_height="@dimen/iconSizeStar"
-                        android:src="@drawable/ic_star"
-                        android:contentDescription="@null" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_4"
-                        android:text="@string/gold_member"
-                        android:textColor="@color/colorGold"
-                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Stats card — overlaps header by 24dp -->
+            <!-- Stats card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/marginPage"
                 android:layout_marginEnd="@dimen/marginPage"
-                android:layout_marginTop="@dimen/negativeOverlapProfileCard"
+                android:layout_marginTop="@dimen/spacing_8"
                 android:layout_marginBottom="@dimen/spacing_16"
                 app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -196,8 +166,8 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
+                                android:layout_width="@dimen/iconSizeStar"
+                                android:layout_height="@dimen/iconSizeStar"
                                 android:src="@drawable/ic_star"
                                 android:contentDescription="@null" />
 
@@ -248,7 +218,7 @@
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -295,7 +265,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/heightDivider"
                         android:layout_marginStart="@dimen/spacing_48"
                         android:background="@color/colorBorder" />
 
@@ -339,7 +309,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/heightDivider"
                         android:layout_marginStart="@dimen/spacing_48"
                         android:background="@color/colorBorder" />
 
@@ -383,7 +353,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/heightDivider"
                         android:layout_marginStart="@dimen/spacing_48"
                         android:background="@color/colorBorder" />
 
@@ -451,7 +421,7 @@
                 app:cardCornerRadius="@dimen/radiusCard"
                 app:cardElevation="@dimen/elevationCard"
                 app:strokeColor="@color/colorBorder"
-                app:strokeWidth="0.5dp">
+                app:strokeWidth="@dimen/strokeWidthCardThin">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -489,7 +459,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/heightDivider"
                         android:layout_marginStart="@dimen/spacing_16"
                         android:layout_marginEnd="@dimen/spacing_16"
                         android:background="@color/colorBorder" />
@@ -525,7 +495,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/heightDivider"
                         android:layout_marginStart="@dimen/spacing_16"
                         android:layout_marginEnd="@dimen/spacing_16"
                         android:background="@color/colorBorder" />
