@@ -315,170 +315,81 @@ That's it. Two commands. Everything else is automatic.
 
 ## Where We Are Right Now
 
-Last updated: 2026-05-23
+Last updated: 2026-05-25
 
 Branch: mobile/core-features
 
 Current state:
-  Active web frontend refactor session. All web TypeScript compiles cleanly.
+  Web design-primitive pass complete. All web P0 tasks are done.
   Mobile and backend code untouched this session.
 
-  Web — this session (2026-05-23):
-    FULL TOKEN MIGRATION COMPLETE across the order flow.
+  Web — this session (2026-05-25):
+    DESIGN PRIMITIVES COMPLETE — all 6 shared UI components created.
 
-    index.css — 21 new design tokens added:
-      --color-overlay, --color-surface-neutral, --color-input-bg,
-      --color-border-subtle, --color-warning-border, --color-warning-text,
-      --color-success-border, --color-success-text, --color-success-text-dark,
-      --color-info-border, --color-info-text, --color-orange,
-      --color-pickup-bg, --color-pickup-text, --color-delivery-bg,
-      --color-delivery-text, --color-error-muted, --color-star-dark,
-      --shadow-modal, --radius-xl.
+    New components under web/src/components/ui/:
+      PageHeader — title + subtitle + right-slot action button.
+        Migrated: AdminOrders, AdminProducts, AdminUsers.
+      Table — composable primitives: TableContainer, Table, TableHead,
+        TableBody, TableRow, Th (align prop), Td (align/bold/semibold),
+        TableEmpty (colSpan empty state). Available for new pages.
+      FileUploadField — image upload widget with drop-zone, preview,
+        change/remove controls, built-in validation (type + size toast).
+        Migrated: ProductFormModal (replaced bespoke upload area).
+        AdminProducts.tsx simplified: imagePreview state removed,
+        handleFileChange → 1-line handleImageChange.
 
-    CheckoutModal.tsx — last inline style removed (notes wrapper div).
-    CheckoutModal.css — fully rewritten. Zero hardcoded hex values.
+    CSS cleanup:
+      AdminProducts.css — removed ~130 lines of dead CSS (old overlay/panel/
+        btn classes now handled by shared Modal/Button/ConfirmModal).
+        All hardcoded hex replaced with tokens.
+      AdminOrders.css — #F0F0F0 → var(--color-border-subtle),
+        hover bg → var(--color-primary-light), #fff → var(--color-white).
+      Button.css — danger hover #B91C1C → var(--color-error-dark).
+      index.css — added --color-error-dark: #B91C1C.
 
-    OrderDetailPage.tsx — all inline styles removed:
-      - Status chip replaced with OrderStatusBadge component.
-      - Helper banner: getHelperBannerClass() derives CSS modifier from status.
-      - Banner icons: color prop removed; icons now inherit currentColor from
-        parent .cod__status-banner--{variant} container.
-      - CheckCircle icons: cod__proof-icon class replaces color="#16a34a".
-      - Spinner: cod__card-spinner class replaces style={{ width, height }}.
-      - Removed getStatusColor import (no longer used in TSX).
-    OrderDetailPage.css — fully rewritten. Zero hardcoded hex values.
+    Previous session (2026-05-24) carried forward:
+      LINT DEBT RESOLVED: 0 errors, 1 intentional warning.
+      ErrorState component wired into 4 pages.
+      ACTIVE_ORDER_STATUSES constant centralized in formatters.ts.
+      StatusTimeline PICKUP_STEPS ordering bug fixed.
+      ProofUploadForm + StatusTimeline CSS extracted.
 
-    OrderConfirmationPage.css — all 4 hardcoded values replaced with tokens.
+    Build: npm run build → 1951 modules, 133.62 KB CSS ✅
+    Lint: npm run lint → 0 errors, 1 intentional warning ✅
 
-    AdminOrderDetail.tsx — all inline styles removed:
-      - Status chip replaced with OrderStatusBadge component.
-      - Cancellation reason label: od__info-label--error class.
-      - Override ChevronDown: od__override-chevron/--open CSS classes.
-      - Removed getStatusColor import.
-    AdminOrderDetail.css — fully rewritten. Zero hardcoded hex values.
+  Backend:
+    ✅ VERIFIED RUNNING — Supabase connection confirmed (2026-05-23).
+    backend/.env exists with correct Supabase credentials (gitignored).
+    To start: Open cmd.exe → cd backend → mvnw.cmd spring-boot:run
 
-    AdminOrders.tsx — full inline style extraction complete. All table/page
-      CSS classes in AdminOrders.css. Status chip now uses OrderStatusBadge.
-    AdminDashboard.tsx — expanded from 4 to 6 stat cards (Total Products,
-      Total Orders, Needs Attention, Payment Pending, In Progress, Revenue).
-      Stat icon color variants moved to CSS modifier classes. Recent Orders
-      table added (last 8 orders, clickable rows, OrderStatusBadge).
-    NotificationDetailModal — new component at components/notifications/.
-      Shows notification type badge, full message, date/time, "View Order"
-      button (routes by type + user role), "Mark as Read" button.
-    NotificationDropdown — now calls onSelectNotification instead of
-      navigating directly. Dropdown closes before modal opens (no stacking).
-    Header.tsx — manages selectedNotification state; renders
-      NotificationDetailModal in Fragment; ensures only one modal open at a time.
+  Mobile:
+    Latest build: .\gradlew.bat :app:assembleDebug → BUILD SUCCESSFUL (2026-05-23)
+    No mobile changes this session.
 
-  TypeScript check: npm.cmd exec -- tsc -b → 0 errors (2026-05-23).
-
-  Backend .env (from 2026-05-19):
-    backend/.env created with Supabase pooler credentials. Gitignored.
-    Backend startup not yet confirmed. To verify:
-      Open cmd.exe → cd backend → mvnw.cmd spring-boot:run
-
-  Latest Android debug build:
-    .\gradlew.bat :app:assembleDebug → BUILD SUCCESSFUL (2026-05-23)
-
-Major work completed since last handoff:
-
-  Previous sessions (carried forward from 2026-05-17):
-
-  Backend/profile support:
-    - Added backend profile feature package for customer profile, favorites,
-      and delivery address support.
-    - Product lookup behavior was adjusted in product repository/service and
-      ProductServiceTest was updated.
-
-  Mobile network/session:
-    - Added ApiErrorParser.kt for actionable API error messages.
-    - Added ApiHostInterceptor.kt and ApiServerDiscovery.kt for automatic LAN
-      backend host discovery instead of hardcoded manual LAN IP changes.
-    - RetrofitClient.kt and network_security_config.xml were updated for this.
-
-  Mobile home/customer product flow:
-    - HomeFragment/HomeViewModel/ProductAdapter now use ViewModel-backed
-      add-to-cart, favorite toggle, pending states, search, category filters,
-      skeleton loading, and product detail bottom sheet.
-    - Product cards are now horizontal list cards with product image on the left
-      and right-side actions.
-    - Favorite button has no visible button background; outline heart when
-      inactive, filled heart when favorited.
-    - Add-to-cart on home card is now a cart icon button with no visible round
-      background. It shows outline cart when idle, filled cart icon in primary
-      color while the add request is pending, then returns to outline so users
-      understand they can tap again to add more quantity.
-    - Bottom nav cart icon now uses selector drawable: outline when inactive,
-      filled when selected.
-
-  Mobile product detail:
-    - Added ProductDetailBottomSheet.kt and bottom_sheet_product_detail.xml.
-    - Product detail shows image, name, price, category, rating, description,
-      quantity stepper, and add-to-cart price.
-    - Latest layout change: quantity stepper moved to the left and Add button
-      sits in the same row to the right for a cleaner bottom action area.
-    - Product detail quantity is capped at 1..10 and updates CTA price.
-
-  Mobile cart/checkout/orders/profile:
-    - Cart, checkout, orders, order detail, notifications, profile, and admin
-      screens have received broader UI and wiring updates in the dirty worktree.
-    - Checkout supports fulfillment/payment UI and uses CheckoutRequest mobile
-      model changes.
-    - Order status presentation is centralized in OrderStatusUi.kt; keep it
-      centralized and do not duplicate status maps in Activities/Adapters.
-    - Profile now has customer profile/favorites/address data model/repository
-      additions in progress.
-
-  Mobile design/assets:
-    - Layout files: 35 | Drawable files: 89
-    - Added/updated many drawables for icons, timeline dots, payment options,
-      quantity stepper, cart selector, heart states, and product detail.
-
-Files most recently touched (prior session, 2026-05-17):
-  - mobile/app/src/main/res/layout/item_product.xml
-  - mobile/app/src/main/java/com/example/mobile/home/ui/ProductAdapter.kt
-  - mobile/app/src/main/java/com/example/mobile/home/ui/HomeViewModel.kt
-  - mobile/app/src/main/java/com/example/mobile/home/ui/HomeFragment.kt
-  - mobile/app/src/main/res/layout/bottom_sheet_product_detail.xml
-  - mobile/app/src/main/java/com/example/mobile/home/ui/ProductDetailBottomSheet.kt
-  - mobile/app/src/main/res/menu/customer_nav_menu.xml
-  - mobile/app/src/main/res/drawable/ic_nav_cart_filled.xml
-  - mobile/app/src/main/res/drawable/ic_nav_cart_selector.xml
-
-Known remaining risks / next best tasks:
-  1. Verify backend actually starts: cd backend && .\mvnw.cmd spring-boot:run
-     from a plain cmd.exe terminal (not PowerShell). Watch for DB connection
-     errors — Supabase pool is on port 5432 (session pooler, not 6543).
-  2. Physical device/emulator QA is still needed for the full customer golden
-     path: login/register -> home -> product detail -> add to cart -> cart ->
-     checkout -> orders -> payment proof -> notifications/profile.
-  3. Automatic LAN scan can take a few seconds on first cold launch; consider a
-     visible connection/loading state if testers think the app is frozen.
-  4. Checkout still has legacy coupling around fulfillment/payment details in
-     notes in some paths. Long-term fix: explicit backend DTO fields.
-  5. Web Vite build is blocked by local access denied error. Re-run in a clean
-     shell or fix file permission issue before web release.
-  6. Login forgot-password and Google sign-in remain UI placeholders.
-  7. Home add-to-cart prevents duplicate tap while a request is pending.
+Known remaining tasks (no code blockers — all require decisions or QA):
+  1. TASK 2: Full customer/admin realtime QA — requires two live browser
+     sessions simultaneously (customer tab + admin tab) with backend running.
+  2. TASK 8: Responsive layout QA — verify mobile breakpoints in browser
+     across desktop/tablet/mobile. Pure CSS review, no logic changes needed.
+  3. BL-MOD-10: OrderPanel category label — backend must add productCategory
+     to CartItemResponse before the frontend can show real category.
+  4. Physical device/emulator QA for the full mobile golden path still needed.
+  5. Login forgot-password and Google sign-in remain UI placeholders (web).
 
 How to continue:
-  1. Verify backend starts (first priority):
-       Open cmd.exe (not PowerShell)
-       cd "...IT342_Phase1_Doughly-Crumbl_Cabatana\backend"
-       mvnw.cmd spring-boot:run
-  2. Run mobile build:
-       cd mobile
-       .\gradlew.bat :app:assembleDebug
-  3. Test golden path on device/emulator with backend running.
-  4. If Supabase connection fails check that port 5432 (not 6543) is used and
-     sslmode=require is present in the DB_URL.
+  1. Start backend: Open cmd.exe → cd backend → mvnw.cmd spring-boot:run
+  2. Start web dev server: cd web → npm.cmd run dev
+  3. Open browser → http://localhost:5173
+  4. Test customer golden path: register → browse → cart → checkout → orders
+  5. Open a second browser tab as admin, test order status flow.
+  6. For mobile QA: run app on emulator, same golden path.
 
 Last known build:
-  Mobile: .\gradlew.bat :app:assembleDebug -> BUILD SUCCESSFUL (2026-05-23)
-  Backend: startup not confirmed — .env was missing until 2026-05-19
+  Web:    npm run build → BUILD SUCCESSFUL (2026-05-25, 1951 modules)
+  Mobile: .\gradlew.bat :app:assembleDebug → BUILD SUCCESSFUL (2026-05-23)
+  Backend: startup VERIFIED (2026-05-23, Supabase connected)
 
-Last commit: 76a6298 chore: session handoff [auto]
+Last commit: 1649bca chore(web): add --color-error-dark token; fix Button danger hover
 
 ---
 
