@@ -13,6 +13,8 @@ export interface CustomerProfile {
   completedOrders?: number;
   cancelledOrders?: number;
   rating?: number;
+  meritTier?: number;
+  meritTierName?: string;
 }
 
 export interface UpdateCustomerProfileRequest {

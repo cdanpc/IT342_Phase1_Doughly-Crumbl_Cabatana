@@ -1,4 +1,5 @@
 // Shared order status flow data — imported by OrderDetailPage, AdminOrderDetail
+import './StatusTimeline.css';
 
 const DELIVERY_STEPS = [
   { status: 'AWAITING_DELIVERY_QUOTE', label: 'Awaiting Delivery Quote' },
@@ -12,9 +13,9 @@ const DELIVERY_STEPS = [
 
 const PICKUP_STEPS = [
   { status: 'ORDER_PLACED', label: 'Order Placed' },
+  { status: 'PAYMENT_CONFIRMED', label: 'Payment Confirmed' },
   { status: 'PREPARING', label: 'Preparing' },
   { status: 'READY', label: 'Ready for Pickup' },
-  { status: 'PAYMENT_CONFIRMED', label: 'Payment Confirmed' },
   { status: 'COMPLETED', label: 'Completed' },
 ];
 
@@ -33,60 +34,28 @@ export default function StatusTimeline({ currentStatus, isCancelled, flowType }:
   const currentIdx = timeline.findIndex((s) => s.status === currentStatus);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+    <div className="status-timeline">
       {timeline.map((step, idx) => {
         const done = !isCancelled && idx <= currentIdx;
         const current = idx === currentIdx && !isCancelled;
+        const dotClass = `status-timeline__dot${current ? ' status-timeline__dot--current' : done ? ' status-timeline__dot--done' : ''}`;
+        const lineClass = `status-timeline__line${done ? ' status-timeline__line--done' : ''}`;
+        const labelClass = `status-timeline__label${current ? ' status-timeline__label--current' : done ? ' status-timeline__label--done' : ''}`;
         return (
-          <div
-            key={step.status}
-            style={{ display: 'flex', gap: 12, paddingBottom: idx < timeline.length - 1 ? 14 : 0 }}
-          >
-            {/* Dot + connecting line */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 18, flexShrink: 0 }}>
-              <div
-                style={{
-                  width: current ? 14 : 10,
-                  height: current ? 14 : 10,
-                  borderRadius: '50%',
-                  background: done ? 'var(--color-primary)' : 'var(--color-border)',
-                  border: current ? '2.5px solid var(--color-primary)' : 'none',
-                  boxSizing: 'border-box',
-                  flexShrink: 0,
-                  marginTop: current ? 1 : 3,
-                }}
-              />
-              {idx < timeline.length - 1 && (
-                <div
-                  style={{
-                    flex: 1, width: 2,
-                    background: done ? 'var(--color-primary)' : 'var(--color-border)',
-                    marginTop: 4,
-                    opacity: done ? 1 : 0.3,
-                  }}
-                />
-              )}
+          <div key={step.status} className={`status-timeline__step${idx === timeline.length - 1 ? ' status-timeline__step--last' : ''}`}>
+            <div className="status-timeline__track">
+              <div className={dotClass} />
+              {idx < timeline.length - 1 && <div className={lineClass} />}
             </div>
-
-            {/* Label */}
-            <span
-              style={{
-                fontSize: 13,
-                fontWeight: current ? 700 : 400,
-                color: done ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
-                paddingBottom: 2,
-              }}
-            >
-              {step.label}
-            </span>
+            <span className={labelClass}>{step.label}</span>
           </div>
         );
       })}
 
       {isCancelled && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
-          <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#DC2626', flexShrink: 0 }} />
-          <span style={{ fontSize: 13, color: '#DC2626', fontWeight: 600 }}>Cancelled</span>
+        <div className="status-timeline__cancelled">
+          <div className="status-timeline__cancelled-dot" />
+          <span className="status-timeline__cancelled-label">Cancelled</span>
         </div>
       )}
     </div>

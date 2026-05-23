@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Upload, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import './ProofUploadForm.css';
 
 const MAX_PROOF_BYTES = 5 * 1024 * 1024;
 const MAX_PROOF_MB = MAX_PROOF_BYTES / 1024 / 1024;
@@ -53,14 +54,9 @@ export default function ProofUploadForm({
 
   return (
     <div>
-      <label
-        style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: 13, fontWeight: 600, marginBottom: 8,
-        }}
-      >
+      <label className="proof-upload__label">
         <Upload size={13} /> Upload Proof of Payment
-        <span style={{ color: 'var(--color-primary)' }}>*</span>
+        <span className="proof-upload__required">*</span>
       </label>
 
       <input
@@ -74,55 +70,28 @@ export default function ProofUploadForm({
       {!proofPreview ? (
         <button
           type="button"
+          className="proof-upload__drop-area"
           onClick={() => fileInputRef.current?.click()}
-          style={{
-            width: '100%', padding: '24px 16px',
-            border: '2px dashed var(--color-border)',
-            borderRadius: 'var(--radius-sm)', background: '#FAFAFA',
-            cursor: 'pointer', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', gap: 8, color: 'var(--color-text-secondary)',
-            marginBottom: 12,
-          }}
         >
           <Upload size={22} />
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Click to upload screenshot</span>
-          <span style={{ fontSize: 12 }}>PNG, JPG up to {MAX_PROOF_MB}MB</span>
+          <span className="proof-upload__drop-label">Click to upload screenshot</span>
+          <span className="proof-upload__drop-hint">PNG, JPG up to {MAX_PROOF_MB}MB</span>
         </button>
       ) : (
-        <div
-          style={{
-            border: '1.5px solid var(--color-border)',
-            borderRadius: 'var(--radius-sm)',
-            overflow: 'hidden', marginBottom: 12,
-          }}
-        >
+        <div className="proof-upload__preview">
           <img
             src={proofPreview}
             alt="Proof"
-            style={{ width: '100%', maxHeight: 200, objectFit: 'contain', display: 'block' }}
+            className="proof-upload__preview-img"
           />
-          <div
-            style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '8px 12px', background: '#F7F7F7',
-              borderTop: '1px solid var(--color-border)',
-            }}
-          >
-            <span
-              style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                fontSize: 13, color: '#16a34a', fontWeight: 600,
-              }}
-            >
+          <div className="proof-upload__preview-footer">
+            <span className="proof-upload__file-name">
               <CheckCircle size={14} /> {proofFile?.name}
             </span>
             <button
               type="button"
+              className="proof-upload__remove-btn"
               onClick={handleRemove}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--color-text-secondary)', fontSize: 12,
-              }}
             >
               Remove
             </button>
@@ -132,15 +101,9 @@ export default function ProofUploadForm({
 
       <button
         type="button"
+        className="proof-upload__submit-btn"
         onClick={handleSubmit}
         disabled={!canSubmit}
-        style={{
-          width: '100%', padding: 12,
-          background: canSubmit ? 'var(--color-primary)' : '#ccc',
-          color: '#fff', fontWeight: 700, fontSize: 14,
-          border: 'none', borderRadius: 'var(--radius-sm)',
-          cursor: canSubmit ? 'pointer' : 'not-allowed',
-        }}
       >
         {isSubmitting ? 'Submitting...' : submitLabel}
       </button>

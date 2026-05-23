@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard, ChevronDown } from 'lucide-react';
+import { ArrowLeft, MapPin, Phone, FileText, Package, Truck, CreditCard, ChevronDown, User } from 'lucide-react';
 import { getAdminOrderById, updateOrderStatus, quoteDeliveryFee } from '../../shared/api/orderApi';
 import { formatPrice, formatDate, formatOrderStatus, getStatusFullText } from '../../shared/utils/formatters';
 import OrderStatusBadge from '../../components/orders/OrderStatusBadge';
@@ -375,6 +375,16 @@ export default function AdminOrderDetail() {
           <div className="od__card">
             <h3 className="od__card-title">{isPickup ? 'Pickup Information' : 'Delivery Information'}</h3>
             <div className="od__info-list">
+              {(order.customerName || order.customerEmail) && (
+                <div className="od__info-item">
+                  <User size={15} className="od__info-icon" />
+                  <div>
+                    <div className="od__info-label">Customer</div>
+                    {order.customerName && <span>{order.customerName}</span>}
+                    {order.customerEmail && <span className="od__info-sub">{order.customerEmail}</span>}
+                  </div>
+                </div>
+              )}
               <div className="od__info-item">
                 <MapPin size={15} className="od__info-icon" />
                 <div>

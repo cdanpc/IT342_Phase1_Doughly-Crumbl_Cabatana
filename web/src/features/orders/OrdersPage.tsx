@@ -4,20 +4,15 @@ import { RefreshCw, ShoppingBag } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Button from '../../components/ui/Button';
 import EmptyState from '../../components/ui/EmptyState';
+import ErrorState from '../../components/ui/ErrorState';
 import LoadingState from '../../components/ui/LoadingState';
 import SectionHeader from '../../components/layout/SectionHeader';
 import OrderCard from '../../components/orders/OrderCard';
 import { getMyOrders } from '../../shared/api/orderApi';
 import { useNotifications } from '../../shared/hooks/NotificationContext';
+import { ACTIVE_ORDER_STATUSES } from '../../shared/utils/formatters';
 import type { Order } from '../../shared/types';
 import './OrdersPage.css';
-
-const ACTIVE_STATUSES = [
-  'ORDER_PLACED', 'AWAITING_DELIVERY_QUOTE',
-  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
-  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
-  'PAYMENT_CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'READY',
-];
 
 export default function OrdersPage() {
   const navigate = useNavigate();
@@ -25,16 +20,19 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loadError, setLoadError] = useState('');
 
   const fetchOrders = useCallback(async (silent = false) => {
-    if (!silent) setIsLoading(true);
+    if (!silent) { setIsLoading(true); setLoadError(''); }
     else setIsRefreshing(true);
     try {
       const data = await getMyOrders();
       setOrders(data);
     } catch {
       if (!silent) {
-        toast.error('Failed to load orders. Please try again.');
+        const message = 'Failed to load orders. Please try again.';
+        setLoadError(message);
+        toast.error(message);
         setOrders([]);
       }
     } finally {
@@ -48,7 +46,7 @@ export default function OrdersPage() {
   }, [fetchOrders]);
 
   useEffect(() => {
-    const hasActive = orders.some((order) => ACTIVE_STATUSES.includes(order.status));
+    const hasActive = orders.some((order) => ACTIVE_ORDER_STATUSES.includes(order.status as typeof ACTIVE_ORDER_STATUSES[number]));
     if (!hasActive) return;
     const interval = setInterval(() => fetchOrders(true), 30000);
     return () => clearInterval(interval);
@@ -77,6 +75,8 @@ export default function OrdersPage() {
 
       {isLoading ? (
         <LoadingState label="Loading your orders..." />
+      ) : loadError ? (
+        <ErrorState message={loadError} onRetry={() => fetchOrders()} />
       ) : orders.length === 0 ? (
         <EmptyState
           title="No orders yet"

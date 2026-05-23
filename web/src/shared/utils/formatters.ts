@@ -19,40 +19,17 @@ export function formatDate(dateStr: string): string {
   });
 }
 
-/**
- * Get status badge color class
- */
-export function getStatusColor(status: string): string {
-  switch (status) {
-    case 'ORDER_PLACED':
-      return '#F59E0B';
-    case 'AWAITING_DELIVERY_QUOTE':
-      return '#F59E0B';
-    case 'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED':
-      return '#EA580C';
-    case 'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION':
-      return '#3B82F6';
-    case 'PAYMENT_CONFIRMED':
-      return '#0891B2';
-    case 'PENDING':
-      return '#F59E0B';
-    case 'CONFIRMED':
-      return '#3B82F6';
-    case 'PREPARING':
-      return '#8B5CF6';
-    case 'OUT_FOR_DELIVERY':
-      return '#2563EB';
-    case 'READY':
-      return '#10B981';
-    case 'DELIVERED':
-    case 'COMPLETED':
-      return '#16A34A';
-    case 'CANCELLED':
-      return '#DC2626';
-    default:
-      return '#666666';
-  }
-}
+/** Non-terminal order statuses that warrant background polling / live refresh */
+export const ACTIVE_ORDER_STATUSES = [
+  'ORDER_PLACED',
+  'AWAITING_DELIVERY_QUOTE',
+  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
+  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
+  'PAYMENT_CONFIRMED',
+  'PREPARING',
+  'OUT_FOR_DELIVERY',
+  'READY',
+] as const;
 
 export function formatOrderStatus(status: string): string {
   switch (status) {

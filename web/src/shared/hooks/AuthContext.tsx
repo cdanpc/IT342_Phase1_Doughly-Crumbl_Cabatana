@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { AuthUser, LoginRequest, RegisterRequest } from '../types';
 import * as authApi from '../api/authApi';
@@ -17,24 +17,21 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Load persisted auth on mount
-  useEffect(() => {
+  // Read from localStorage synchronously so auth state is ready before first render
+  const [user, setUser] = useState<AuthUser | null>(() => {
     const stored = localStorage.getItem('auth');
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as AuthUser;
-        if (parsed.token) {
-          setUser(parsed);
-        }
+        if (parsed.token) return parsed;
       } catch {
         localStorage.removeItem('auth');
       }
     }
-    setIsLoading(false);
-  }, []);
+    return null;
+  });
+  // Synchronous init means no async loading phase is needed
+  const isLoading = false;
 
   const login = useCallback(async (data: LoginRequest) => {
     const authUser = await authApi.login(data);
@@ -80,6 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) {

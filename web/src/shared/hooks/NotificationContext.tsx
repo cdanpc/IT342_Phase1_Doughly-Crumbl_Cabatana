@@ -43,6 +43,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   }, [isAuthenticated]);
 
   useEffect(() => {
+    // loadNotifications is async — setState calls happen in a callback, not synchronously
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadNotifications();
   }, [loadNotifications]);
 
@@ -104,6 +106,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNotifications(): NotificationContextValue {
   const context = useContext(NotificationContext);
   if (!context) throw new Error('useNotifications must be used within NotificationProvider');

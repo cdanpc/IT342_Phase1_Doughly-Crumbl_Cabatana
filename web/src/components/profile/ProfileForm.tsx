@@ -58,6 +58,8 @@ export default function ProfileForm({
   const [errors, setErrors] = useState<ProfileErrors>({});
 
   useEffect(() => {
+    // Intentional: reset form when parent provides new profile data (e.g. after save or modal reopen)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm(initialData);
     setErrors({});
   }, [initialData]);

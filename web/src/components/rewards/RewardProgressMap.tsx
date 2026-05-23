@@ -68,7 +68,7 @@ export default function RewardProgressMap({ completedOrders }: RewardProgressMap
       </div>
 
       <p className="reward-map__note">
-        Reward rules are display-only until admin reward endpoints are added. Completed orders are the merit source.
+        Completed orders are the merit source. Reach milestones to unlock rewards!
       </p>
     </section>
   );

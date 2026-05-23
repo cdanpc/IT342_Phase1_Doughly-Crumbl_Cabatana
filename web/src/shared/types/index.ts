@@ -29,6 +29,18 @@ export interface AuthUser {
   role: UserRole;
 }
 
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  phoneNumber?: string | null;
+  address?: string | null;
+  enabled: boolean;
+  accountLocked: boolean;
+  createdAt?: string | null;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -111,6 +123,8 @@ export interface OrderItem {
 
 export interface Order {
   orderId: number;
+  customerName?: string;
+  customerEmail?: string;
   orderDate: string;
   status: OrderStatus;
   paymentStatus: string;   // UNPAID | SUBMITTED | PAID | CANCELLED

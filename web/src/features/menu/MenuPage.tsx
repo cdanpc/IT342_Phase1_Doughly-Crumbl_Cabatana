@@ -6,6 +6,7 @@ import CategoryTabs from '../../components/menu/CategoryTabs';
 import ProductGrid from '../../components/menu/ProductGrid';
 import ProductDetailModal from '../../components/product/ProductDetailModal';
 import SectionHeader from '../../components/layout/SectionHeader';
+import ErrorState from '../../components/ui/ErrorState';
 import { getProducts } from '../../shared/api/productApi';
 import { useCart } from '../../shared/hooks/CartContext';
 import useDebouncedValue from '../../shared/hooks/useDebouncedValue';
@@ -43,7 +44,7 @@ export default function MenuPage() {
 
       const data = await getProducts(params);
       setProducts(data.content);
-    } catch (err: unknown) {
+    } catch {
       const message = 'Failed to load products. Please try again.';
       setLoadError(message);
       toast.error(message);
@@ -99,11 +100,12 @@ export default function MenuPage() {
         />
 
         {loadError ? (
-          <div className="menu-page__error" role="alert">
-            <strong>Could not load products</strong>
-            <span>{loadError}</span>
-            <button type="button" onClick={fetchProducts}>Try again</button>
-          </div>
+          <ErrorState
+            title="Could not load products"
+            message={loadError}
+            onRetry={fetchProducts}
+            className="menu-page__error"
+          />
         ) : (
           <ProductGrid
             products={products}

@@ -13,6 +13,7 @@ import OrderConfirmationPage from '../features/orders/OrderConfirmationPage';
 import AdminDashboard from '../features/admin/AdminDashboard';
 import AdminProducts from '../features/admin/AdminProducts';
 import AdminOrders from '../features/admin/AdminOrders';
+import AdminUsers from '../features/admin/AdminUsers';
 import AdminOrderDetail from '../features/admin/AdminOrderDetail';
 import CareGuidePage from '../features/care-guide/CareGuidePage';
 import AboutPage from '../features/about/AboutPage';
@@ -75,6 +76,7 @@ export default function AppRouter() {
           <Route path={ROUTES.ADMIN_DASHBOARD} element={<AdminDashboard />} />
           <Route path={ROUTES.ADMIN_PRODUCTS} element={<AdminProducts />} />
           <Route path={ROUTES.ADMIN_ORDERS} element={<AdminOrders />} />
+          <Route path={ROUTES.ADMIN_USERS} element={<AdminUsers />} />
           <Route path={ROUTES.ADMIN_ORDER_DETAIL} element={<AdminOrderDetail />} />
         </Route>
       </Routes>

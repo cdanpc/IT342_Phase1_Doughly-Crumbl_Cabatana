@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   UtensilsCrossed, ShoppingBag, Info, BookMarked,
-  LogOut, LayoutDashboard, Package, ClipboardList, User,
+  LogOut, LayoutDashboard, Package, ClipboardList, User, Users,
 } from 'lucide-react';
 import { useAuth } from '../shared/hooks/AuthContext';
 import { ROUTES } from '../shared/utils/routes';
@@ -70,6 +70,7 @@ export default function Sidebar() {
     { icon: <LayoutDashboard size={22} />, label: 'Dashboard', route: ROUTES.ADMIN_DASHBOARD },
     { icon: <Package size={22} />, label: 'Products', route: ROUTES.ADMIN_PRODUCTS },
     { icon: <ClipboardList size={22} />, label: 'Orders', route: ROUTES.ADMIN_ORDERS },
+    { icon: <Users size={22} />, label: 'Users', route: ROUTES.ADMIN_USERS },
   ];
 
   const navItems = isAdmin ? adminNav : customerNav;

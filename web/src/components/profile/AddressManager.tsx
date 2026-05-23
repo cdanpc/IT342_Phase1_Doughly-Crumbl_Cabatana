@@ -52,6 +52,8 @@ export default function AddressManager({
 
   useEffect(() => {
     if (addresses.length === 0 || editingId) return;
+    // Auto-check "default" when adding the first address — intentional state sync from derived condition
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm((prev) => ({ ...prev, defaultAddress: true }));
   }, [addresses.length, editingId]);
 

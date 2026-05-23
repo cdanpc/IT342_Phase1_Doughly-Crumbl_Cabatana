@@ -38,9 +38,8 @@ const ACCOUNT_DETAILS: Record<string, { label: string; value: string }[]> = {
     { label: 'Number', value: '0916 566 7589' },
   ],
   MAYA: [
-    { label: 'Name', value: 'Chris Daniel Cabataña' },
-    { label: 'Username', value: '@cdanpc' },
-    { label: 'Number', value: '+63 *** *** 8113' },
+    { label: 'Name', value: 'Doughly Crumbl' },
+    { label: 'Number', value: '0916 566 7589' },
   ],
   BANK_TRANSFER: [
     { label: 'Bank', value: 'BPI' },
@@ -130,7 +129,7 @@ export default function PaymentInstructionsPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}>
+      <div className="pip__loading">
         <div className="spinner" />
       </div>
     );
@@ -138,16 +137,9 @@ export default function PaymentInstructionsPage() {
 
   if (!order) {
     return (
-      <div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-        <p style={{ marginBottom: 16 }}>Order not found.</p>
-        <button
-          style={{
-            background: 'var(--color-primary)', color: '#fff',
-            borderRadius: 'var(--radius-sm)', padding: '10px 20px',
-            fontWeight: 600, border: 'none', cursor: 'pointer',
-          }}
-          onClick={() => navigate(ROUTES.ORDERS)}
-        >
+      <div className="pip__not-found">
+        <p className="pip__not-found-text">Order not found.</p>
+        <button className="pip__not-found-btn" onClick={() => navigate(ROUTES.ORDERS)}>
           Back to Orders
         </button>
       </div>

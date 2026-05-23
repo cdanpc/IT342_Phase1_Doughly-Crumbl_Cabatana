@@ -1,4 +1,3 @@
-import { Star } from 'lucide-react';
 import type { Product } from '../../shared/types';
 import { formatPrice } from '../../shared/utils/formatters';
 import Badge from '../ui/Badge';
@@ -40,7 +39,6 @@ export default function ProductCard({ product, isAdding, onAddToCart, onOpen }: 
       <div className="menu-product-card__body">
         <div className="menu-product-card__meta">
           <span>{getCategoryLabel(product.category || 'Cookies')}</span>
-          <span><Star size={13} fill="currentColor" /> 4.8</span>
         </div>
         <h3>{product.name}</h3>
         <p>{product.description || 'Freshly baked Doughly Crumbl treat.'}</p>

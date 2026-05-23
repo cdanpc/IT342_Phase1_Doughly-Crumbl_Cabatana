@@ -1,0 +1,112 @@
+.proof-upload__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.proof-upload__required {
+  color: var(--color-primary);
+}
+
+.proof-upload__drop-area {
+  width: 100%;
+  padding: 24px 16px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-soft);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.proof-upload__drop-area:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.proof-upload__drop-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.proof-upload__drop-hint {
+  font-size: 12px;
+}
+
+.proof-upload__preview {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.proof-upload__preview-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+}
+
+.proof-upload__preview-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--color-surface-soft);
+  border-top: 1px solid var(--color-border);
+}
+
+.proof-upload__file-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.proof-upload__remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-family: inherit;
+  padding: 0;
+}
+
+.proof-upload__remove-btn:hover {
+  color: var(--color-error);
+}
+
+.proof-upload__submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.proof-upload__submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.proof-upload__submit-btn:disabled {
+  background: var(--color-border);
+  cursor: not-allowed;
+}

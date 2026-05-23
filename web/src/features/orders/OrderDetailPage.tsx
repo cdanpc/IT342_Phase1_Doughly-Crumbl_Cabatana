@@ -8,6 +8,7 @@ import {
   formatOrderStatus,
   getStatusFullText,
   getOrderStatusHelperText,
+  ACTIVE_ORDER_STATUSES,
 } from '../../shared/utils/formatters';
 import { ROUTES } from '../../shared/utils/routes';
 import type { Order } from '../../shared/types';
@@ -72,14 +73,6 @@ function getHelperBannerClass(status: string): string {
   return 'cod__helper--info';
 }
 
-const ACTIVE_STATUSES = [
-  'ORDER_PLACED',
-  'AWAITING_DELIVERY_QUOTE',
-  'DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED',
-  'PAYMENT_SUBMITTED_AWAITING_CONFIRMATION',
-  'PREPARING',
-  'OUT_FOR_DELIVERY',
-];
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -130,7 +123,7 @@ export default function OrderDetailPage() {
   useEffect(() => { fetchOrder(); }, [fetchOrder]);
 
   useEffect(() => {
-    if (!order || !ACTIVE_STATUSES.includes(order.status)) return;
+    if (!order || !ACTIVE_ORDER_STATUSES.includes(order.status as typeof ACTIVE_ORDER_STATUSES[number])) return;
     const interval = setInterval(() => fetchOrder(true), 20000);
     return () => clearInterval(interval);
   }, [order?.status, fetchOrder]);
