@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -55,17 +56,24 @@ class AdminAddEditProductActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
+        setupCategoryDropdown()
         editingProduct?.let { prefill(it) }
 
         observeViewModel()
         setupListeners()
     }
 
+    private fun setupCategoryDropdown() {
+        val categories = listOf("Cookies", "Croissants", "Donuts", "Sourdough", "Cakes", "Pastries", "Beverages")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories)
+        binding.etCategory.setAdapter(adapter)
+    }
+
     private fun prefill(p: Product) {
         binding.etName.setText(p.name)
         binding.etDescription.setText(p.description ?: "")
         binding.etPrice.setText(p.price.toString())
-        binding.etCategory.setText(p.category)
+        binding.etCategory.setText(p.category, false)
         binding.switchAvailable.isChecked = p.available
         binding.etImageUrl.setText(p.imageUrl ?: "")
         Glide.with(this).load(p.imageUrl).centerCrop().into(binding.ivPreview)

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.mobile.R
 import com.example.mobile.databinding.ItemAdminProductBinding
 import com.example.mobile.model.Product
 
@@ -22,12 +23,23 @@ class AdminProductAdapter(
 
     inner class ViewHolder(private val b: ItemAdminProductBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(product: Product) {
+            val context = b.root.context
+            val availability = context.getString(
+                if (product.available) R.string.admin_product_available
+                else R.string.admin_product_unavailable
+            )
+
             b.tvName.text = product.name
-            b.tvCategory.text = "${product.category} · ${if (product.available) "Available" else "Unavailable"}"
-            b.tvPrice.text = "₱%.2f".format(product.price)
+            b.tvCategory.text = context.getString(
+                R.string.admin_product_category_availability_format,
+                product.category,
+                availability
+            )
+            b.tvPrice.text = context.getString(R.string.price_format, product.price)
             Glide.with(b.root)
                 .load(product.imageUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.bg_product_placeholder)
+                .error(R.drawable.bg_product_placeholder)
                 .centerCrop()
                 .into(b.ivProduct)
             b.btnEdit.isEnabled = actionsEnabled

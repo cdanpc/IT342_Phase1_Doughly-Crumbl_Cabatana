@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.mobile.DoughlyApp
+import com.example.mobile.R
 import com.example.mobile.cart.data.CartRepository
 import com.example.mobile.home.data.ProductRepository
 import com.example.mobile.model.Product
@@ -47,9 +49,9 @@ class HomeViewModel(sessionManager: SessionManager) : ViewModel() {
             try {
                 val response = repository.getProducts(search = search, category = category)
                 if (response.isSuccessful) _products.value = response.body()?.content ?: emptyList()
-                else _error.value = "Failed to load products"
+                else _error.value = DoughlyApp.appContext.getString(R.string.error_load_products)
             } catch (e: Exception) {
-                _error.value = e.localizedMessage ?: "Network error"
+                _error.value = e.localizedMessage ?: DoughlyApp.appContext.getString(R.string.error_network)
             } finally {
                 _isLoading.value = false
             }
@@ -84,40 +86,42 @@ class HomeViewModel(sessionManager: SessionManager) : ViewModel() {
                 } else {
                     profileRepository.addFavorite(product.id)
                 }
+                val ctx = DoughlyApp.appContext
                 if (response.isSuccessful) {
                     if (product.id in currentFavorites) {
                         _favoriteProductIds.value = currentFavorites - product.id
-                        _favoriteMessage.value = "${product.name} removed from favorites"
+                        _favoriteMessage.value = ctx.getString(R.string.favorites_removed_format, product.name)
                     } else {
                         _favoriteProductIds.value = currentFavorites + product.id
-                        _favoriteMessage.value = "${product.name} added to favorites"
+                        _favoriteMessage.value = ctx.getString(R.string.favorites_added_format, product.name)
                     }
                 } else {
-                    _error.value = ApiErrorParser.message(response, "Failed to update favorite")
+                    _error.value = ApiErrorParser.message(response, ctx.getString(R.string.error_update_favorite))
                 }
             } catch (e: Exception) {
-                _error.value = e.localizedMessage ?: "Failed to update favorite"
+                _error.value = e.localizedMessage ?: DoughlyApp.appContext.getString(R.string.error_update_favorite)
             } finally {
                 _pendingFavoriteProductIds.value = _pendingFavoriteProductIds.value.orEmpty() - product.id
             }
         }
     }
 
-    fun addToCart(product: Product) {
+    fun addToCart(product: Product, quantity: Int = 1) {
         val current = _addingProductIds.value.orEmpty()
         if (product.id in current) return
 
         viewModelScope.launch {
             _addingProductIds.value = current + product.id
             try {
-                val response = cartRepository.addToCart(product.id, 1)
+                val ctx = DoughlyApp.appContext
+                val response = cartRepository.addToCart(product.id, quantity)
                 if (response.isSuccessful) {
-                    _addToCartMessage.value = "${product.name} added to cart"
+                    _addToCartMessage.value = ctx.getString(R.string.cart_added_format, product.name)
                 } else {
-                    _error.value = ApiErrorParser.message(response, "Failed to add ${product.name} to cart")
+                    _error.value = ApiErrorParser.message(response, ctx.getString(R.string.cart_add_failed_format, product.name))
                 }
             } catch (e: Exception) {
-                _error.value = e.localizedMessage ?: "Network error"
+                _error.value = e.localizedMessage ?: DoughlyApp.appContext.getString(R.string.error_network)
             } finally {
                 _addingProductIds.value = _addingProductIds.value.orEmpty() - product.id
             }

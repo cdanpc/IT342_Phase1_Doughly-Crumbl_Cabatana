@@ -703,6 +703,109 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Rate Order Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/gapCard"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="@dimen/strokeWidthCardThin">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <TextView
+                        android:id="@+id/tvRatingTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_8"
+                        android:text="@string/rate_order"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                        android:textColor="@color/colorTextPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="@dimen/spacing_12">
+
+                        <ImageView
+                            android:id="@+id/star1"
+                            android:layout_width="@dimen/minTouchTarget"
+                            android:layout_height="@dimen/minTouchTarget"
+                            android:padding="@dimen/spacing_8"
+                            android:src="@drawable/ic_star_outline"
+                            android:contentDescription="@string/star_1" />
+
+                        <ImageView
+                            android:id="@+id/star2"
+                            android:layout_width="@dimen/minTouchTarget"
+                            android:layout_height="@dimen/minTouchTarget"
+                            android:padding="@dimen/spacing_8"
+                            android:src="@drawable/ic_star_outline"
+                            android:contentDescription="@string/star_2" />
+
+                        <ImageView
+                            android:id="@+id/star3"
+                            android:layout_width="@dimen/minTouchTarget"
+                            android:layout_height="@dimen/minTouchTarget"
+                            android:padding="@dimen/spacing_8"
+                            android:src="@drawable/ic_star_outline"
+                            android:contentDescription="@string/star_3" />
+
+                        <ImageView
+                            android:id="@+id/star4"
+                            android:layout_width="@dimen/minTouchTarget"
+                            android:layout_height="@dimen/minTouchTarget"
+                            android:padding="@dimen/spacing_8"
+                            android:src="@drawable/ic_star_outline"
+                            android:contentDescription="@string/star_4" />
+
+                        <ImageView
+                            android:id="@+id/star5"
+                            android:layout_width="@dimen/minTouchTarget"
+                            android:layout_height="@dimen/minTouchTarget"
+                            android:padding="@dimen/spacing_8"
+                            android:src="@drawable/ic_star_outline"
+                            android:contentDescription="@string/star_5" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/rating_comment_hint">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etComment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:maxLines="3" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSubmitRating"
+                        style="@style/Style.DoughlyCrumbl.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_12"
+                        android:text="@string/submit_rating"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Cancel Order Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancel"

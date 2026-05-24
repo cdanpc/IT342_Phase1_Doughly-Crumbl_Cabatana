@@ -129,11 +129,43 @@ class ProfileFragment : Fragment() {
         binding.tvEmail.text = profile.email.ifEmpty { getString(R.string.profile_unknown_email) }
         updateAvatarInitials(profile.name)
 
-        // Show actual rating if non-zero, otherwise show placeholder
         binding.tvRating.text = if (profile.rating > 0.0) {
             "%.1f".format(profile.rating)
         } else {
-            getString(R.string.profile_default_rating)
+            "-"
+        }
+
+        bindMeritProgress(profile)
+    }
+
+    private fun bindMeritProgress(profile: CustomerProfile) {
+        binding.cardMerit.visibility = View.VISIBLE
+        binding.tvMeritTierName.text = profile.meritTierName
+
+        val completed = profile.completedOrders
+        val plural = if (completed == 1) "" else "s"
+        binding.tvMeritOrderCount.text = getString(R.string.merit_completed_orders_format, completed, plural)
+
+        val milestones = listOf(1 to "New Crumbler", 3 to "Topping Ready", 5 to "Discount Ready", 10 to "Cookie Box", 15 to "VIP Crumbler")
+        val next = milestones.firstOrNull { completed < it.first }
+        val prev = milestones.lastOrNull { completed >= it.first }
+        val prevCount = prev?.first ?: 0
+        val target = next ?: milestones.last()
+        val range = (target.first - prevCount).coerceAtLeast(1)
+        val progress = if (next != null) {
+            ((completed - prevCount).toFloat() / range * 100).toInt().coerceIn(0, 100)
+        } else {
+            100
+        }
+
+        binding.progressMerit.progress = progress
+
+        if (next != null) {
+            val remaining = next.first - completed
+            val remPlural = if (remaining == 1) "" else "s"
+            binding.tvMeritNextTier.text = getString(R.string.merit_orders_until_format, remaining, remPlural, next.second)
+        } else {
+            binding.tvMeritNextTier.text = getString(R.string.merit_top_reached)
         }
     }
 
@@ -159,19 +191,37 @@ class ProfileFragment : Fragment() {
         val address = editText(profile?.address.orEmpty(), getString(R.string.delivery_address), InputType.TYPE_CLASS_TEXT)
         listOf(name, email, phone, address).forEach { fields.addView(it) }
 
-        AlertDialog.Builder(context)
+        // Use null listener so the dialog stays open on validation failure
+        val dialog = AlertDialog.Builder(context)
             .setTitle(R.string.edit_profile_title)
             .setView(fields)
-            .setPositiveButton(R.string.update_profile) { _, _ ->
-                viewModel.updateProfile(
-                    name.text.toString().trim(),
-                    email.text.toString().trim(),
-                    phone.text.toString().trim().ifBlank { null },
-                    address.text.toString().trim().ifBlank { null }
-                )
-            }
+            .setPositiveButton(R.string.update_profile, null)
             .setNegativeButton(R.string.cancel, null)
             .show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val nameValue = name.text.toString().trim()
+            val phoneValue = phone.text.toString().trim()
+
+            if (nameValue.isBlank()) {
+                name.error = getString(R.string.error_name_required)
+                return@setOnClickListener
+            }
+
+            val phPhoneRegex = Regex("^(09|\\+639)\\d{9}$")
+            if (phoneValue.isNotBlank() && !phPhoneRegex.matches(phoneValue)) {
+                phone.error = getString(R.string.error_phone_invalid)
+                return@setOnClickListener
+            }
+
+            viewModel.updateProfile(
+                nameValue,
+                email.text.toString().trim(),
+                phoneValue.ifBlank { null },
+                address.text.toString().trim().ifBlank { null }
+            )
+            dialog.dismiss()
+        }
     }
 
     private fun showAddressDialog(addresses: List<DeliveryAddress>, viewModel: ProfileViewModel) {

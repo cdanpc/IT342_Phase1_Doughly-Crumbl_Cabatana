@@ -1,6 +1,8 @@
 package com.example.mobile.orders.data
 
 import com.example.mobile.model.Order
+import com.example.mobile.model.OrderRating
+import com.example.mobile.model.OrderRatingRequest
 import com.example.mobile.network.ApiService
 import com.example.mobile.network.RetrofitClient
 import com.example.mobile.util.SessionManager
@@ -16,4 +18,8 @@ class OrderRepository(sessionManager: SessionManager) {
         api.cancelOrder(id, reason)
     suspend fun submitPayment(id: Long, proof: MultipartBody.Part): Response<Order> =
         api.submitPayment(id, proof)
+    suspend fun submitRating(orderId: Long, request: OrderRatingRequest): Response<OrderRating> =
+        api.submitOrderRating(orderId, request)
+    suspend fun getRating(orderId: Long): Response<OrderRating> =
+        api.getOrderRating(orderId)
 }

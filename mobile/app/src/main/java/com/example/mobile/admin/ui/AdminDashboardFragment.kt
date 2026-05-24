@@ -34,24 +34,35 @@ class AdminDashboardFragment : Fragment() {
         binding.recyclerRecentOrders.isNestedScrollingEnabled = false
 
         viewModel.stats.observe(viewLifecycleOwner) { s ->
-            binding.tvPendingCount.text = s.pending.toString()
-            binding.tvConfirmedCount.text = s.confirmed.toString()
-            binding.tvPreparingCount.text = s.preparing.toString()
-            binding.tvReadyCount.text = s.ready.toString()
+            binding.tvTotalProductsCount.text = s.totalProducts.toString()
+            binding.tvTotalOrdersCount.text = s.totalOrders.toString()
+            binding.tvNeedsAttentionCount.text = s.needsAttention.toString()
+            binding.tvPaymentPendingCount.text = s.paymentPending.toString()
+            binding.tvInProgressCount.text = s.inProgress.toString()
+            binding.tvRevenueCount.text = getString(com.example.mobile.R.string.price_format, s.revenue)
+            binding.errorState.visibility = View.GONE
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.recentOrders.observe(viewLifecycleOwner) { orders ->
             recentAdapter.submitList(orders)
+            binding.tvRecentOrdersEmpty.visibility = if (orders.isEmpty()) View.VISIBLE else View.GONE
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         }
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            msg?.let {
+                binding.tvDashboardError.text = it
+                binding.errorState.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
             binding.swipeRefresh.isRefreshing = false
         }
 
         binding.swipeRefresh.setOnRefreshListener {
+            viewModel.load()
+        }
+        binding.btnDashboardRetry.setOnClickListener {
             viewModel.load()
         }
 

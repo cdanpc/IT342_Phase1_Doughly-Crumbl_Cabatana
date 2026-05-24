@@ -22,7 +22,7 @@
         <activity
             android:name=".auth.ui.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.DoughlyCrumbl">
+            android:theme="@style/Theme.DoughlyCrumbl.Auth">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,8 +30,8 @@
         </activity>
 
         <!-- Auth -->
-        <activity android:name=".auth.ui.LoginActivity" android:exported="false" />
-        <activity android:name=".auth.ui.RegisterActivity" android:exported="false" />
+        <activity android:name=".auth.ui.LoginActivity" android:exported="false" android:theme="@style/Theme.DoughlyCrumbl.Auth" />
+        <activity android:name=".auth.ui.RegisterActivity" android:exported="false" android:theme="@style/Theme.DoughlyCrumbl.Auth" />
 
         <!-- Customer host + sub-screens -->
         <activity android:name=".MainActivity" android:exported="false" />

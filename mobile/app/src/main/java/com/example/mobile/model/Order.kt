@@ -6,6 +6,12 @@ data class Order(
     @SerializedName("orderId")
     val orderId: Long = 0,
 
+    @SerializedName("customerName")
+    val customerName: String? = null,
+
+    @SerializedName("customerEmail")
+    val customerEmail: String? = null,
+
     @SerializedName("orderDate")
     val orderDate: String = "",
 
@@ -49,5 +55,8 @@ data class Order(
     val totalAmount: Double = 0.0,
 
     @SerializedName("itemCount")
-    val itemCount: Int? = null
+    val itemCount: Int? = null,
+
+    @SerializedName("rating")
+    val rating: Int? = null
 )

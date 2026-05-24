@@ -16,7 +16,7 @@ object ApiServerDiscovery {
     private const val KEY_BASE_URL = "base_url"
     private const val API_PORT = 8080
     private const val PROBE_TIMEOUT_MS = 450
-    private const val SCAN_THREADS = 32
+    private const val SCAN_THREADS = 8
     private const val DEFAULT_BASE_URL = "http://10.0.2.2:8080/api/"
     private const val LAST_KNOWN_LAN_BASE_URL = "http://192.168.1.52:8080/api/"
 
@@ -33,16 +33,24 @@ object ApiServerDiscovery {
 
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val savedBaseUrl = prefs.getString(KEY_BASE_URL, null)
-        val candidates = buildCandidates(savedBaseUrl)
 
-        if (!force) {
-            candidates.firstOrNull { it == savedBaseUrl && isBackendReachable(it) }?.let {
-                cache(context, it)
-                return it
-            }
+        // Fast path: try well-known URLs serially before spawning the subnet scan.
+        // On emulator 10.0.2.2 responds immediately; on physical device the saved
+        // or last-known LAN URL should hit. Only fall through to the subnet scan when
+        // all fixed candidates fail (backend unreachable from every known address).
+        val fixedCandidates = linkedSetOf<String>()
+        savedBaseUrl?.let(fixedCandidates::add)
+        fixedCandidates.add(DEFAULT_BASE_URL)
+        fixedCandidates.add(LAST_KNOWN_LAN_BASE_URL)
+
+        fixedCandidates.firstOrNull { isBackendReachable(it) }?.let {
+            cache(context, it)
+            return it
         }
 
-        val discovered = findReachable(candidates) ?: DEFAULT_BASE_URL
+        // Slow path: full subnet scan as last resort.
+        val subnetCandidates = buildSubnetCandidates()
+        val discovered = findReachable(subnetCandidates) ?: DEFAULT_BASE_URL
         cache(context, discovered)
         discovered
     }
@@ -61,12 +69,8 @@ object ApiServerDiscovery {
             .apply()
     }
 
-    private fun buildCandidates(savedBaseUrl: String?): List<String> {
+    private fun buildSubnetCandidates(): List<String> {
         val candidates = linkedSetOf<String>()
-        savedBaseUrl?.let(candidates::add)
-        candidates.add(DEFAULT_BASE_URL)
-        candidates.add(LAST_KNOWN_LAN_BASE_URL)
-
         localIpv4Addresses().forEach { localIp ->
             subnetHosts(localIp).forEach { host ->
                 candidates.add("http://$host:$API_PORT/api/")

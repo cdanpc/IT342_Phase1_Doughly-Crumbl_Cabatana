@@ -14,27 +14,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="@dimen/heightAuthHeaderGuide" />
 
-    <!-- ── DECORATIVE CIRCLES ── -->
-    <View
-        android:layout_width="@dimen/sizeDecorCircle1W"
-        android:layout_height="@dimen/sizeLogo"
-        android:alpha="0.10"
-        android:background="@drawable/bg_circle_white_alpha"
-        android:layout_marginStart="@dimen/negativeDecorMarginL"
-        android:layout_marginTop="@dimen/negativeDecorMarginL"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="@dimen/sizeDecorCircle2"
-        android:layout_height="@dimen/sizeDecorCircle2"
-        android:alpha="0.07"
-        android:background="@drawable/bg_circle_white_alpha"
-        android:layout_marginEnd="@dimen/negativeDecorMarginM"
-        android:layout_marginTop="@dimen/spacing_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <!-- ── LOGO ── -->
     <FrameLayout
         android:id="@+id/logoContainer"

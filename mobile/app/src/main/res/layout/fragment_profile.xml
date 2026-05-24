@@ -176,7 +176,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/spacing_4"
-                                android:text="@string/profile_default_rating"
+                                android:text="-"
                                 android:textColor="@color/colorTextPrimary"
                                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineMedium"
                                 android:textStyle="bold" />
@@ -191,6 +191,88 @@
                             android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption" />
 
                     </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Merit Progress Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMerit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginPage"
+                android:layout_marginEnd="@dimen/marginPage"
+                android:layout_marginBottom="@dimen/spacing_16"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="@dimen/radiusCard"
+                app:cardElevation="@dimen/elevationCard"
+                app:strokeColor="@color/colorBorder"
+                app:strokeWidth="@dimen/strokeWidthCardThin">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="@dimen/spacing_8">
+
+                        <ImageView
+                            android:layout_width="@dimen/iconSize"
+                            android:layout_height="@dimen/iconSize"
+                            android:layout_marginEnd="@dimen/spacing_8"
+                            android:src="@drawable/ic_star"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/merit_progress"
+                            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.LabelLarge"
+                            android:textColor="@color/colorTextPrimary" />
+
+                        <TextView
+                            android:id="@+id/tvMeritTierName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvMeritOrderCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_8"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorTextSecondary" />
+
+                    <ProgressBar
+                        android:id="@+id/progressMerit"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_8"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressTint="@color/colorPrimary"
+                        android:progressBackgroundTint="@color/colorBorder"
+                        android:layout_marginBottom="@dimen/spacing_8" />
+
+                    <TextView
+                        android:id="@+id/tvMeritNextTier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
+                        android:textColor="@color/colorTextMuted" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     android:orientation="vertical">
 
     <FrameLayout
@@ -15,6 +16,10 @@
         android:id="@+id/adminBottomNav"
         style="@style/Style.DoughlyCrumbl.BottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/heightBottomNav"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_marginEnd="@dimen/spacing_12"
+        android:layout_marginBottom="@dimen/spacing_8"
+        android:background="@drawable/bg_card"
         app:menu="@menu/admin_nav_menu" />
 </LinearLayout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Border Radius -->
-    <dimen name="radiusCard">12dp</dimen>
-    <dimen name="radiusButton">12dp</dimen>
+    <dimen name="radiusCard">16dp</dimen>
+    <dimen name="radiusButton">14dp</dimen>
     <dimen name="radiusInput">12dp</dimen>
     <dimen name="radiusPill">24dp</dimen>
     <dimen name="radiusAvatar">100dp</dimen>
@@ -12,8 +12,8 @@
     <dimen name="heightButtonPrimary">52dp</dimen>
     <dimen name="heightButtonSecondary">44dp</dimen>
     <dimen name="heightInput">56dp</dimen>
-    <dimen name="heightBottomNav">80dp</dimen>
-    <dimen name="heightTopAppBar">56dp</dimen>
+    <dimen name="heightBottomNav">68dp</dimen>
+    <dimen name="heightTopAppBar">64dp</dimen>
     <dimen name="heightChip">36dp</dimen>
     <dimen name="heightChipSmall">28dp</dimen>
     <dimen name="heightChipTiny">24dp</dimen>
@@ -21,7 +21,7 @@
     <dimen name="heightHomeHeader">112dp</dimen>
     <dimen name="heightHomePromo">168dp</dimen>
     <dimen name="heightProductDetailImage">220dp</dimen>
-    <dimen name="heightCartHeader">88dp</dimen>
+    <dimen name="heightCartHeader">76dp</dimen>
     <dimen name="heightPaymentOption">64dp</dimen>
     <dimen name="heightFulfillmentOption">104dp</dimen>
 
@@ -45,7 +45,7 @@
     <dimen name="avatarSmall">40dp</dimen>
     <dimen name="avatarMedium">56dp</dimen>
     <dimen name="avatarLarge">72dp</dimen>
-    <dimen name="productThumbLarge">88dp</dimen>
+    <dimen name="productThumbLarge">96dp</dimen>
     <dimen name="cartThumbSize">88dp</dimen>
     <dimen name="productActionSize">48dp</dimen>
     <dimen name="promoLogoSize">112dp</dimen>
@@ -57,7 +57,7 @@
     <dimen name="timelineLineHeight">36dp</dimen>
 
     <!-- Elevation / Shadow -->
-    <dimen name="elevationCard">2dp</dimen>
+    <dimen name="elevationCard">1dp</dimen>
     <dimen name="elevationBottomNav">8dp</dimen>
     <dimen name="elevationFab">6dp</dimen>
 
@@ -111,7 +111,8 @@
     <dimen name="overlapProfileCard">24dp</dimen>
     <dimen name="negativeOverlapProfileCard">-24dp</dimen>
     <dimen name="heightHeroBanner">200dp</dimen>
-    <dimen name="heightProductImage">130dp</dimen>
+    <dimen name="heightProductImage">136dp</dimen>
+    <dimen name="heightNotificationIcon">72dp</dimen>
     <dimen name="heightAdminProductImage">72dp</dimen>
     <dimen name="heightAdminProductPreview">180dp</dimen>
     <dimen name="heightProofOfPayment">180dp</dimen>

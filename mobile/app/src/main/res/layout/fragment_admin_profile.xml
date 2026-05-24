@@ -65,7 +65,7 @@
         <!-- Logout -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
-            style="@style/Style.DoughlyCrumbl.Button.Destructive"
+            style="@style/Style.DoughlyCrumbl.Button.Filled.Destructive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/logout"

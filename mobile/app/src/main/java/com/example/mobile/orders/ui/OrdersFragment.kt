@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +38,12 @@ class OrdersFragment : Fragment() {
 
         observeViewModel()
         binding.swipeRefresh.setOnRefreshListener { viewModel.loadOrders() }
+        binding.btnOrdersRetry.setOnClickListener { viewModel.loadOrders() }
+        viewModel.loadOrders()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.loadOrders()
     }
 
@@ -48,13 +53,18 @@ class OrdersFragment : Fragment() {
             val isEmpty = list.isEmpty()
             binding.emptyState.visibility = if (isEmpty) View.VISIBLE else View.GONE
             binding.recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            binding.errorState.visibility = View.GONE
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         }
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            msg?.let {
+                binding.tvOrdersError.text = it
+                binding.errorState.visibility = View.VISIBLE
+                binding.emptyState.visibility = View.GONE
+            }
             binding.swipeRefresh.isRefreshing = false
         }
     }

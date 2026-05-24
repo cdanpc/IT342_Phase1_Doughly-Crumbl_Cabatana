@@ -1,8 +1,13 @@
 ﻿package com.example.mobile.admin.ui
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +18,9 @@ import com.example.mobile.orders.ui.OrderItemAdapter
 import com.example.mobile.util.OrderStatusUi
 import com.example.mobile.util.SessionManager
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class AdminOrderDetailActivity : AppCompatActivity() {
 
@@ -53,12 +61,12 @@ class AdminOrderDetailActivity : AppCompatActivity() {
 
         binding.btnQuoteFee.setOnClickListener {
             if (viewModel.order.value?.status != "AWAITING_DELIVERY_QUOTE") {
-                Toast.makeText(this, "Delivery fee can only be quoted while an order is awaiting quote.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.admin_delivery_fee_invalid_state), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val fee = binding.etDeliveryFee.text.toString().toDoubleOrNull()
             if (fee == null || fee < 0) {
-                Toast.makeText(this, "Enter a valid delivery fee", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.admin_delivery_fee_invalid_amount), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             viewModel.quoteDeliveryFee(orderId, fee)
@@ -68,9 +76,9 @@ class AdminOrderDetailActivity : AppCompatActivity() {
     }
 
     private fun bindOrder(order: Order, adapter: OrderItemAdapter) {
-        supportActionBar?.title = "Order #${order.orderId}"
-        binding.tvCustomerName.text = "Order #${order.orderId}"
-        binding.tvCustomerEmail.text = order.contactNumber ?: ""
+        supportActionBar?.title = getString(R.string.admin_order_title_format, order.orderId)
+        binding.tvCustomerName.text = order.customerName ?: getString(R.string.profile_unknown_user)
+        binding.tvCustomerEmail.text = order.customerEmail ?: ""
         binding.tvDate.text = order.orderDate.take(10)
         binding.chipStatus.text = OrderStatusUi.label(order.status)
         binding.chipStatus.setChipBackgroundColorResource(OrderStatusUi.colorRes(order.status))
@@ -81,19 +89,149 @@ class AdminOrderDetailActivity : AppCompatActivity() {
 
         adapter.submitList(order.items)
 
-        binding.tvSubtotal.text = "Subtotal: ₱%.2f".format(order.totalAmount)
+        binding.tvSubtotal.text = getString(
+            R.string.admin_order_subtotal_format,
+            getString(R.string.price_format, order.totalAmount)
+        )
 
-        // Build status transition buttons
         binding.layoutStatusButtons.removeAllViews()
+        bindStatusActions(order)
+    }
+
+    private fun bindStatusActions(order: Order) {
+        val isTerminal = order.status == "COMPLETED" || order.status == "CANCELLED"
         val nextStatus = OrderStatusUi.nextAdminStatus(order)
-        if (nextStatus != null && order.status != "COMPLETED" && order.status != "CANCELLED") {
-            val btn = MaterialButton(this).apply {
-                text = "Move to: ${OrderStatusUi.label(nextStatus)}"
-                isAllCaps = false
-                setOnClickListener { viewModel.updateStatus(order.orderId, nextStatus) }
-            }
-            binding.layoutStatusButtons.addView(btn)
+        if (nextStatus != null && !isTerminal) {
+            binding.layoutStatusButtons.addView(
+                createStatusButton(
+                    text = getString(R.string.admin_move_to_status_format, OrderStatusUi.label(nextStatus))
+                ) {
+                    viewModel.updateStatus(order.orderId, nextStatus)
+                }
+            )
         }
+
+        if (!isTerminal) {
+            binding.layoutStatusButtons.addView(
+                createStatusButton(
+                    text = getString(R.string.admin_override_status),
+                    isOutlined = true
+                ) {
+                    showOverrideStatusDialog(order)
+                }
+            )
+            binding.layoutStatusButtons.addView(
+                createStatusButton(
+                    text = getString(R.string.admin_cancel_order),
+                    isOutlined = true,
+                    isDanger = true
+                ) {
+                    showCancelOrderDialog(order)
+                }
+            )
+        }
+    }
+
+    private fun createStatusButton(
+        text: String,
+        isOutlined: Boolean = false,
+        isDanger: Boolean = false,
+        onClick: () -> Unit
+    ): MaterialButton {
+        val margin = resources.getDimensionPixelSize(R.dimen.spacing_8)
+        val styleAttr = if (isOutlined) {
+            com.google.android.material.R.attr.materialButtonOutlinedStyle
+        } else {
+            com.google.android.material.R.attr.materialButtonStyle
+        }
+        return MaterialButton(this, null, styleAttr).apply {
+            this.text = text
+            isAllCaps = false
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = margin
+            }
+            if (isDanger) {
+                setTextColor(getColor(R.color.colorError))
+                strokeColor = getColorStateList(R.color.colorError)
+            }
+            setOnClickListener { onClick() }
+        }
+    }
+
+    private fun showCancelOrderDialog(order: Order) {
+        val reasonInput = createReasonInput(getString(R.string.admin_cancel_reason_hint))
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.admin_cancel_order_title)
+            .setView(reasonInput.container)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.admin_confirm_cancel_order, null)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            submitStatusChange(dialog, order, "CANCELLED", reasonInput)
+        }
+    }
+
+    private fun showOverrideStatusDialog(order: Order) {
+        val statusOptions = OrderStatusUi.adminStatuses.filter { it != order.status }
+        val spinner = Spinner(this).apply {
+            adapter = ArrayAdapter(
+                this@AdminOrderDetailActivity,
+                android.R.layout.simple_spinner_dropdown_item,
+                statusOptions.map { OrderStatusUi.label(it) }
+            )
+        }
+        val reasonInput = createReasonInput(getString(R.string.admin_override_reason_hint))
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            val padding = resources.getDimensionPixelSize(R.dimen.spacing_20)
+            setPadding(padding, padding / 2, padding, 0)
+            addView(spinner)
+            addView(reasonInput.container)
+        }
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.admin_override_status_title)
+            .setMessage(R.string.admin_override_status_message)
+            .setView(content)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.admin_confirm_override, null)
+            .show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val selectedStatus = statusOptions[spinner.selectedItemPosition]
+            submitStatusChange(dialog, order, selectedStatus, reasonInput)
+        }
+    }
+
+    private fun submitStatusChange(
+        dialog: AlertDialog,
+        order: Order,
+        status: String,
+        reasonInput: ReasonInput
+    ) {
+        val reason = reasonInput.editText.text?.toString()?.trim().orEmpty()
+        if (reason.isBlank()) {
+            reasonInput.container.error = getString(R.string.error_required)
+            return
+        }
+        reasonInput.container.error = null
+        viewModel.updateStatus(order.orderId, status, reason)
+        dialog.dismiss()
+    }
+
+    private fun createReasonInput(hint: String): ReasonInput {
+        val editText = TextInputEditText(this).apply {
+            minLines = 2
+            maxLines = 4
+        }
+        val inputLayout = TextInputLayout(this).apply {
+            this.hint = hint
+            addView(editText)
+        }
+        return ReasonInput(inputLayout, editText)
     }
 
     private fun setStatusButtonsEnabled(enabled: Boolean) {
@@ -101,4 +239,9 @@ class AdminOrderDetailActivity : AppCompatActivity() {
             binding.layoutStatusButtons.getChildAt(index).isEnabled = enabled
         }
     }
+
+    private data class ReasonInput(
+        val container: TextInputLayout,
+        val editText: TextInputEditText
+    )
 }

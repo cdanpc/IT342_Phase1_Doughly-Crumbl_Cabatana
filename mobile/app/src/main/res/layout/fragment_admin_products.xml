@@ -51,6 +51,36 @@
                     android:text="@string/no_products"
                     android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                     android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/errorState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/spacing_16"
+                    android:background="@drawable/bg_error_banner"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_16"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvProductsError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                        android:textColor="@color/colorError" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnProductsRetry"
+                        style="@style/Style.DoughlyCrumbl.Button.Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_8"
+                        android:text="@string/retry"
+                        android:textAllCaps="false" />
+                </LinearLayout>
             </FrameLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>

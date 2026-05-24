@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/spacing_8"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/ripple_card"
     app:cardBackgroundColor="@color/colorSurface"
     app:cardCornerRadius="@dimen/radiusCard"
     app:cardElevation="@dimen/elevationCard"
@@ -14,12 +17,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/heightListItem"
         android:padding="@dimen/spacing_12">
 
         <FrameLayout
             android:id="@+id/iconContainer"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/minTouchTarget"
+            android:layout_height="@dimen/minTouchTarget"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -59,15 +63,15 @@
             android:layout_marginStart="@dimen/spacing_12"
             android:layout_marginTop="@dimen/spacing_4"
             android:textColor="@color/colorTextMuted"
-            android:textSize="11sp"
+            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconContainer"
             app:layout_constraintTop_toBottomOf="@id/tvMessage" />
 
         <View
             android:id="@+id/unreadDot"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="@dimen/spacing_8"
+            android:layout_height="@dimen/spacing_8"
             android:background="@drawable/bg_badge_dot"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

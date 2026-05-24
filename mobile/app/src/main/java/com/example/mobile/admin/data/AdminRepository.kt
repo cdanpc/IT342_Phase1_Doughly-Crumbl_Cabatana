@@ -1,6 +1,7 @@
 package com.example.mobile.admin.data
 
 import com.example.mobile.model.Order
+import com.example.mobile.model.AdminUser
 import com.example.mobile.model.PagedResponse
 import com.example.mobile.model.Product
 import com.example.mobile.model.ProductRequest
@@ -38,9 +39,25 @@ class AdminRepository(sessionManager: SessionManager) {
     suspend fun getOrderDetail(id: Long): Response<Order> =
         api.getAdminOrderDetail(id)
 
-    suspend fun updateOrderStatus(id: Long, status: String): Response<Order> =
-        api.updateOrderStatus(id, UpdateOrderStatusRequest(status))
+    suspend fun updateOrderStatus(id: Long, status: String, reason: String? = null): Response<Order> =
+        api.updateOrderStatus(id, UpdateOrderStatusRequest(status, reason))
 
     suspend fun quoteDeliveryFee(id: Long, fee: Double): Response<Order> =
         api.quoteDeliveryFee(id, fee)
+
+    // Users
+    suspend fun getUsers(): Response<List<AdminUser>> =
+        api.getAdminUsers()
+
+    suspend fun banUser(id: Long): Response<AdminUser> =
+        api.banUser(id)
+
+    suspend fun unbanUser(id: Long): Response<AdminUser> =
+        api.unbanUser(id)
+
+    suspend fun disableUser(id: Long): Response<AdminUser> =
+        api.disableUser(id)
+
+    suspend fun restoreUser(id: Long): Response<AdminUser> =
+        api.restoreUser(id)
 }

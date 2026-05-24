@@ -142,6 +142,12 @@
     <string name="home_categories">Categories</string>
     <string name="home_popular_bakes">Popular Bakes</string>
     <string name="notifications">Notifications</string>
+    <!-- Bottom navigation labels -->
+    <string name="nav_menu">Menu</string>
+    <string name="nav_cart">Cart</string>
+    <string name="nav_orders">Orders</string>
+    <string name="nav_alerts">Alerts</string>
+    <string name="nav_profile">Profile</string>
     <string name="add_product_to_cart">Add product to cart</string>
     <string name="add_product_to_favorites">Add product to favorites</string>
     <string name="remove_product_from_favorites">Remove product from favorites</string>
@@ -152,7 +158,6 @@
     <string name="rating_label">Rating</string>
     <string name="quantity_label">Quantity</string>
     <string name="about_this_bake">About this bake</string>
-    <string name="review_summary">4.8 (128 reviews)</string>
     <string name="decrease_quantity">Decrease quantity</string>
     <string name="increase_quantity">Increase quantity</string>
     <string name="stepper_decrement">-</string>
@@ -180,7 +185,6 @@
     <string name="notifications_empty_body">No new notifications</string>
     <string name="profile_unknown_user">Customer</string>
     <string name="profile_unknown_email">No email saved</string>
-    <string name="profile_default_rating">4.8</string>
     <string name="confirm_logout_title">Log out?</string>
     <string name="confirm_logout_message">You will need to sign in again to place orders and view your account.</string>
     <string name="favorites_count_format">%d favorite bakes saved</string>
@@ -273,6 +277,33 @@
     <string name="admin_user_current_admin">Current admin</string>
     <string name="error_required">Required</string>
     <string name="error_invalid_price">Enter a valid price</string>
+    <string name="error_name_required">Name cannot be empty</string>
+    <string name="error_phone_invalid">Enter a valid PH number (e.g. 09XXXXXXXXX)</string>
+
+    <!-- Rating -->
+    <string name="rate_order">Rate This Order</string>
+    <string name="submit_rating">Submit Rating</string>
+    <string name="rating_comment_hint">Leave a comment (optional)</string>
+    <string name="star_1">1 star</string>
+    <string name="star_2">2 stars</string>
+    <string name="star_3">3 stars</string>
+    <string name="star_4">4 stars</string>
+    <string name="star_5">5 stars</string>
+    <string name="rating_submitted">Rating submitted!</string>
+    <string name="rating_select_stars">Tap a star to rate</string>
+    <string name="your_rating">Your Rating</string>
+
+    <!-- Merit tiers -->
+    <string name="merit_progress">Merit Progress</string>
+    <string name="merit_tier_newcomer">Newcomer</string>
+    <string name="merit_tier_new_crumbler">New Crumbler</string>
+    <string name="merit_tier_topping_ready">Topping Ready</string>
+    <string name="merit_tier_discount_ready">Discount Ready</string>
+    <string name="merit_tier_cookie_box">Cookie Box</string>
+    <string name="merit_tier_vip_crumbler">VIP Crumbler</string>
+    <string name="merit_orders_until_format">%1$d more order%2$s until %3$s</string>
+    <string name="merit_top_reached">Top loyalty milestone reached!</string>
+    <string name="merit_completed_orders_format">%1$d completed order%2$s</string>
 
     <!-- Informational screens -->
     <string name="care_guide_title">Care Guide</string>
@@ -309,4 +340,28 @@
     <string name="login_no_account">Don\'t have an account? </string>
     <string name="login_sign_up">Sign Up</string>
     <string name="login_button">Sign In</string>
+
+    <!-- Validation errors (auth + profile) -->
+    <string name="error_email_invalid">Enter a valid email</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_phone_required">Phone number required</string>
+    <string name="error_delivery_address_required">Delivery address required</string>
+    <string name="error_password_min_length">Min 8 characters</string>
+    <string name="error_passwords_mismatch">Passwords do not match</string>
+    <string name="strength_weak">Weak</string>
+    <string name="strength_medium">Medium</string>
+    <string name="strength_strong">Strong</string>
+    <string name="msg_forgot_password_unavailable">Password reset is not available yet.</string>
+    <string name="msg_google_signin_unavailable">Google sign-in is not available yet.</string>
+
+    <!-- Cart / Checkout -->
+    <string name="checkout_item_line_format">%1$s x%2$d   %3$s</string>
+
+    <!-- Home / Product feedback -->
+    <string name="cart_added_format">%1$s added to cart</string>
+    <string name="cart_add_failed_format">Failed to add %1$s to cart</string>
+    <string name="favorites_removed_format">%1$s removed from favorites</string>
+    <string name="favorites_added_format">%1$s added to favorites</string>
+    <string name="error_load_products">Failed to load products</string>
+    <string name="error_update_favorite">Failed to update favorite</string>
 </resources>

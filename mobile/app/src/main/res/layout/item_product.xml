@@ -60,11 +60,11 @@
             android:padding="0dp"
             android:contentDescription="@string/add_product_to_favorites"
             android:textAllCaps="false"
-            app:backgroundTint="@android:color/transparent"
+            app:backgroundTint="@color/colorPrimaryLight"
             app:cornerRadius="@dimen/radiusPill"
             app:icon="@drawable/ic_heart"
             app:iconPadding="0dp"
-            app:iconTint="@color/colorTextPrimary"
+            app:iconTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivProduct" />
 
@@ -106,11 +106,11 @@
             android:padding="0dp"
             android:contentDescription="@string/add_product_to_cart"
             android:textAllCaps="false"
-            app:backgroundTint="@android:color/transparent"
+            app:backgroundTint="@color/colorPrimary"
             app:cornerRadius="@dimen/radiusPill"
             app:icon="@drawable/ic_nav_cart"
             app:iconPadding="0dp"
-            app:iconTint="@color/colorTextPrimary"
+            app:iconTint="@color/colorSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/ivProduct" />
 

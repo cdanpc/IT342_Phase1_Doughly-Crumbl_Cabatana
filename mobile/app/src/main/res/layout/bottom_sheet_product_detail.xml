@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet"
-    android:paddingBottom="@dimen/spacing_32">
+    android:paddingBottom="@dimen/spacing_24">
 
     <!-- Drag handle -->
     <View
@@ -13,7 +13,7 @@
         android:layout_width="@dimen/dragHandleWidth"
         android:layout_height="@dimen/dragHandleHeight"
         android:layout_marginTop="@dimen/spacing_12"
-        android:background="@color/colorBorder"
+        android:background="@color/colorBorderStrong"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -23,7 +23,7 @@
         android:id="@+id/ivProduct"
         android:layout_width="0dp"
         android:layout_height="@dimen/heightProductDetailImage"
-        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_20"
         android:layout_marginStart="@dimen/marginPage"
         android:layout_marginEnd="@dimen/marginPage"
         android:scaleType="centerCrop"
@@ -70,34 +70,6 @@
         app:layout_constraintTop_toBottomOf="@id/tvName"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Rating row -->
-    <LinearLayout
-        android:id="@+id/ratingRow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_4"
-        android:layout_marginStart="@dimen/marginPage"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/chipCategory"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:layout_width="@dimen/iconSizeSmall"
-            android:layout_height="@dimen/iconSizeSmall"
-            android:src="@drawable/ic_star"
-            android:contentDescription="@null" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_4"
-            android:text="@string/review_summary"
-            android:textAppearance="@style/TextAppearance.DoughlyCrumbl.Caption"
-            android:textColor="@color/colorTextSecondary" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tvAboutLabel"
         android:layout_width="0dp"
@@ -107,7 +79,7 @@
         android:layout_marginEnd="@dimen/marginPage"
         android:text="@string/about_this_bake"
         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.TitleLarge"
-        app:layout_constraintTop_toBottomOf="@id/ratingRow"
+        app:layout_constraintTop_toBottomOf="@id/chipCategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -121,6 +93,7 @@
         android:layout_marginEnd="@dimen/marginPage"
         android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
         android:textColor="@color/colorTextSecondary"
+        android:lineSpacingExtra="@dimen/spacing_2"
         app:layout_constraintTop_toBottomOf="@id/tvAboutLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

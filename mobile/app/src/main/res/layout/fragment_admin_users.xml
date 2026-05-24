@@ -11,32 +11,11 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="@string/admin_orders_title"
-        app:titleTextColor="@color/colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <HorizontalScrollView
-        android:id="@+id/filterScroll"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
-        android:paddingHorizontal="@dimen/spacing_8"
-        android:paddingVertical="@dimen/spacing_8"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleLine="true"
-            app:singleSelection="false" />
-
-    </HorizontalScrollView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/admin_users_title"
+        app:titleTextColor="@color/colorSurface" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -46,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScroll" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -55,14 +34,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScroll">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
@@ -73,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/no_orders"
+                android:text="@string/admin_users_empty"
                 android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
                 android:visibility="gone" />
 
@@ -90,7 +69,7 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tvOrdersError"
+                    android:id="@+id/tvUsersError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -98,7 +77,7 @@
                     android:textColor="@color/colorError" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnOrdersRetry"
+                    android:id="@+id/btnUsersRetry"
                     style="@style/Style.DoughlyCrumbl.Button.Outlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,8 +85,6 @@
                     android:text="@string/retry"
                     android:textAllCaps="false" />
             </LinearLayout>
-
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

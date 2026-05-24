@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.mobile.MainActivity
+import com.example.mobile.R
 import com.example.mobile.admin.ui.AdminActivity
 import com.example.mobile.databinding.ActivityLoginBinding
 import com.example.mobile.util.SessionManager
@@ -75,12 +76,12 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString()
             if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                showFieldError(binding.tilEmail, binding.tvEmailError, "Enter a valid email")
+                showFieldError(binding.tilEmail, binding.tvEmailError, getString(R.string.error_email_invalid))
                 return@setOnClickListener
             }
             showFieldError(binding.tilEmail, binding.tvEmailError, null)
             if (password.isEmpty()) {
-                showFieldError(binding.tilPassword, binding.tvPasswordError, "Password required")
+                showFieldError(binding.tilPassword, binding.tvPasswordError, getString(R.string.error_password_required))
                 return@setOnClickListener
             }
             showFieldError(binding.tilPassword, binding.tvPasswordError, null)
@@ -90,10 +91,10 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
         binding.tvForgotPassword.setOnClickListener {
-            Toast.makeText(this, "Password reset is not available yet.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_forgot_password_unavailable), Toast.LENGTH_SHORT).show()
         }
         binding.btnGoogle.setOnClickListener {
-            Toast.makeText(this, "Google sign-in is not available yet.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_google_signin_unavailable), Toast.LENGTH_SHORT).show()
         }
     }
 }

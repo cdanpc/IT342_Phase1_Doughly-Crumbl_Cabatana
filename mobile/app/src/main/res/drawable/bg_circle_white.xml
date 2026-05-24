@@ -4,5 +4,5 @@
     <solid android:color="@color/colorSurface" />
     <stroke
         android:width="2dp"
-        android:color="#33FFFFFF" />
+        android:color="@color/colorHeroOverlay" />
 </shape>

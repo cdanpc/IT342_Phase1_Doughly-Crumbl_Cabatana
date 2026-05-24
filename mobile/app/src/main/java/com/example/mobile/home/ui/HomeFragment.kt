@@ -139,7 +139,7 @@ class HomeFragment : Fragment() {
     private fun showProductDetail(product: Product) {
         val sheet = ProductDetailBottomSheet.newInstance(product)
         sheet.onAddToCart = { p, qty ->
-            repeat(qty) { viewModel.addToCart(p) }
+            viewModel.addToCart(p, qty)
         }
         sheet.show(childFragmentManager, ProductDetailBottomSheet.TAG)
     }

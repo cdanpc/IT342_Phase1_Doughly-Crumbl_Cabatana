@@ -95,9 +95,12 @@ class CheckoutActivity : AppCompatActivity() {
         binding.layoutExpandedItems.removeAllViews()
         cart.items.forEach { item ->
             val tv = TextView(this).apply {
-                text = "${item.productName} x${item.quantity}   ${
+                text = getString(
+                    R.string.checkout_item_line_format,
+                    item.productName,
+                    item.quantity,
                     getString(R.string.price_format, item.subtotal)
-                }"
+                )
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.textCaption))
                 setTextColor(ContextCompat.getColor(this@CheckoutActivity, R.color.colorTextSecondary))
                 val vPad = resources.getDimensionPixelSize(R.dimen.spacing_4)

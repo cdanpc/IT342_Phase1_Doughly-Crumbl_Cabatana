@@ -39,11 +39,11 @@ class AdminOrderDetailViewModel(private val sessionManager: SessionManager) : Vi
         }
     }
 
-    fun updateStatus(id: Long, status: String) {
+    fun updateStatus(id: Long, status: String, reason: String? = null) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val r = repository.updateOrderStatus(id, status)
+                val r = repository.updateOrderStatus(id, status, reason)
                 if (r.isSuccessful) _order.value = r.body()
                 else _error.value = ApiErrorParser.message(r, "Status update failed")
             } catch (e: Exception) {

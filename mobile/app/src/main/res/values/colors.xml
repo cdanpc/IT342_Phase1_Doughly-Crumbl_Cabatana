@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Brand -->
-    <color name="colorPrimary">#6B1A2B</color>
-    <color name="colorPrimaryDark">#4A1020</color>
-    <color name="colorPrimaryLight">#F5E8EB</color>
+    <color name="colorPrimary">#7A1E32</color>
+    <color name="colorPrimaryDark">#4F1020</color>
+    <color name="colorPrimaryLight">#F7E6EA</color>
 
     <!-- Backgrounds -->
-    <color name="colorBackground">#FAF7F4</color>
+    <color name="colorBackground">#FFF8F3</color>
     <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceWarm">#FFF1E7</color>
+    <color name="colorSurfaceSoft">#FFFBF8</color>
 
     <!-- Text -->
     <color name="colorTextPrimary">#1A1A2E</color>
     <color name="colorTextSecondary">#6B6B6B</color>
     <color name="colorTextMuted">#AAAAAA</color>
+    <color name="colorIconDefault">#000000</color>
 
     <!-- Border -->
-    <color name="colorBorder">#E8E0D8</color>
+    <color name="colorBorder">#EADFD7</color>
+    <color name="colorBorderStrong">#D9C9BE</color>
+    <color name="colorInputDisabled">#F5F5F5</color>
+    <color name="colorInputDisabledBorder">#E0E0E0</color>
+    <color name="colorButtonDisabled">#BDBDBD</color>
+    <color name="colorScrimStrong">#CC000000</color>
 
     <!-- Semantic -->
     <color name="colorSuccess">#1A7A4A</color>
@@ -46,7 +54,7 @@
 
     <!-- Bottom Nav -->
     <color name="navActive">#6B1A2B</color>
-    <color name="navInactive">#AAAAAA</color>
+    <color name="navInactive">#878787</color>
 
     <!-- Hero banner overlay (20% white for pill button bg) -->
     <color name="colorHeroOverlay">#33FFFFFF</color>

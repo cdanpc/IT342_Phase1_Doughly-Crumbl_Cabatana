@@ -10,9 +10,12 @@
         android:id="@+id/tvOrdersTitle"
         android:layout_width="0dp"
         android:layout_height="@dimen/heightCartHeader"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/marginPage"
+        android:paddingEnd="@dimen/marginPage"
         android:text="@string/orders_title"
-        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.HeadlineLarge"
+        android:textAppearance="@style/TextAppearance.DoughlyCrumbl.DisplayLarge"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -37,6 +40,34 @@
                 android:clipToPadding="false"
                 android:paddingTop="@dimen/spacing_8"
                 android:paddingBottom="@dimen/spacing_24" />
+
+            <LinearLayout
+                android:id="@+id/errorState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_24"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvOrdersError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.DoughlyCrumbl.BodyMedium"
+                    android:textColor="@color/colorTextSecondary" />
+
+                <Button
+                    android:id="@+id/btnOrdersRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/minTouchTarget"
+                    android:layout_marginTop="@dimen/spacing_12"
+                    android:text="@string/retry"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/emptyState"

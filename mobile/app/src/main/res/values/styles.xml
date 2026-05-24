@@ -14,6 +14,14 @@
         <item name="strokeWidth">0.5dp</item>
     </style>
 
+    <style name="Style.DoughlyCrumbl.Card.Quiet" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/radiusCard</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@color/colorSurfaceSoft</item>
+        <item name="strokeColor">@color/colorBorder</item>
+        <item name="strokeWidth">0.5dp</item>
+    </style>
+
     <!-- Primary button -->
     <style name="Style.DoughlyCrumbl.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:minHeight">@dimen/heightButtonPrimary</item>
@@ -39,6 +47,20 @@
         <item name="rippleColor">@color/colorPrimaryLight</item>
     </style>
 
+    <!-- Destructive filled button (e.g. logout) -->
+    <style name="Style.DoughlyCrumbl.Button.Filled.Destructive" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/heightButtonPrimary</item>
+        <item name="android:paddingStart">@dimen/paddingButton</item>
+        <item name="android:paddingEnd">@dimen/paddingButton</item>
+        <item name="cornerRadius">@dimen/radiusButton</item>
+        <item name="backgroundTint">@color/colorError</item>
+        <item name="android:textColor">@color/colorSurface</item>
+        <item name="android:textAppearance">@style/TextAppearance.DoughlyCrumbl.LabelLarge</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/colorErrorBg</item>
+    </style>
+
     <!-- Destructive outlined button -->
     <style name="Style.DoughlyCrumbl.Button.Destructive" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:minHeight">@dimen/heightButtonSecondary</item>
@@ -57,15 +79,22 @@
         <item name="itemActiveIndicatorStyle">@style/Style.DoughlyCrumbl.BottomNav.Indicator</item>
         <item name="android:background">@color/colorSurface</item>
         <item name="elevation">@dimen/elevationBottomNav</item>
-        <item name="itemPaddingTop">6dp</item>
-        <item name="itemPaddingBottom">8dp</item>
-        <item name="itemTextAppearanceActive">@style/TextAppearance.DoughlyCrumbl.BottomNavLabel</item>
+        <item name="itemIconSize">@dimen/iconSize</item>
+        <item name="itemIconPadding">@dimen/spacing_2</item>
+        <item name="itemPaddingTop">@dimen/spacing_8</item>
+        <item name="itemPaddingBottom">@dimen/spacing_4</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.DoughlyCrumbl.BottomNavLabel.Active</item>
         <item name="itemTextAppearanceInactive">@style/TextAppearance.DoughlyCrumbl.BottomNavLabel</item>
     </style>
 
     <style name="TextAppearance.DoughlyCrumbl.BottomNavLabel" parent="TextAppearance.Material3.LabelSmall">
         <item name="android:textSize">11sp</item>
-        <item name="android:fontFamily">sans</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.DoughlyCrumbl.BottomNavLabel.Active">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Style.DoughlyCrumbl.BottomNav.Indicator">

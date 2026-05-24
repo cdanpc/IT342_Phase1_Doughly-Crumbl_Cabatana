@@ -43,8 +43,8 @@ class ProductAdapter(
             binding.tvPrice.text = binding.root.context.getString(R.string.price_format, product.price)
             Glide.with(binding.root)
                 .load(product.imageUrl)
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+                .placeholder(R.drawable.bg_product_placeholder)
+                .error(R.drawable.bg_product_placeholder)
                 .centerCrop()
                 .into(binding.ivProduct)
             val context = binding.root.context

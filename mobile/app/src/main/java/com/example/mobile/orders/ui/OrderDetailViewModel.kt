@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.cart.data.CartRepository
 import com.example.mobile.model.Order
+import com.example.mobile.model.OrderRatingRequest
 import com.example.mobile.network.ApiErrorParser
 import com.example.mobile.orders.data.OrderRepository
 import com.example.mobile.util.SessionManager
@@ -36,9 +37,13 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
     private val _paymentSubmitted = MutableLiveData<Boolean>()
     val paymentSubmitted: LiveData<Boolean> = _paymentSubmitted
 
+    private val _ratingSubmitted = MutableLiveData<Boolean>()
+    val ratingSubmitted: LiveData<Boolean> = _ratingSubmitted
+
     fun loadOrder(id: Long) {
         viewModelScope.launch {
             _isLoading.value = true
+            _error.value = null
             try {
                 val r = repository.getOrderDetail(id)
                 if (r.isSuccessful) _order.value = r.body()
@@ -49,6 +54,13 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
                 _isLoading.value = false
             }
         }
+    }
+
+    private suspend fun reloadOrder(id: Long) {
+        try {
+            val r = repository.getOrderDetail(id)
+            if (r.isSuccessful) _order.value = r.body()
+        } catch (_: Exception) { }
     }
 
     fun reorder(order: Order) {
@@ -89,6 +101,26 @@ class OrderDetailViewModel(sessionManager: SessionManager) : ViewModel() {
                     _cancelSuccess.value = true
                 } else {
                     _error.value = ApiErrorParser.message(r, "Could not cancel order")
+                }
+            } catch (e: Exception) {
+                _error.value = e.localizedMessage
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun submitRating(orderId: Long, stars: Int, comment: String?) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val r = repository.submitRating(orderId, OrderRatingRequest(stars, comment?.trim()?.ifBlank { null }))
+                if (r.isSuccessful) {
+                    _ratingSubmitted.value = true
+                    reloadOrder(orderId)
+                } else {
+                    _error.value = ApiErrorParser.message(r, "Could not submit rating")
                 }
             } catch (e: Exception) {
                 _error.value = e.localizedMessage

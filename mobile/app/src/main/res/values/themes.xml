@@ -33,7 +33,7 @@
         <!-- Window -->
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:statusBarColor">@color/colorSurface</item>
+        <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/colorSurface</item>
         <item name="android:windowLightNavigationBar">true</item>
@@ -42,6 +42,13 @@
         <item name="colorControlHighlight">@color/colorPrimaryLight</item>
         <item name="rippleColor">@color/colorPrimaryLight</item>
 
+    </style>
+
+    <!-- Auth screens — full crimson top including status bar and notch area -->
+    <style name="Theme.DoughlyCrumbl.Auth" parent="Theme.DoughlyCrumbl">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <!-- Shape appearances -->
@@ -62,8 +69,8 @@
 
     <!-- Top App Bar -->
     <style name="Theme.DoughlyCrumbl.AppBar" parent="Widget.Material3.Toolbar">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="titleTextColor">@color/colorSurface</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="titleTextColor">@color/colorTextPrimary</item>
     </style>
 
     <!-- Status Chip Styles — tinted bg + semantic text color per design spec -->

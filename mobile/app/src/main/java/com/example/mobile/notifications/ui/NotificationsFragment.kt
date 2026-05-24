@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +53,7 @@ class NotificationsFragment : Fragment() {
 
         viewModel.notifications.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
+            binding.errorState.visibility = View.GONE
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
@@ -65,16 +65,27 @@ class NotificationsFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            if (msg != null) {
+                binding.tvNotificationsError.text = msg
+                binding.errorState.visibility = View.VISIBLE
+                binding.emptyState.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
+            }
         }
 
         viewModel.isEmpty.observe(viewLifecycleOwner) { empty ->
-            binding.emptyState.visibility = if (empty) View.VISIBLE else View.GONE
-            binding.recyclerView.visibility = if (empty) View.GONE else View.VISIBLE
+            if (viewModel.error.value == null) {
+                binding.emptyState.visibility = if (empty) View.VISIBLE else View.GONE
+                binding.recyclerView.visibility = if (empty) View.GONE else View.VISIBLE
+            }
         }
 
         binding.btnMarkAllRead.setOnClickListener {
             viewModel.markAllRead()
+        }
+
+        binding.btnNotificationsRetry.setOnClickListener {
+            viewModel.load()
         }
 
         viewModel.load()

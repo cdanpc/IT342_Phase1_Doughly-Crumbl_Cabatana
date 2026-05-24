@@ -9,5 +9,7 @@ data class CustomerProfile(
     val totalOrders: Int = 0,
     val completedOrders: Int = 0,
     val cancelledOrders: Int = 0,
-    val rating: Double = 0.0
+    val rating: Double = 0.0,
+    val meritTier: Int = 0,
+    val meritTierName: String = "Newcomer"
 )

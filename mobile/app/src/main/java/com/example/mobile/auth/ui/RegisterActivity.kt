@@ -91,45 +91,45 @@ class RegisterActivity : AppCompatActivity() {
             var valid = true
 
             if (name.isEmpty()) {
-                showFieldError(binding.tilName, binding.tvNameError, "Name required")
+                showFieldError(binding.tilName, binding.tvNameError, getString(R.string.error_name_required))
                 valid = false
             } else {
                 showFieldError(binding.tilName, binding.tvNameError, null)
             }
 
             if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                showFieldError(binding.tilEmail, binding.tvEmailError, "Enter a valid email")
+                showFieldError(binding.tilEmail, binding.tvEmailError, getString(R.string.error_email_invalid))
                 valid = false
             } else {
                 showFieldError(binding.tilEmail, binding.tvEmailError, null)
             }
 
             if (phone.isEmpty()) {
-                showFieldError(binding.tilPhone, binding.tvPhoneError, "Phone number required")
+                showFieldError(binding.tilPhone, binding.tvPhoneError, getString(R.string.error_phone_required))
                 valid = false
             } else if (!Regex("^(09\\d{9}|\\+639\\d{9})$").matches(phone)) {
-                showFieldError(binding.tilPhone, binding.tvPhoneError, "Enter a valid PH number")
+                showFieldError(binding.tilPhone, binding.tvPhoneError, getString(R.string.error_phone_invalid))
                 valid = false
             } else {
                 showFieldError(binding.tilPhone, binding.tvPhoneError, null)
             }
 
             if (address.isEmpty()) {
-                showFieldError(binding.tilAddress, binding.tvAddressError, "Delivery address required")
+                showFieldError(binding.tilAddress, binding.tvAddressError, getString(R.string.error_delivery_address_required))
                 valid = false
             } else {
                 showFieldError(binding.tilAddress, binding.tvAddressError, null)
             }
 
             if (password.length < 8) {
-                showFieldError(binding.tilPassword, binding.tvPasswordError, "Min 8 characters")
+                showFieldError(binding.tilPassword, binding.tvPasswordError, getString(R.string.error_password_min_length))
                 valid = false
             } else {
                 showFieldError(binding.tilPassword, binding.tvPasswordError, null)
             }
 
             if (confirmPassword != password) {
-                showFieldError(binding.tilConfirmPassword, binding.tvConfirmPasswordError, "Passwords do not match")
+                showFieldError(binding.tilConfirmPassword, binding.tvConfirmPasswordError, getString(R.string.error_passwords_mismatch))
                 valid = false
             } else {
                 showFieldError(binding.tilConfirmPassword, binding.tvConfirmPasswordError, null)
@@ -146,9 +146,9 @@ class RegisterActivity : AppCompatActivity() {
         binding.strengthBar.progress = strength
         val (tint, label) = when (strength) {
             0 -> Pair(getColor(R.color.colorBorder), "")
-            1 -> Pair(getColor(R.color.colorError), "Weak")
-            2 -> Pair(getColor(R.color.colorWarning), "Medium")
-            else -> Pair(getColor(R.color.colorSuccess), "Strong")
+            1 -> Pair(getColor(R.color.colorError), getString(R.string.strength_weak))
+            2 -> Pair(getColor(R.color.colorWarning), getString(R.string.strength_medium))
+            else -> Pair(getColor(R.color.colorSuccess), getString(R.string.strength_strong))
         }
         binding.strengthBar.progressTintList = android.content.res.ColorStateList.valueOf(tint)
         binding.tvStrengthLabel.text = label

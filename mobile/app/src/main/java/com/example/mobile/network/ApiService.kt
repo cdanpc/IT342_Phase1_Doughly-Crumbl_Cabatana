@@ -2,20 +2,23 @@ package com.example.mobile.network
 
 import com.example.mobile.model.AuthRequest
 import com.example.mobile.model.AuthResponse
+import com.example.mobile.model.AdminUser
 import com.example.mobile.model.Cart
 import com.example.mobile.model.CartItemRequest
 import com.example.mobile.model.CheckoutRequest
 import com.example.mobile.model.CustomerProfile
 import com.example.mobile.model.DeliveryAddress
 import com.example.mobile.model.DeliveryAddressRequest
-import com.example.mobile.model.MessageResponse
 import com.example.mobile.model.Notification
 import com.example.mobile.model.Order
+import com.example.mobile.model.OrderRating
+import com.example.mobile.model.OrderRatingRequest
 import com.example.mobile.model.PagedResponse
 import com.example.mobile.model.Product
 import com.example.mobile.model.ProductRequest
 import com.example.mobile.model.RegisterRequest
 import com.example.mobile.model.UpdateCustomerProfileRequest
+import com.example.mobile.model.UpdateCartItemRequest
 import com.example.mobile.model.UpdateOrderStatusRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -57,14 +60,14 @@ interface ApiService {
     @PUT("cart/items/{itemId}")
     suspend fun updateCartItem(
         @Path("itemId") itemId: Long,
-        @Body request: CartItemRequest
+        @Body request: UpdateCartItemRequest
     ): Response<Cart>
 
     @DELETE("cart/items/{itemId}")
     suspend fun removeCartItem(@Path("itemId") itemId: Long): Response<Cart>
 
     @DELETE("cart")
-    suspend fun clearCart(): Response<MessageResponse>
+    suspend fun clearCart(): Response<Void>
 
     // --- Orders (customer) ---
     @POST("orders")
@@ -133,6 +136,16 @@ interface ApiService {
     @DELETE("profile/favorites/{productId}")
     suspend fun removeFavorite(@Path("productId") productId: Long): Response<Void>
 
+    // --- Order ratings ---
+    @POST("orders/{orderId}/rating")
+    suspend fun submitOrderRating(
+        @Path("orderId") orderId: Long,
+        @Body request: OrderRatingRequest
+    ): Response<OrderRating>
+
+    @GET("orders/{orderId}/rating")
+    suspend fun getOrderRating(@Path("orderId") orderId: Long): Response<OrderRating>
+
     // --- Admin: Products ---
     @GET("admin/products")
     suspend fun getAdminProducts(
@@ -178,4 +191,20 @@ interface ApiService {
         @Path("id") id: Long,
         @Query("fee") fee: Double
     ): Response<Order>
+
+    // --- Admin: Users ---
+    @GET("admin/users")
+    suspend fun getAdminUsers(): Response<List<AdminUser>>
+
+    @PUT("admin/users/{id}/ban")
+    suspend fun banUser(@Path("id") id: Long): Response<AdminUser>
+
+    @PUT("admin/users/{id}/unban")
+    suspend fun unbanUser(@Path("id") id: Long): Response<AdminUser>
+
+    @DELETE("admin/users/{id}")
+    suspend fun disableUser(@Path("id") id: Long): Response<AdminUser>
+
+    @PUT("admin/users/{id}/restore")
+    suspend fun restoreUser(@Path("id") id: Long): Response<AdminUser>
 }

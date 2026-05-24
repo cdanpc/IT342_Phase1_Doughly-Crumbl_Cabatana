@@ -42,8 +42,8 @@ class CartItemAdapter(
 
             Glide.with(b.root)
                 .load(item.productImageUrl)
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+                .placeholder(R.drawable.bg_product_placeholder)
+                .error(R.drawable.bg_product_placeholder)
                 .centerCrop()
                 .into(b.ivProduct)
 

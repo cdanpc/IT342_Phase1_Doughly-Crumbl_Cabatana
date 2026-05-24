@@ -17,10 +17,11 @@ class AdminOrderAdapter(
 
     inner class ViewHolder(private val b: ItemAdminOrderBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(order: Order) {
-            b.tvOrderId.text = "Order #${order.orderId}"
+            val context = b.root.context
+            b.tvOrderId.text = context.getString(R.string.admin_order_title_format, order.orderId)
             b.tvDate.text = order.orderDate.take(10)
-            b.tvTotal.text = "₱%.2f".format(order.totalAmount)
-            b.tvContact.text = order.contactNumber ?: "No contact"
+            b.tvTotal.text = context.getString(R.string.price_format, order.totalAmount)
+            b.tvContact.text = order.contactNumber ?: context.getString(R.string.admin_order_no_contact)
 
             b.chipStatus.text = OrderStatusUi.label(order.status)
             b.chipStatus.setChipBackgroundColorResource(OrderStatusUi.colorRes(order.status))
@@ -33,9 +34,9 @@ class AdminOrderAdapter(
                 b.tvStatusFull.visibility = View.GONE
             }
 
-            b.chipPayment.text = order.paymentStatus.ifEmpty { "UNPAID" }
+            b.chipPayment.text = order.paymentStatus.ifEmpty { context.getString(R.string.payment_unpaid) }
             b.chipPayment.setChipBackgroundColorResource(paymentColor(order.paymentStatus))
-            b.chipPayment.setTextColor(b.root.context.getColor(R.color.colorSurface))
+            b.chipPayment.setTextColor(context.getColor(R.color.colorSurface))
 
             b.root.setOnClickListener { onClick(order) }
         }

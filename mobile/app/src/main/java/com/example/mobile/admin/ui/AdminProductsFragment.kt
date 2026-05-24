@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mobile.R
 import com.example.mobile.databinding.FragmentAdminProductsBinding
 import com.example.mobile.model.Product
 import com.example.mobile.util.SessionManager
@@ -43,6 +44,7 @@ class AdminProductsFragment : Fragment() {
 
         binding.fab.setOnClickListener { openAddEdit(null) }
         binding.swipeRefresh.setOnRefreshListener { viewModel.loadProducts() }
+        binding.btnProductsRetry.setOnClickListener { viewModel.loadProducts() }
 
         viewModel.loadProducts()
     }
@@ -51,6 +53,7 @@ class AdminProductsFragment : Fragment() {
         viewModel.products.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
             binding.tvEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+            binding.errorState.visibility = View.GONE
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { loading ->
@@ -59,11 +62,16 @@ class AdminProductsFragment : Fragment() {
             adapter.actionsEnabled = !loading
         }
         viewModel.error.observe(viewLifecycleOwner) { msg ->
-            msg?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            msg?.let {
+                binding.tvProductsError.text = it
+                binding.errorState.visibility = View.VISIBLE
+                binding.tvEmpty.visibility = View.GONE
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
             binding.swipeRefresh.isRefreshing = false
         }
         viewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
-            if (success == true) Toast.makeText(requireContext(), "Product deleted", Toast.LENGTH_SHORT).show()
+            if (success == true) Toast.makeText(requireContext(), R.string.admin_product_deleted, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -75,10 +83,10 @@ class AdminProductsFragment : Fragment() {
 
     private fun confirmDelete(product: Product) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Delete Product")
-            .setMessage("Delete \"${product.name}\"? This cannot be undone.")
-            .setPositiveButton("Delete") { _, _ -> viewModel.deleteProduct(product.id) }
-            .setNegativeButton("Cancel", null)
+            .setTitle(R.string.admin_delete_product_title)
+            .setMessage(getString(R.string.admin_delete_product_message, product.name))
+            .setPositiveButton(R.string.confirm_delete_yes) { _, _ -> viewModel.deleteProduct(product.id) }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

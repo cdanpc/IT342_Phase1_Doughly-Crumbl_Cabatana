@@ -22,6 +22,7 @@ class AdminActivity : AppCompatActivity() {
                 R.id.nav_admin_dashboard -> loadFragment(AdminDashboardFragment())
                 R.id.nav_admin_products  -> loadFragment(AdminProductsFragment())
                 R.id.nav_admin_orders    -> loadFragment(AdminOrdersFragment())
+                R.id.nav_admin_users     -> loadFragment(AdminUsersFragment())
                 R.id.nav_admin_profile   -> loadFragment(AdminProfileFragment())
             }
             true

@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,8 @@ class OrderDetailActivity : AppCompatActivity() {
     private lateinit var viewModel: OrderDetailViewModel
     private var orderId = -1L
     private var canUploadProof = false
+    private var selectedStars = 0
+    private var ratingLocked = false
     private val proofPickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri ?: return@registerForActivityResult
@@ -60,6 +63,7 @@ class OrderDetailActivity : AppCompatActivity() {
             binding.btnCancel.isEnabled = !loading
             binding.btnReorder.isEnabled = !loading
             binding.btnUploadProof.isEnabled = !loading && canUploadProof
+            binding.btnSubmitRating.isEnabled = !loading
         }
         viewModel.error.observe(this) { msg ->
             msg?.let { showMessage(it) }
@@ -86,6 +90,21 @@ class OrderDetailActivity : AppCompatActivity() {
             } else {
                 showMessage(result.substringAfter("error:"))
             }
+        }
+
+        viewModel.ratingSubmitted.observe(this) { success ->
+            if (success == true) showMessage(getString(R.string.rating_submitted))
+        }
+
+        setupStarListeners()
+
+        binding.btnSubmitRating.setOnClickListener {
+            if (selectedStars == 0) {
+                showMessage(getString(R.string.rating_select_stars))
+                return@setOnClickListener
+            }
+            val comment = binding.etComment.text?.toString()
+            viewModel.submitRating(orderId, selectedStars, comment)
         }
 
         binding.btnCancel.setOnClickListener { showCancelDialog() }
@@ -148,6 +167,8 @@ class OrderDetailActivity : AppCompatActivity() {
 
         binding.btnReorder.visibility =
             if (order.status == "COMPLETED") View.VISIBLE else View.GONE
+
+        bindRatingCard(order)
 
         val canSubmitProof = order.status == "DELIVERY_FEE_QUOTED_PAYMENT_REQUIRED" ||
             (OrderStatusUi.isPickup(order) && order.status == "ORDER_PLACED" && !OrderStatusUi.isCashOnPickup(order))
@@ -236,6 +257,49 @@ class OrderDetailActivity : AppCompatActivity() {
         "READY" -> getString(R.string.timeline_ready_for_pickup)
         else -> OrderStatusUi.label(status)
     }
+    private fun bindRatingCard(order: Order) {
+        if (order.status != "COMPLETED") {
+            binding.cardRating.visibility = View.GONE
+            return
+        }
+
+        binding.cardRating.visibility = View.VISIBLE
+
+        if (order.rating != null && order.rating > 0) {
+            ratingLocked = true
+            selectedStars = order.rating
+            updateStars(order.rating)
+            binding.tvRatingTitle.text = getString(R.string.your_rating)
+            binding.etComment.isEnabled = false
+            binding.btnSubmitRating.visibility = View.GONE
+        } else {
+            ratingLocked = false
+            binding.tvRatingTitle.text = getString(R.string.rate_order)
+            binding.etComment.isEnabled = true
+            binding.btnSubmitRating.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupStarListeners() {
+        val stars = listOf(binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
+        stars.forEachIndexed { index, star ->
+            star.setOnClickListener {
+                if (ratingLocked) return@setOnClickListener
+                selectedStars = index + 1
+                updateStars(selectedStars)
+            }
+        }
+    }
+
+    private fun updateStars(count: Int) {
+        val stars = listOf(binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
+        stars.forEachIndexed { index, star ->
+            star.setImageResource(
+                if (index < count) R.drawable.ic_star else R.drawable.ic_star_outline
+            )
+        }
+    }
+
     private fun showCancelDialog() {
         AlertDialog.Builder(this)
             .setTitle(R.string.cancel_order)
