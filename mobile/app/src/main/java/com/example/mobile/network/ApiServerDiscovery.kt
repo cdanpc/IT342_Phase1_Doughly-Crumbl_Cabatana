@@ -24,8 +24,15 @@ object ApiServerDiscovery {
     @Volatile
     private var cachedBaseUrl: String? = null
 
-    fun currentOrDiscover(context: Context): String =
-        cachedBaseUrl ?: discover(context, force = false)
+    fun currentOrDiscover(context: Context): String {
+        // Production URL is always used directly — no probe needed.
+        // Render's free tier cold-starts in 30+ seconds, far longer than the
+        // 450 ms probe timeout, so probing would always fail and fall back to
+        // the local emulator address. Return it immediately and let OkHttp's
+        // 30-second connect timeout handle any wake-up delay.
+        if (PRODUCTION_BASE_URL.isNotBlank()) return PRODUCTION_BASE_URL
+        return cachedBaseUrl ?: discover(context, force = false)
+    }
 
     fun discover(context: Context, force: Boolean): String = synchronized(this) {
         if (!force) {
@@ -40,7 +47,6 @@ object ApiServerDiscovery {
         // or last-known LAN URL should hit. Only fall through to the subnet scan when
         // all fixed candidates fail (backend unreachable from every known address).
         val fixedCandidates = linkedSetOf<String>()
-        fixedCandidates.add(PRODUCTION_BASE_URL)   // always try Render first
         savedBaseUrl?.let(fixedCandidates::add)
         fixedCandidates.add(DEFAULT_BASE_URL)
         fixedCandidates.add(LAST_KNOWN_LAN_BASE_URL)

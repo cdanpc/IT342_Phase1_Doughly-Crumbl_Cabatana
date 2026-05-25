@@ -93,8 +93,6 @@ class LoginActivity : AppCompatActivity() {
         binding.tvForgotPassword.setOnClickListener {
             Toast.makeText(this, getString(R.string.msg_forgot_password_unavailable), Toast.LENGTH_SHORT).show()
         }
-        binding.btnGoogle.setOnClickListener {
-            Toast.makeText(this, getString(R.string.msg_google_signin_unavailable), Toast.LENGTH_SHORT).show()
-        }
+        // btnGoogle not in layout yet — Google Sign-In is a future feature
     }
 }

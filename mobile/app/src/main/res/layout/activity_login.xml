@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_crimson">
@@ -313,24 +314,7 @@
                 android:layout_height="@dimen/heightDivider"
                 android:layout_marginTop="@dimen/spacing_24"
                 android:background="@color/colorBorder"
-                app:layout_constraintBottom_toBottomOf="@id/tvOr"
-                app:layout_constraintEnd_toStartOf="@id/tvOr"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loadingContainer" />
-
-            <TextView
-                android:id="@+id/tvOr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_24"
-                android:layout_marginStart="@dimen/spacing_12"
-                android:layout_marginEnd="@dimen/spacing_12"
-                android:fontFamily="@font/poppins"
-                android:text="@string/login_or_continue"
-                android:textColor="@color/colorTextMuted"
-                android:textSize="@dimen/textCaption"
-                app:layout_constraintEnd_toStartOf="@id/dividerRight"
-                app:layout_constraintStart_toEndOf="@id/dividerLeft"
                 app:layout_constraintTop_toBottomOf="@id/loadingContainer" />
 
             <View
@@ -338,35 +322,10 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/heightDivider"
                 android:background="@color/colorBorder"
-                app:layout_constraintBottom_toBottomOf="@id/tvOr"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tvOr"
-                app:layout_constraintTop_toTopOf="@id/tvOr" />
+                tools:layout_editor_absoluteY="375dp" />
 
             <!-- ── GOOGLE BUTTON ── -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGoogle"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/heightButtonSecondary"
-                android:layout_marginTop="@dimen/spacing_20"
-                android:fontFamily="@font/poppins"
-                android:text="@string/login_google"
-                android:textAllCaps="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/textBodyLarge"
-                app:backgroundTint="@color/colorSurface"
-                app:cornerRadius="@dimen/radiusButton"
-                app:icon="@drawable/ic_google"
-                app:iconGravity="textStart"
-                app:iconPadding="@dimen/spacing_8"
-                app:iconSize="@dimen/iconSizeSmall"
-                app:iconTint="@null"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOr"
-                app:strokeColor="@color/colorBorder"
-                app:strokeWidth="1dp" />
 
             <!-- ── SIGN UP LINK ── -->
             <LinearLayout
@@ -380,7 +339,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnGoogle">
+                app:layout_constraintTop_toBottomOf="@id/dividerLeft">
 
                 <TextView
                     android:layout_width="wrap_content"
