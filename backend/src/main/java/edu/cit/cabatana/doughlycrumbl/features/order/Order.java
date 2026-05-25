@@ -35,8 +35,7 @@ public class Order {
     // Payment status — default "UNPAID" so Hibernate never inserts null.
     // columnDefinition also sets a DB-level DEFAULT so existing rows and
     // any raw SQL inserts that omit the column stay consistent.
-    @Column(name = "payment_status", nullable = false, length = 30,
-            columnDefinition = "VARCHAR(30) DEFAULT 'UNPAID'")
+    @Column(name = "payment_status", nullable = false, length = 30)
     @Builder.Default
     private String paymentStatus = "UNPAID";
 
@@ -49,13 +48,11 @@ public class Order {
     @Column(name = "delivery_notes", columnDefinition = "TEXT")
     private String deliveryNotes;
 
-    @Column(name = "fulfillment_method", nullable = false, length = 20,
-            columnDefinition = "VARCHAR(20) DEFAULT 'DELIVERY'")
+    @Column(name = "fulfillment_method", nullable = false, length = 20)
     @Builder.Default
     private String fulfillmentMethod = "DELIVERY";
 
-    @Column(name = "payment_method", nullable = false, length = 30,
-            columnDefinition = "VARCHAR(30) DEFAULT 'GCASH'")
+    @Column(name = "payment_method", nullable = false, length = 30)
     @Builder.Default
     private String paymentMethod = "GCASH";
 
@@ -68,8 +65,7 @@ public class Order {
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "delivery_fee", nullable = false, precision = 10, scale = 2,
-            columnDefinition = "NUMERIC(10,2) DEFAULT 0")
+    @Column(name = "delivery_fee", nullable = false, precision = 10, scale = 2)
     @Builder.Default
     private BigDecimal deliveryFee = BigDecimal.ZERO;
 
