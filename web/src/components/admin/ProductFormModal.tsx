@@ -103,10 +103,27 @@ export default function ProductFormModal({
           )}
         </div>
 
+        <div>
+          <label className="admin-product-field-label" htmlFor="admin-product-image-url">
+            Image URL
+          </label>
+          <input
+            id="admin-product-image-url"
+            className="admin-product-input"
+            value={form.imageUrl}
+            onChange={(e) => onFormChange({ ...form, imageUrl: e.target.value })}
+            placeholder="https://i.imgur.com/..."
+            disabled={isSaving || Boolean(imageFile)}
+          />
+          <span className="admin-product-field-hint">
+            Paste any public image URL. If you also pick a file below, the uploaded file takes priority.
+          </span>
+        </div>
+
         <FileUploadField
-          label="Product Image"
+          label="Or upload an image file"
           file={imageFile}
-          previewUrl={existingImageUrl}
+          previewUrl={imageFile ? undefined : existingImageUrl}
           onChange={onImageChange}
           accept="image/jpeg,image/png,image/webp,image/gif"
           maxSizeMB={5}
