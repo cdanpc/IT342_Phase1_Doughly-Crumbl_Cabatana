@@ -1,6 +1,7 @@
 package edu.cit.cabatana.doughlycrumbl.features.payment;
 
 import edu.cit.cabatana.doughlycrumbl.shared.config.AppUploadProperties;
+import edu.cit.cabatana.doughlycrumbl.shared.config.SupabaseStorageService;
 import edu.cit.cabatana.doughlycrumbl.shared.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class FileUploadService {
 
     private final AppUploadProperties uploadProperties;
+    private final SupabaseStorageService supabaseStorageService;
 
     private static final long MAX_SIZE = 5 * 1024 * 1024; // 5 MB
     private static final java.util.Set<String> ALLOWED_TYPES = java.util.Set.of(
@@ -34,6 +36,16 @@ public class FileUploadService {
             throw new BadRequestException("File size must not exceed 5 MB");
         }
 
+        // Use Supabase Storage in production so images survive Render redeploys.
+        if (supabaseStorageService.isConfigured()) {
+            try {
+                return supabaseStorageService.upload(file);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload image to Supabase Storage: " + e.getMessage(), e);
+            }
+        }
+
+        // Fallback: local filesystem (local dev only).
         String originalFilename = file.getOriginalFilename();
         String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
