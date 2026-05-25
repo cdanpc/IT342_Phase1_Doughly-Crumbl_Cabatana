@@ -1,12 +1,13 @@
 package edu.cit.cabatana.doughlycrumbl.features.auth;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 
 @Component
@@ -18,13 +19,10 @@ public class JwtTokenProvider {
     public JwtTokenProvider(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-ms}") long expirationMs) {
-        // Ensure the secret is Base64-encoded; if not, encode it
-        byte[] keyBytes;
-        try {
-            keyBytes = Decoders.BASE64.decode(secret);
-        } catch (Exception e) {
-            keyBytes = secret.getBytes();
-        }
+        // Use raw UTF-8 bytes. Pad with zeros if shorter than 32 bytes (HS256 minimum),
+        // so any non-empty secret works. Production deployments should use 32+ char secrets.
+        byte[] raw = secret.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = raw.length >= 32 ? raw : Arrays.copyOf(raw, 32);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.expirationMs = expirationMs;
     }

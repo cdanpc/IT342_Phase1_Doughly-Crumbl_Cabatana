@@ -36,7 +36,8 @@ build/
 .env
 .env.*
 !.env.example
-src/main/resources/application.properties
+# application.properties only contains ${ENV_VAR:placeholder} references — safe to commit.
+# Real secrets go in .env (gitignored) for local dev, or env vars on Render/Vercel.
 src/main/resources/application-local.properties
 
 ### Runtime uploads ###
