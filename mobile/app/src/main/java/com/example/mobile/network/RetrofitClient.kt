@@ -11,8 +11,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // Local WiFi — laptop must be on same network as the phone (192.168.1.52)
-    private const val FALLBACK_BASE_URL = "http://10.0.2.2:8080/api/"
+    private const val FALLBACK_BASE_URL = "https://doughly-crumbl.onrender.com/api/"
 
     fun getInstance(sessionManager: SessionManager): Retrofit {
         val isDebuggable = DoughlyApp.appContext.applicationInfo.flags and

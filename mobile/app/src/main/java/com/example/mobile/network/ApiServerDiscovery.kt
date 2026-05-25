@@ -17,6 +17,7 @@ object ApiServerDiscovery {
     private const val API_PORT = 8080
     private const val PROBE_TIMEOUT_MS = 450
     private const val SCAN_THREADS = 8
+    private const val PRODUCTION_BASE_URL = "https://doughly-crumbl.onrender.com/api/"
     private const val DEFAULT_BASE_URL = "http://10.0.2.2:8080/api/"
     private const val LAST_KNOWN_LAN_BASE_URL = "http://192.168.1.52:8080/api/"
 
@@ -39,6 +40,7 @@ object ApiServerDiscovery {
         // or last-known LAN URL should hit. Only fall through to the subnet scan when
         // all fixed candidates fail (backend unreachable from every known address).
         val fixedCandidates = linkedSetOf<String>()
+        fixedCandidates.add(PRODUCTION_BASE_URL)   // always try Render first
         savedBaseUrl?.let(fixedCandidates::add)
         fixedCandidates.add(DEFAULT_BASE_URL)
         fixedCandidates.add(LAST_KNOWN_LAN_BASE_URL)
