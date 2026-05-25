@@ -12,7 +12,10 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("#{'${app.cors.allowed-origins}'.split(',')}")
+    // Read directly from the CORS_ALLOWED_ORIGINS environment variable.
+    // Spring Boot exposes env vars in @Value, so this works on Render without
+    // any properties file. Defaults to localhost for local dev.
+    @Value("#{'${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://10.0.2.2:8080}'.split(',')}")
     private List<String> allowedOrigins;
 
     @Bean
