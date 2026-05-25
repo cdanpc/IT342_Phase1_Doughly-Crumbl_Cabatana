@@ -1,23 +1,26 @@
 import { ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
 import PageContainer from '../layout/PageContainer';
+import whiteChocolateCookie from '../../assets/products/featured-cookie-white-chocolate.png';
+import chocolateChipCookie from '../../assets/products/featured-cookie-chocolate-chip.png';
+import redVelvetCookie from '../../assets/products/featured-cookie-red-velvet.png';
 import './LandingSections.css';
 
 const cookies = [
   {
-    name: 'Classic Crumbl',
-    description: 'Soft center, crisp edges, and a chocolatey finish.',
-    tone: 'choco',
+    name: 'Classic White Chocolate',
+    description: 'Buttery dough loaded with creamy white chocolate chips.',
+    image: whiteChocolateCookie,
   },
   {
-    name: 'Red Velvet Bite',
-    description: 'A rich bakery favorite with a smooth, creamy mood.',
-    tone: 'red',
+    name: 'Classic Chocolate Chip',
+    description: 'The timeless bite — soft center, crisp edges, rich chocolate chips.',
+    image: chocolateChipCookie,
   },
   {
-    name: 'Golden Brownie',
-    description: 'Dense, fudgy, and packed for serious dessert cravings.',
-    tone: 'cream',
+    name: 'Red Velvet',
+    description: 'A rich bakery favorite with white chips and a smooth, creamy mood.',
+    image: redVelvetCookie,
   },
 ];
 
@@ -39,7 +42,11 @@ export default function FeaturedCookies({ onOrderNow }: FeaturedCookiesProps) {
           {cookies.map((cookie) => (
             <article className="featured-cookie-card" key={cookie.name}>
               <div className="featured-cookie-card__visual">
-                <span className={`cookie-art cookie-art--${cookie.tone}`} />
+                <img
+                  className="featured-cookie-card__image"
+                  src={cookie.image}
+                  alt={cookie.name}
+                />
               </div>
               <div className="featured-cookie-card__body">
                 <h3>{cookie.name}</h3>

@@ -3,7 +3,7 @@
   overflow: hidden;
   min-height: 300px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-6);
   margin: 24px 24px 0;
   padding: clamp(28px, 5vw, 48px);
@@ -56,39 +56,29 @@
   position: relative;
   z-index: 1;
   min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.menu-hero-v2__cookie {
+.menu-hero-v2__visual::before {
+  content: '';
   position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 88%;
+  height: 70%;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.28) 0 8px, transparent 9px),
-    radial-gradient(circle at 64% 58%, rgba(58, 23, 14, 0.3) 0 10px, transparent 11px),
-    #d4a15e;
-  box-shadow: inset -16px -18px 0 rgba(74, 28, 14, 0.16), 0 24px 44px rgba(0,0,0,0.18);
+  background: radial-gradient(circle, rgba(255, 240, 222, 0.28), transparent 68%);
+  filter: blur(26px);
 }
 
-.menu-hero-v2__cookie--one {
-  width: 170px;
-  height: 170px;
-  top: 16px;
-  left: 40px;
-}
-
-.menu-hero-v2__cookie--two {
-  width: 132px;
-  height: 132px;
-  right: 10px;
-  top: 86px;
-  background-color: #a63a42;
-}
-
-.menu-hero-v2__cookie--three {
-  width: 96px;
-  height: 96px;
-  left: 16px;
-  bottom: 6px;
-  background-color: #4f251b;
+.menu-hero-v2__image {
+  position: relative;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.4));
 }
 
 .menu-hero-v2__meta {
@@ -212,27 +202,11 @@
   padding: 18px;
 }
 
-.menu-product-card__meta,
 .menu-product-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-}
-
-.menu-product-card__meta {
-  color: var(--color-text-muted);
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.menu-product-card__meta span:last-child {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--color-star);
 }
 
 .menu-product-card h3 {

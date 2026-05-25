@@ -1,5 +1,6 @@
 import { ArrowRight, Clock3, PackageCheck, Sparkles } from 'lucide-react';
 import Button from '../ui/Button';
+import menuCookies from '../../assets/products/menu-cookie-group.png';
 import './MenuComponents.css';
 
 interface MenuHeroProps {
@@ -24,10 +25,12 @@ export default function MenuHero({ onOrderNow }: MenuHeroProps) {
           </Button>
         </div>
       </div>
-      <div className="menu-hero-v2__visual" aria-hidden="true">
-        <div className="menu-hero-v2__cookie menu-hero-v2__cookie--one" />
-        <div className="menu-hero-v2__cookie menu-hero-v2__cookie--two" />
-        <div className="menu-hero-v2__cookie menu-hero-v2__cookie--three" />
+      <div className="menu-hero-v2__visual">
+        <img
+          className="menu-hero-v2__image"
+          src={menuCookies}
+          alt="A spread of freshly baked Doughly Crumbl cookies"
+        />
       </div>
       <div className="menu-hero-v2__meta">
         <span><Clock3 size={17} /> Baked to order</span>

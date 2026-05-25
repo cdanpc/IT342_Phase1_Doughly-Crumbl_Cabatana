@@ -14,10 +14,6 @@ interface ProductCardProps {
   onOpen: (product: Product) => void;
 }
 
-function getCategoryLabel(category: string) {
-  return category.toLowerCase().split('_').map((part) => part[0].toUpperCase() + part.slice(1)).join(' ');
-}
-
 function getBadge(product: Product) {
   if (product.category === 'BEST_SELLERS') return 'Best Seller';
   if (product.category === 'SEASONAL') return 'Seasonal';
@@ -37,9 +33,6 @@ export default function ProductCard({ product, isAdding, onAddToCart, onOpen }: 
         {!product.available && <Badge tone="danger" className="menu-product-card__availability">Unavailable</Badge>}
       </div>
       <div className="menu-product-card__body">
-        <div className="menu-product-card__meta">
-          <span>{getCategoryLabel(product.category || 'Cookies')}</span>
-        </div>
         <h3>{product.name}</h3>
         <p>{product.description || 'Freshly baked Doughly Crumbl treat.'}</p>
         <div className="menu-product-card__footer">

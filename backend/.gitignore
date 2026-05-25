@@ -36,8 +36,9 @@ build/
 .env
 .env.*
 !.env.example
-src/main/resources/application.properties
-src/main/resources/application.properties.example
+# application.properties is safe to commit — it only contains ${ENV_VAR:default} references.
+# application-local.properties is ignored because it may contain real local credentials.
+src/main/resources/application-local.properties
 
 ### Runtime uploads ###
 uploads/

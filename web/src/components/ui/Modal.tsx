@@ -14,6 +14,15 @@ interface ModalProps {
   className?: string;
 }
 
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
 export default function Modal({
   isOpen,
   onClose,
@@ -28,25 +37,30 @@ export default function Modal({
   const descId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Effect 1: scroll lock + initial focus — only runs when the modal opens/closes,
+  // NOT when onClose/preventClose change (which are new references on every parent render).
+  // This prevents the close button from stealing focus on every keystroke.
   useEffect(() => {
     if (!isOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     document.body.classList.add('ui-modal-open');
 
-    const focusableSelector = [
-      'a[href]',
-      'button:not([disabled])',
-      'textarea:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-    ].join(',');
-
     window.setTimeout(() => {
-      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(focusableSelector);
+      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
       focusable?.[0]?.focus();
     }, 0);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove('ui-modal-open');
+    };
+  }, [isOpen]);
+
+  // Effect 2: keyboard focus trap — re-attaches when onClose/preventClose change so
+  // the handler always has the latest callbacks, but does NOT steal focus.
+  useEffect(() => {
+    if (!isOpen) return;
 
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape' && !preventClose) {
@@ -55,7 +69,7 @@ export default function Modal({
       }
 
       if (e.key !== 'Tab') return;
-      const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? []);
+      const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []);
       if (focusable.length === 0) {
         e.preventDefault();
         panelRef.current?.focus();
@@ -74,11 +88,7 @@ export default function Modal({
     }
 
     document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = previousOverflow;
-      document.body.classList.remove('ui-modal-open');
-    };
+    return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, onClose, preventClose]);
 
   if (!isOpen) return null;

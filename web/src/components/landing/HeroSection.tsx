@@ -1,6 +1,7 @@
-import { ArrowRight, Clock, ShoppingBag, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../ui/Button';
 import PageContainer from '../layout/PageContainer';
+import landingHero from '../../assets/products/landing-cookie-hero.png';
 import './LandingSections.css';
 
 interface HeroSectionProps {
@@ -36,28 +37,13 @@ export default function HeroSection({ onOrderNow, onCreateAccount }: HeroSection
           </div>
         </div>
 
-        <div className="landing-hero__visual" aria-label="Featured Doughly Crumbl cookie box">
-          <div className="cookie-showcase">
-            <div className="cookie-showcase__card cookie-showcase__card--main">
-              <span className="cookie-art cookie-art--choco" />
-              <div>
-                <p>Signature box</p>
-                <strong>Assorted cookie cravings</strong>
-              </div>
-            </div>
-            <div className="cookie-showcase__plate">
-              <span className="cookie-art cookie-art--red" />
-              <span className="cookie-art cookie-art--cream" />
-              <span className="cookie-art cookie-art--dark" />
-            </div>
-            <div className="cookie-showcase__note cookie-showcase__note--top">
-              <Clock size={17} />
-              Baked fresh
-            </div>
-            <div className="cookie-showcase__note cookie-showcase__note--bottom">
-              <ShoppingBag size={17} />
-              Ready for pickup
-            </div>
+        <div className="landing-hero__visual">
+          <div className="landing-hero__visual-card">
+            <img
+              className="landing-hero__image"
+              src={landingHero}
+              alt="Assorted freshly baked Doughly Crumbl cookies"
+            />
           </div>
         </div>
       </PageContainer>

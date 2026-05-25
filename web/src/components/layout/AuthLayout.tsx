@@ -28,7 +28,6 @@ export default function AuthLayout({ children, eyebrow, title, subtitle }: AuthL
 
       <aside className="auth-shell__brand-panel" aria-label="Doughly Crumbl brand story">
         <div className="auth-shell__brand-content">
-          <Logo variant="white" />
           <p className="auth-shell__eyebrow">{eyebrow}</p>
           <h2>{title}</h2>
           <p>{subtitle}</p>

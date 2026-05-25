@@ -13,7 +13,7 @@ This tracker is based on the current repo state, not only the older docs. It sta
 | TypeScript check — latest pass | `npm.cmd exec -- tsc -b` from `web/` | **0 errors (included in build above — tsc -b runs first in build script).** |
 | **Full web lint** | `npm run lint` from `web/` | **✅ 0 errors, 1 intentional warning (2026-05-25)** — `OrderDetailPage.tsx:129` react-hooks/exhaustive-deps warning is documented and intentional. |
 | Web dev server | `npm run dev -- --host 127.0.0.1 --port 5174` from `web/` | Verified HTTP 200 after previous customer-facing pass. |
-| Backend tests | `.\mvnw.cmd test` from `backend/` | Passed. 45 tests, 0 failures, 0 errors. |
+| Backend tests | `.\mvnw.cmd test` from `backend/` | ✅ Passed. 53 tests, 0 failures, 0 errors (2026-05-25, after admin upload-image fix). |
 | **Backend runtime startup** | `.\mvnw.cmd spring-boot:run` from `backend/` | **✅ VERIFIED (2026-05-23)** — HikariPool-1 connected to Supabase (port 5432, sslmode=require). HTTP 200 at `http://localhost:8080/api/products`. One non-fatal DDL WARN on startup (see notes). |
 
 Notes:
@@ -22,6 +22,44 @@ Notes:
 - **DDL warning (non-fatal):** On every startup with `JPA_DDL_AUTO=update`, Hibernate generates `ALTER TABLE orders ALTER COLUMN payment_status SET DATA TYPE VARCHAR(30) DEFAULT 'UNPAID'` — this is invalid PostgreSQL syntax (DEFAULT cannot be combined with TYPE in a single ALTER COLUMN statement). This produces a `WARN` but does NOT crash the app. Fix: split into separate `TYPE` and `SET DEFAULT` statements, or switch `JPA_DDL_AUTO` to `validate` and manage schema changes via Flyway migration instead.
 - **Full web lint is now clean (2026-05-24).** Previously failing issues in `shared/hooks/AuthContext.tsx`, `shared/hooks/CartContext.tsx`, `shared/hooks/NotificationContext.tsx`, `components/profile/ProfileForm.tsx`, `components/profile/AddressManager.tsx`, and `features/menu/MenuPage.tsx` are all resolved.
 - `OrderDetailPage.tsx` lint warning (react-hooks/exhaustive-deps) is pre-existing and intentional — not introduced by any recent pass.
+
+## Bug Fix: Admin "Add Product" 500 on image upload (2026-05-25)
+
+**Reported symptom:** Adding a new product from the admin product form failed; backend threw a Spring 500 during the POST.
+
+**Root cause:** Multipart field-name mismatch on the image-upload endpoint.
+- Both clients send the multipart part named **`file`**:
+  - Web: `productApi.ts` → `formData.append('file', file)`
+  - Mobile: `AdminAddEditProductActivity.kt:139` → `MultipartBody.Part.createFormData("file", ...)`
+- Backend required a different name: `AdminController.uploadProductImage(@RequestPart("image") ...)`.
+- Result: Spring threw `MissingServletRequestPartException: Required part 'image' is not present`. There was no specific handler, so the catch-all `@ExceptionHandler(Exception.class)` in `GlobalExceptionHandler` logged the full stack trace and returned **HTTP 500**. Because `AdminProducts.handleSave()` uploads the image *before* creating the product, the whole "Add Product" flow aborted whenever an image was attached. (Create-without-image already worked.)
+
+**Fix (backend only — aligns the outlier to what both clients already send):**
+- `AdminController.java` — `@RequestPart("image")` → `@RequestPart("file")` on `/api/admin/products/upload-image`. Fixes web **and** mobile in one change.
+- `GlobalExceptionHandler.java` — added handlers for `MissingServletRequestPartException` and `MaxUploadSizeExceededException` returning clean **400** responses instead of a raw 500.
+
+**Endpoint affected:** `POST /api/admin/products/upload-image` (multipart). Create/update/delete JSON endpoints were already correct.
+
+**Payload before/after:** No client payload change — web/mobile already send field `file`. Only the backend `@RequestPart` name changed to match.
+
+**Backend response before → after:**
+- Upload (`file` part): `500 "Required part 'image' is not present."` → `200 {"url": "..."}`
+- Upload with wrong part name: `500` → `400 "Required file 'file' is missing."`
+- Missing name/price on create: already `400` (validation) — unchanged.
+
+**Verification (live, against recompiled backend + Supabase):**
+- `.\mvnw.cmd compile` ✅ · `.\mvnw.cmd test` → **53 passed, 0 failures** ✅
+- Login as admin → upload (`file`) → **200**; create with imageUrl → **201**; create without image → **201** (imageUrl null).
+- Negative: wrong part name → **400**; missing name+price → **400** with field errors.
+- New products appeared in both `/api/admin/products` and the available-only `/api/products` (customer menu). QA test rows then deleted (DB restored to 4 products).
+
+**Files changed:**
+- `backend/.../features/order/AdminController.java`
+- `backend/.../shared/exception/GlobalExceptionHandler.java`
+
+**Remaining follow-ups (not blocking):**
+- Mobile sends `file` too, so it's now fixed server-side — no mobile code change needed, but a mobile QA pass on Add/Edit Product image upload is still worth doing.
+- `max-request-size` and `max-file-size` are both `5MB`; a file at exactly 5MB + multipart overhead could marginally exceed request size. Low risk; raise `max-request-size` (e.g. 10MB) if it ever surfaces.
 
 ## Latest Frontend Pass: Design Primitives — PageHeader, Table, FileUploadField
 
