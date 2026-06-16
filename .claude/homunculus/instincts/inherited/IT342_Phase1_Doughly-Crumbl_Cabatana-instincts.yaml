@@ -1,0 +1,285 @@
+# Instincts generated from https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+# Generated: 2026-04-07T15:39:02.394Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Commit Length
+
+## Action
+
+Keep commit messages concise (~44 characters)
+
+## Evidence
+
+- Average commit message length: 44 chars
+- Based on 6 commits
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: IT342_Phase1_Doughly-Crumbl_Cabatana-workflow-implement-design-pattern
+trigger: "when doing implement design pattern"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# IT342_Phase1_Doughly Crumbl_Cabatana Workflow Implement Design Pattern
+
+## Action
+
+Follow the implement-design-pattern workflow:
+1. Create a new subdirectory under backend/src/main/java/edu/cit/cabatana/doughlycrumbl/ named after the pattern (e.g., factory, adapter, strategy, observer, decorator).
+2. Implement one or more new Java classes in this directory to encapsulate the pattern's logic.
+3. Optionally update related service classes to use the new pattern implementation.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: backend/src/main/java/edu/cit/cabatana/doughlycrumbl/*/*.java, backend/src/main/java/edu/cit/cabatana/doughlycrumbl/service/*.java
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-class-naming
+trigger: "When creating a new Java class file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Class Naming
+
+## Action
+
+Name the class file and class itself using PascalCase
+
+## Evidence
+
+- Naming conventions specified in analysis
+- Observed in files: backend/src/main/java/edu/cit/cabatana/doughlycrumbl/*/*.java
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-function-naming
+trigger: "When defining a function/method in Java"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Function Naming
+
+## Action
+
+Use camelCase for function/method names
+
+## Evidence
+
+- Naming conventions specified in analysis
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-constant-naming
+trigger: "When declaring a constant in Java"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Naming conventions specified in analysis
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-import-style
+trigger: "When importing Java classes"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Import Style
+
+## Action
+
+Use relative imports
+
+## Evidence
+
+- Import style specified as relative in analysis
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-export-style
+trigger: "When exporting Java classes or methods"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Export style specified as named in analysis
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Test Location
+
+## Action
+
+Place test files in a separate test directory, not mixed with source code
+
+## Evidence
+
+- testLocation specified as separate in architecture analysis
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-git-commit-format
+trigger: "When writing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Git Commit Format
+
+## Action
+
+Write a freeform, descriptive commit message without a required prefix; average length ~44 characters
+
+## Evidence
+
+- Commits are freeform, no prefixes, average length observed in analysis
+- Examples: 'Applied Factory Pattern to Order creation'
+
+---
+id: it342_phase1_doughly-crumbl_cabatana-instinct-implement-design-pattern
+trigger: "When refactoring backend logic using a design pattern (e.g., Factory, Adapter, Strategy, Observer, Decorator)"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: cdanpc/IT342_Phase1_Doughly-Crumbl_Cabatana
+---
+
+# It342_phase1_doughly Crumbl_cabatana Instinct Implement Design Pattern
+
+## Action
+
+Create a new subdirectory under backend/src/main/java/edu/cit/cabatana/doughlycrumbl/ named after the pattern, implement one or more Java classes in this directory, and optionally update related service classes to use the new pattern implementation
+
+## Evidence
+
+- Workflow 'implement-design-pattern' described in analysis
+- Seen in commit sequence and example commits
+

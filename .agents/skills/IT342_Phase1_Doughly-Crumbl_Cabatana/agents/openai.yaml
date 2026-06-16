@@ -1,0 +1,6 @@
+interface:
+  display_name: "IT342 Phase1 Doughly Crumbl Cabatana"
+  short_description: "Repo-specific patterns and workflows for IT342_Phase1_Doughly-Crumbl_Cabatana"
+  default_prompt: "Use the IT342_Phase1_Doughly-Crumbl_Cabatana repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
